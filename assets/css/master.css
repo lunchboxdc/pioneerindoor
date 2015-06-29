@@ -1,0 +1,37 @@
+@font-face {
+	font-family: SourceSansPro;
+	src: url('../font/source-sans-pro/SourceSansPro-Regular.otf');
+}
+
+@font-face {
+	font-family: SourceSansPro;
+	src: url('../font/source-sans-pro/SourceSansPro-Bold.otf');
+	font-weight: bold;
+}
+
+body {
+	background-color: #151B19;
+	font-family: SourceSansPro, sans-serif;
+}
+
+.logo {
+	height: 70px;
+}
+
+.logo-link {
+	display: inline-block;
+}
+
+.site-container {
+	margin-right:auto;
+	margin-left:auto;
+	width:1280px;
+}
+
+.site-nav li {
+	color: #ffffff;
+	display:inline;
+	padding:10px 20px;
+	font-weight: bold;
+	letter-spacing: .04em;
+}

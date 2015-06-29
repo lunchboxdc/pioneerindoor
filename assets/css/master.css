@@ -14,6 +14,10 @@ body {
 	font-family: SourceSansPro, sans-serif;
 }
 
+header {
+	margin-top: 20px;
+}
+
 .logo {
 	height: 70px;
 }
@@ -25,12 +29,17 @@ body {
 .site-container {
 	margin-right:auto;
 	margin-left:auto;
-	width:1280px;
+	width:1150px;
+}
+
+.site-nav {	
+	float: right;
+	line-height: 46px;
 }
 
 .site-nav li {
-	color: #ffffff;
 	display:inline;
+	color: #ffffff;
 	padding:10px 20px;
 	font-weight: bold;
 	letter-spacing: .04em;

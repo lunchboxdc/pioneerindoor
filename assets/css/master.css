@@ -19,12 +19,12 @@ header {
 }
 
 .logo {
-	height: 70px;
-}
-
-.logo-link {
 	display: inline-block;
+	width: 221px;
 }
+#pioneer-logo .leaf {fill:white;}
+
+#pioneer-logo .type {fill:green;}
 
 .site-container {
 	margin-right:auto;
@@ -32,7 +32,7 @@ header {
 	width:1150px;
 }
 
-.site-nav {	
+.site-nav {
 	float: right;
 	line-height: 46px;
 }

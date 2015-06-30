@@ -47,4 +47,21 @@ header {
 
 .slider img {
 	width: 100%;
+	margin: 12px 0;
+}
+
+.site-container section {
+	display: inline-block;
+	background-color: #ffffff;
+	padding: 12px;
+}
+
+.site-container section.main-content {
+	width: 61%;
+}
+
+
+.site-container section.right-rail {
+	width: 31%;
+	float: right;
 }

@@ -15,12 +15,12 @@ body {
 }
 
 header {
-	margin: 20px 0;
+	margin-top: 15px;
 }
 
 .logo {
 	display: inline-block;
-	width: 221px;
+	width: 300px;
 }
 #pioneer-logo .leaf {fill:white;}
 
@@ -29,12 +29,12 @@ header {
 .site-container {
 	margin-right:auto;
 	margin-left:auto;
-	width:1150px;
+	width:1050px;
 }
 
 .site-nav {
 	float: right;
-	line-height: 46px;
+	line-height: 69px;
 }
 
 .site-nav li {
@@ -45,23 +45,30 @@ header {
 	letter-spacing: .04em;
 }
 
+.slider {
+	margin-top: 15px;
+}
+
 .slider img {
 	width: 100%;
-	margin: 12px 0;
 }
 
 .site-container section {
 	display: inline-block;
-	background-color: #ffffff;
-	padding: 12px;
 }
 
 .site-container section.main-content {
-	width: 61%;
+	width: 65%;
 }
 
 
 .site-container section.right-rail {
-	width: 31%;
+	width: 32%;
 	float: right;
+}
+
+.content-block {
+	margin-top: 15px;
+	padding: 15px;
+	background-color: #ffffff;
 }

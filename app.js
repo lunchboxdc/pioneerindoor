@@ -2,7 +2,7 @@ var express = require("express");
 var app = express();
 var path = require("path");
 
-app.set('port', process.env.PORT || 8080);
+app.set('port', process.env.PORT || 3000);
 app.use(express.static('assets'));
 
 app.get('/',function(req,res){

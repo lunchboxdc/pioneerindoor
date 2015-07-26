@@ -2,8 +2,11 @@
   "name": "pioneer-indoor",
   "version": "0.0.0",
   "description": "Pioneer Indoor Percussion",
-  "main": "app.js",
   "author": "Andy Hull",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
   "dependencies": {
     "express": "4.13.0",
     "mongoose": "4.0.6"

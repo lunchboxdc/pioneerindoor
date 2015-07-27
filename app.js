@@ -37,6 +37,7 @@ app.use(function(err, req, res, next) {
     console.log(err);
 });
 
-app.listen(app.get('port'), '127.0.0.1', function() {
+app.set('port', process.env.OPENSHIFT_NODEJS_PORT || 3000);
+app.listen(app.get('port'), process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1', function() {
   console.log('Express server listening on port ' + app.get('port'));
 });

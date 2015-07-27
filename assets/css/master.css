@@ -5,6 +5,7 @@ body {
 header {
 	display: inline-block;
 	margin-top: 15px;
+	width: 100%;
 }
 
 .logo {

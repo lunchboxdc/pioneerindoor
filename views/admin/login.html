@@ -1,0 +1,17 @@
+{{#section 'head'}}
+	<link type="text/css" rel="stylesheet" href="/css/admin-master.css"/>
+{{/section}}
+
+<div class="main-container">
+	<img class="login-logo" src="/image/logo-black.svg">
+	<div class="login-container">
+		<form action="/admin/login" method="post">
+			<input type="text" class="credentials email" name="username" placeholder="Email" autofocus/>
+			<input type="password" class="credentials pass" name="password" placeholder="Password"/>
+			<button type="submit" class="credentials login">Sign In</button>
+			{{#if authMessage}}
+				<div>{{authMessage}}</div>
+			{{/if}}	
+		</form>
+	</div>	
+</div>

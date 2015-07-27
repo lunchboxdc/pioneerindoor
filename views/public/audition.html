@@ -1,0 +1,35 @@
+{{#section 'head'}}  
+  <link type="text/css" rel="stylesheet" href="/css/master.css"/>
+{{/section}}
+
+<div class="site-container">
+  {{> nav}}
+
+  <h1>Audition</h1>
+
+  <form class="audition-form" action="/audition" method="post">
+    <div class="basic-info">
+    	<input name="firstName" placeholder="First Name"/>
+    	<input name="lastName" placeholder="Last Name"/>
+    	<input name="address1" placeholder="Address1"/>	
+    	<input name="address2" placeholder="Address2"/>	
+    	<input name="city" placeholder="City"/>	
+    	<select name="state" placeholder="State">
+    		{{> stateOptions}}
+    	</select>
+    	<input name="zip" placeholder="Zipcode"/>
+      <input name="phone" placeholder="Phone"/>
+      <input name="email" placeholder="Email"/>      
+      <select name="instrument" placeholder="Instrument">
+        <option value="">Instrument</option>
+        <option value="snare">Snare</option>
+        <option value="tenors">Tenors</option>
+        <option value="bassDrum">Bass Drum</option>
+        <option value="pitKeyboard">Pit - Keyboard</option>
+        <option value="pitAux">Pit - Auxilliary</option>
+      </select>
+      <textarea name="comments" placeholder="Comments"></textarea>
+      <button type="submit">Sign Up</button>
+    </div>  
+  </form>
+</div>  

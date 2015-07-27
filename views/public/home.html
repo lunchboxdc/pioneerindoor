@@ -1,0 +1,82 @@
+{{#section 'head'}}  
+  <link type="text/css" rel="stylesheet" href="/css/master.css"/>
+{{/section}}
+
+<script>
+  //getFbPicture();
+  //getFbPosts();
+
+  //var facebookTemplate = Handlebars.compile($('#facebookTemplate').html());
+  var facebookFeedHtml;
+
+  function getFbPicture() {
+    $.ajax({
+      url: 'https://graph.facebook.com/v2.3/PioneerIndoor/picture',
+      dataType: 'json',
+      data: {redirect: false},
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader("Authorization", "OAuth 763105940474072|UnGwKT6yz37pyGdSHGCpHx6opQI");
+      },
+      error: function() {
+        // error handler
+      },
+      success: function(json) {
+        console.log(json);
+      }
+    });
+  }
+
+  function getFbPosts() {
+    $.ajax({
+      url: 'https://graph.facebook.com/v2.3/PioneerIndoor/posts',
+      dataType: 'json',
+      data: {limit: 20, fields: 'from,message,name,description,caption,picture,link,type'},
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader("Authorization", "OAuth 763105940474072|UnGwKT6yz37pyGdSHGCpHx6opQI");
+      },
+      error: function() {
+        // error handler
+      },
+      success: function(json) {
+        facebookFeedHtml = facebookTemplate(json.data);
+        $('.right-rail').html(facebookFeedHtml);
+      }
+    });
+  }
+
+  Handlebars.registerHelper('equals', function(a, b, options) {
+      if (a === b) {
+        return options.fn(this);
+      }
+      else {
+        return options.inverse(this);
+      }
+  });
+
+  $(function() {
+    //$('.right-rail').html(facebookFeedHtml);
+  });
+</script>
+<div class="site-container">
+  {{> nav}}
+
+  <div class="slider">
+    <img src="image/slider1.jpg"/>
+  </div>
+
+  <section class="main-content">
+    <div class="content-block">
+      <div>
+          <span>Andy Hull</span>
+          <span>15 May 2005</span>
+      </div>    
+      <h1>Why drumming is an amazing hobby.</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat....</p>
+    </div>
+  </section>
+
+  <section class="right-rail">
+    
+  </section>
+
+</div>

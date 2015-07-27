@@ -1,0 +1,14 @@
+@font-face {
+	font-family: SourceSansPro;
+	src: url('../font/source-sans-pro/SourceSansPro-Regular.otf');
+}
+
+@font-face {
+	font-family: SourceSansPro;
+	src: url('../font/source-sans-pro/SourceSansPro-Bold.otf');
+	font-weight: bold;
+}
+
+body {
+	font-family: SourceSansPro, sans-serif;
+}

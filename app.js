@@ -15,7 +15,34 @@ mongoose.connect(dbUrl);
 
 var app = express();
 
-app.set('port', process.env.PORT || 8080);
+var hbConfig = {
+	extname: '.html',
+    layoutsDir: path.join(app.settings.views, ""),
+    defaultLayout: "main",
+    partialsDir: [
+    	'views/partials',
+    	'views/admin/partials/',
+    	'views/public/partials'
+    ],
+    helpers: {
+    	section: function(name, options) {
+    		if(!this._sections) {
+    			this._sections = {};
+    		}
+    		this._sections[name] = options.fn(this);
+    		return;
+    	}
+    }
+}
+
+app.engine('html', exphbs(hbConfig));
+app.set('view engine', 'html');
+
+app.use(expressSession({secret: 'secureTheBeatsIs'}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(bodyParser.urlencoded());
+
 app.use(express.static('assets'));
 
  // Using the flash middleware provided by connect-flash to store messages in session

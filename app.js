@@ -1,3 +1,4 @@
+console.log('starting pi node app');
 var express = require("express");
 var passport = require('passport');
 var expressSession = require('express-session');
@@ -11,7 +12,7 @@ var dbUrl = 'mongodb://localhost/pi';
 if(process.env.OPENSHIFT_MONGODB_DB_URL) {
     dbUrl = process.env.OPENSHIFT_MONGODB_DB_URL;
 }
-mongoose.connect(dbUrl);
+//mongoose.connect(dbUrl);
 
 var app = express();
 

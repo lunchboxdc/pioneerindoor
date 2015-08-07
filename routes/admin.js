@@ -60,6 +60,7 @@ module.exports = function(passport) {
 	});
 
 	router.post('/adminusers/new', function(req, res) {
+		//new token in db
 		res.render('admin/newAdminUserSuccess');
 	});
 

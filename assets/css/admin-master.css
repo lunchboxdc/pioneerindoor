@@ -78,9 +78,9 @@ body {
 .content h1 {
 	margin: 0;
 }
-.auditionees {
+.admin-table {
 	width: 75%;
 }
-.auditionees th {
+.admin-table th {
 	text-align: left;
 }

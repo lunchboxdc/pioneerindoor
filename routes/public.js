@@ -52,8 +52,10 @@ module.exports = (function() {
 		try {
 			// create reusable transporter object using SMTP transport
 			var transporter = nodemailer.createTransport(ses({
-			    accessKeyId: 'AKIAJ36PDLKR3KQTTC3A',
-			    secretAccessKey: 'AgRCLn46l8eEMBmTnieM151SFLCbnePTKTOtk7Edt4tW'
+				region: 'us-west-2',
+			    accessKeyId: 'AKIAI7C7AFSWTHGKREYA',
+			    secretAccessKey: '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',
+			    rateLimit: 5
 			}));
 
 			// NB! No need to recreate the transporter object. You can use
@@ -61,8 +63,8 @@ module.exports = (function() {
 
 			// setup e-mail data with unicode symbols
 			var mailOptions = {
-			    from: 'PI <admin@lunchboxdc.me>', // sender address
-			    to: 'andrew.hull@vividseats.com', // list of receivers
+			    from: 'admin@lunchboxdc.me', // sender address
+			    to: 'lunchboxdc@gmail.com', // list of receivers
 			    subject: 'Test email', // Subject line
 			    html: '<b>Html</b>' // html body
 			};

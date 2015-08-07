@@ -12,7 +12,8 @@ var dbUrl = 'mongodb://localhost/pi';
 if(process.env.OPENSHIFT_MONGODB_DB_URL) {
     dbUrl = process.env.OPENSHIFT_MONGODB_DB_URL;
 }
-//mongoose.connect(dbUrl);
+
+mongoose.connect(dbUrl);
 
 var app = express();
 
@@ -39,10 +40,14 @@ var hbConfig = {
 app.engine('html', exphbs(hbConfig));
 app.set('view engine', 'html');
 
-app.use(expressSession({secret: 'secureTheBeatsIs'}));
+app.use(expressSession({
+    resave: false,
+    saveUninitialized: false,
+    secret: 'secureTheBeatsIs'
+}));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static('assets'));
 

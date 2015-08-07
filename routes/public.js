@@ -1,5 +1,7 @@
 var express = require('express');
 var path = require("path");
+var nodemailer = require('nodemailer');
+var ses = require('nodemailer-ses-transport');
 var Auditionee = require('../persistence/models/auditionee');
 
 module.exports = (function() {
@@ -32,6 +34,7 @@ module.exports = (function() {
 				console.log(err);
 				res.redirect('/audition/error');
 			}
+			sendEmail();
 			res.redirect('/audition/confirm');
 		});
 	});
@@ -43,6 +46,41 @@ module.exports = (function() {
 	router.get('/audition/error',function(req,res) {
 		res.render('public/auditionError');
 	});
+
+
+	var sendEmail = function() {
+		try {
+			// create reusable transporter object using SMTP transport
+			var transporter = nodemailer.createTransport(ses({
+			    accessKeyId: 'AKIAJ36PDLKR3KQTTC3A',
+			    secretAccessKey: 'AgRCLn46l8eEMBmTnieM151SFLCbnePTKTOtk7Edt4tW'
+			}));
+
+			// NB! No need to recreate the transporter object. You can use
+			// the same transporter object for all e-mails
+
+			// setup e-mail data with unicode symbols
+			var mailOptions = {
+			    from: 'PI <admin@lunchboxdc.me>', // sender address
+			    to: 'andrew.hull@vividseats.com', // list of receivers
+			    subject: 'Test email', // Subject line
+			    html: '<b>Html</b>' // html body
+			};
+
+			// send mail with defined transport object
+			transporter.sendMail(mailOptions, function(error, info){
+			    if(error){
+			        console.log(error);
+			    }else{
+			        console.log('Message sent: ' + info.response);
+			    }
+			});
+		} catch (e) {
+			console.log(e);
+			console.log(e.stack);
+		}	
+	}	
+
 
 	return router;
 })();

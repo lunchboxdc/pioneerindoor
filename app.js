@@ -1,4 +1,4 @@
-console.log('starting pi node app');
+require('./common/logger');
 var express = require("express");
 var passport = require('passport');
 var expressSession = require('express-session');

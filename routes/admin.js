@@ -2,7 +2,7 @@ var express = require('express');
 var path = require("path");
 var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
-var bCrypt = require('bcrypt-nodejs');
+var utils = require('../common/utils')
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -29,13 +29,13 @@ module.exports = function(passport) {
 	}));
 
 	router.get('/', isAuthenticated, function(req, res) {
-		res.render('admin/adminHome');
+		res.render('admin/home');
 	});
 
 	router.get('/auditionees', isAuthenticated, function(req, res) {
 		Auditionee.find(function(err, auditionees) {
 			if (err) {
-				console.log(err);
+				console.error(err);
 			}
 			res.render('admin/auditionees', {auditionees: auditionees});
 		});
@@ -46,22 +46,39 @@ module.exports = function(passport) {
 		res.redirect('/admin');
 	});
 
-	router.get('/adminusers', function(req, res) {
+	router.get('/users', function(req, res) {
 		AdminUser.find(function(err, adminusers) {
 			if (err) {
-				console.log(err);
+				console.error(err);
 			}
-			res.render('admin/adminusers', {adminusers: adminusers});
+			res.render('admin/users', {adminusers: adminusers});
 		});
 	});
 
-	router.get('/adminusers/new', function(req, res) {
-		res.render('admin/newAdminUser');
+	router.get('/users/new', function(req, res) {
+		res.render('admin/newUser');
 	});
 
-	router.post('/adminusers/new', function(req, res) {
-		//new token in db
-		res.render('admin/newAdminUserSuccess');
+	router.post('/users/new', function(req, res) {
+		var token = require('crypto').randomBytes(32).toString('hex');
+		console.log(req.body.email);
+		AdminUser.findByEmail(req.body.email, function(err, user) {
+			console.log(user)
+			if(user) {
+				console.log("found the user");
+				
+			} else {				
+				console.log("couldn't find the user");
+				// var adminUser = new AdminUser();
+				// adminUser.firstName = req.body.firstName;
+				// adminUser.lastName = req.body.lastName;
+				// adminUser.email = req.body.email;
+				// adminUser.token = utils.createHash(token);
+			}			
+			res.render('admin/newUserSuccess');
+		});		
+
+		
 	});
 
 	// router.post('/users', function(req, res) {
@@ -69,7 +86,7 @@ module.exports = function(passport) {
 	// 	adminUser.firstName = req.body.firstName;
 	// 	adminUser.lastName = req.body.lastName;
 	// 	adminUser.email = req.body.email;
-	// 	adminUser.password = createHash(req.body.password);
+	// 	adminUser.password = utils.createHash(req.body.password);
 
 	// 	adminUser.save(function(err) {
 	// 		if (err) {
@@ -96,7 +113,7 @@ module.exports = function(passport) {
 	// 		user.firstName = req.body.firstName;
 	// 		user.lastName = req.body.lastName;
 	// 		user.email = req.body.email;
-	// 		user.password = createHash(req.body.password);
+	// 		user.password = utils.createHash(req.body.password);
 	// 		user.save(function(err) {
 	// 			if (err) {
 	// 				res.send(err);
@@ -115,12 +132,7 @@ module.exports = function(passport) {
 	// 		}
 	// 		res.json({ message: 'Successfully deleted user' });
 	// 	});
-	// });
-
-	// Generates hash using bCrypt
-    var createHash = function(password){
-        return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-    };
+	// });    
 
 	return router;
 }

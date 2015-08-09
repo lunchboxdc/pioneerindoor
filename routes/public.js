@@ -53,8 +53,8 @@ module.exports = (function() {
 			// create reusable transporter object using SMTP transport
 			var transporter = nodemailer.createTransport(ses({
 				region: 'us-west-2',
-			    accessKeyId: 'AKIAI7C7AFSWTHGKREYA',
-			    secretAccessKey: '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',
+			    accessKeyId: process.env.SES_ACCESS_KEY_ID,
+			    secretAccessKey: process.env.SES_SECRET_ACCESS_KEY,
 			    rateLimit: 5
 			}));
 

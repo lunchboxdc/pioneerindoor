@@ -1,5 +1,6 @@
 var express = require('express');
-var path = require("path");
+var path = require('path');
+var moment = require('moment');
 var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
 var utils = require('../common/utils')
@@ -61,24 +62,28 @@ module.exports = function(passport) {
 
 	router.post('/users/new', function(req, res) {
 		var token = require('crypto').randomBytes(32).toString('hex');
-		console.log(req.body.email);
-		AdminUser.findByEmail(req.body.email, function(err, user) {
-			console.log(user)
-			if(user) {
-				console.log("found the user");
-				
-			} else {				
-				console.log("couldn't find the user");
-				// var adminUser = new AdminUser();
-				// adminUser.firstName = req.body.firstName;
-				// adminUser.lastName = req.body.lastName;
-				// adminUser.email = req.body.email;
-				// adminUser.token = utils.createHash(token);
-			}			
-			res.render('admin/newUserSuccess');
-		});		
-
 		
+		AdminUser.findOne({ 'email': req.body.email }, function (err, user) {
+			if(user) {
+				console.info("New User: user already exists with email, %s", req.body.email);
+				res.render('admin/newUserExists');				
+			} else {				
+				console.info("New User: no user found for email, %s ... adding user with token.", req.body.email);
+				var adminUser = new AdminUser();
+				adminUser.firstName = req.body.firstName;
+				adminUser.lastName = req.body.lastName;
+				adminUser.email = req.body.email;
+				adminUser.token = utils.createHash(token);
+				adminUser.tokenExpires = moment().add(1, 'hours');
+				adminUser.save(function(err) {
+					if (err) {
+						res.send(err);
+					}
+					
+					res.render('admin/newUserSuccess');
+				});
+			}
+		});		
 	});
 
 	// router.post('/users', function(req, res) {

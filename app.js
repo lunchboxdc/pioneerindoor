@@ -8,6 +8,9 @@ var bodyParser = require('body-parser');
 var exphbs  = require('express-handlebars');
 var path = require('path');
 
+console.log('SES_ACCESS_KEY: ' + process.env.SES_ACCESS_KEY);
+console.log('SES_TOKEN: ' + process.env.SES_TOKEN);
+
 var dbUrl = 'mongodb://localhost/pi';
 if(process.env.OPENSHIFT_MONGODB_DB_URL) {
     dbUrl = process.env.OPENSHIFT_MONGODB_DB_URL;

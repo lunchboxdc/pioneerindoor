@@ -86,7 +86,7 @@ module.exports = (function() {
 	router.delete('/users/:user_id', function(req, res) {
 		AdminUser.remove({
 			_id: req.params.user_id
-		}, function(err, bear) {
+		}, function(err) {
 			if (err) {
 				res.send(err);
 			} else {

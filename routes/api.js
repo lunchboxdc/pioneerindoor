@@ -1,6 +1,7 @@
 var express = require('express');
 var bCrypt = require('bcrypt-nodejs');
 var AdminUser = require('../persistence/models/adminUser');
+var Auditionee = require('../persistence/models/auditionee');
 
 module.exports = (function() {
 	var router = express.Router();
@@ -30,8 +31,9 @@ module.exports = (function() {
 		AdminUser.find(function(err, adminUsers) {
 			if (err) {
 				res.send(err);
+			} else {
+				res.json(adminUsers);
 			}
-			res.json(adminUsers);
 		});
 	});
 
@@ -45,8 +47,9 @@ module.exports = (function() {
 		adminUser.save(function(err) {
 			if (err) {
 				res.send(err);
+			} else {
+				res.json({message: 'User created!'});
 			}
-			res.json({ message: 'User created!' });
 		});
 	});
 
@@ -54,8 +57,9 @@ module.exports = (function() {
 		AdminUser.findById(req.params.user_id, function(err, user) {
 			if (err) {
 				res.send(err);
+			} else {
+				res.json(user);
 			}
-			res.json(user);
 		});
 	});
 
@@ -63,17 +67,19 @@ module.exports = (function() {
 		AdminUser.findById(req.params.user_id, function(err, user) {
 			if (err) {
 				res.send(err);
+			} else {
+				user.firstName = req.body.firstName;
+				user.lastName = req.body.lastName;
+				user.email = req.body.email;
+				user.password = utils.createHash(req.body.password);
+				user.save(function (err) {
+					if (err) {
+						res.send(err);
+					} else {
+						res.json({message: 'user updated!'});
+					}
+				});
 			}
-			user.firstName = req.body.firstName;
-			user.lastName = req.body.lastName;
-			user.email = req.body.email;
-			user.password = utils.createHash(req.body.password);
-			user.save(function(err) {
-				if (err) {
-					res.send(err);
-				}
-				res.json({ message: 'user updated!' });
-			});
 		});
 	});
 
@@ -83,10 +89,21 @@ module.exports = (function() {
 		}, function(err, bear) {
 			if (err) {
 				res.send(err);
+			} else {
+				res.json({message: 'Successfully deleted user'});
 			}
-			res.json({ message: 'Successfully deleted user' });
+		});
+	});
+
+	router.get('/auditionees', function(req, res) {
+		Auditionee.find(function(err, auditionees) {
+			if (err) {
+				res.send(err);
+			} else {
+				res.json(auditionees);
+			}
 		});
 	});
 
 	return router;
-})();	
+})();

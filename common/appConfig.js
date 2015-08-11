@@ -14,7 +14,7 @@ if(process.env.NODE_ENV === 'prod') {
     configObject["logLevel"] = "debug";
 }
 
-console.info('App properties: %s', configObject);
+console.info('App properties:\n', configObject);
 
 if(configObject.logLevel) {
     logger.transports.console.level = configObject.logLevel;

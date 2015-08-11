@@ -1,4 +1,6 @@
 var express = require('express');
+var bCrypt = require('bcrypt-nodejs');
+var AdminUser = require('../persistence/models/adminUser');
 
 module.exports = (function() {
 	var router = express.Router();
@@ -6,9 +8,27 @@ module.exports = (function() {
 	router.all('/', function (req, res, next) {
 		var apiToken = req.headers['x-api-token'];
 		var userId = req.headers['x-user-id'];
-		
-		res.send('success');
-		//next();
+
+		if(userId && apiToken) {
+			AdminUser.findById(userId, function(err, user) {
+				if(user && bCrypt.compareSync(apiToken, user.apiToken)) {
+					next();
+				} else {
+					res.json('error');
+				}
+			});
+		} else {
+			res.json('error');
+		}
+	});
+
+	router.get('/users', function(req, res) {
+		AdminUser.find(function(err, adminUsers) {
+			if (err) {
+				res.send(err);
+			}
+			res.json(adminUsers);
+		});
 	});
 
 	router.post('/users', function(req, res) {
@@ -26,12 +46,12 @@ module.exports = (function() {
 		});
 	});
 
-	router.get('/users', function(req, res) {
-		AdminUser.find(function(err, adminUsers) {
+	router.get('/users/:user_id', function(req, res) {
+		AdminUser.findById(req.params.user_id, function(err, user) {
 			if (err) {
 				res.send(err);
 			}
-			res.json(adminUsers);
+			res.json(user);
 		});
 	});
 

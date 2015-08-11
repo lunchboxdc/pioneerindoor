@@ -3,7 +3,9 @@ var logger = require('./logger');
 var configObject = {};
 if(process.env.NODE_ENV === 'prod') {
 	console.info('App running in prod mode');
-	console.info('process.env.PORT = %s', process.env.PORT);
+	if(process.env.PORT) {
+		configObject["port"] = process.env.PORT;
+	}
     configObject["host"] = "https://www.lunchboxdc.me";
     configObject["logLevel"] = "error";
 } else {

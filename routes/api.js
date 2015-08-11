@@ -5,19 +5,23 @@ var AdminUser = require('../persistence/models/adminUser');
 module.exports = (function() {
 	var router = express.Router();
 
-	router.all('/', function (req, res, next) {
+	router.all('*', function (req, res, next) {
+		console.debug('Api: auth step');
 		var apiToken = req.headers['x-api-token'];
 		var userId = req.headers['x-user-id'];
 
 		if(userId && apiToken) {
 			AdminUser.findById(userId, function(err, user) {
 				if(user && bCrypt.compareSync(apiToken, user.apiToken)) {
+					console.debug('Api: successful api auth');
 					next();
 				} else {
+					console.debug('Api: user not found or bad token');
 					res.json('error');
 				}
 			});
 		} else {
+			console.debug('Api: either userId or token was missing');
 			res.json('error');
 		}
 	});

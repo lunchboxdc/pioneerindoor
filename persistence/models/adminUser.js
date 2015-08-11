@@ -6,6 +6,7 @@ module.exports = mongoose.model('AdminUser', {
 	lastName: String,
 	email: String,
 	password: String,
+	apiToken: String,
 	token: String,
 	tokenExpires: Date,
 	dateCreated: { type: Date, default: Date.now },

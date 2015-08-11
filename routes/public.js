@@ -1,10 +1,13 @@
 var express = require('express');
-var path = require("path");
-var nodemailer = require('nodemailer');
-var ses = require('nodemailer-ses-transport');
+var path = require('path');
+var moment = require('moment');
+var bCrypt = require('bcrypt-nodejs');
+var piMailer = require('../email/piMailer');
+var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
+var utils = require('../common/utils');
 
-module.exports = (function() {
+module.exports = function(passport) {
 	var router = express.Router();
 
 	router.get('/',function(req,res) {
@@ -47,42 +50,83 @@ module.exports = (function() {
 		res.render('public/auditionError');
 	});
 
+	router.get('/login', function(req, res) {
+		res.render('public/login', { authMessage: req.flash('authMessage') });
+	});
+
+	router.post('/login', passport.authenticate('login', {
+		successRedirect: '/admin',
+		failureRedirect: '/login',
+		failureFlash : true
+	}));
+
+	router.get('/register', function(req, res) {
+		if(req.query.a && req.query.z) {
+			AdminUser.findById(req.query.z, function (err, user) {
+				if(user && bCrypt.compareSync(req.query.a, user.token)) {
+					if(moment(user.tokenExpires).diff(moment())>0) {
+						console.debug('Valid registration token.');
+						var payLoad = {
+							userId: user._id,
+							firstName: user.firstName,
+							lastName: user.lastName,
+							email: user.email
+						};
+						res.render('admin/register', payLoad);
+					} else {
+						console.debug('registration token expired');
+						res.render('admin/register', {registerError: 'We\'re sorry, the registration link provided has expired. Please contact the system administrator for a new one.'});
+					}
+				} else {
+					console.debug('No user found by token, %s', user.token);
+					res.render('admin/register', {registerError: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+				}
+			});
+		} else {
+			console.debug('the token query string parameter was not provided.');
+			res.render('admin/register', {registerError: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+		}
+	});
+
+	router.post('/register', function(req, res) {
+		AdminUser.findById(req.body.userId, function(err, user) {
+			if (err) {
+				res.render('admin/register', {registerError: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+			} else {
+				user.password = utils.createHash(req.body.password1);
+				user.tokenExpires = undefined;
+				user.token = undefined;
+				user.save(function (err) {
+					if (err) {
+						res.send(err);
+					}
+					res.render('admin/register', {registerError: 'Thank you for registering'});
+				});
+
+			}
+		});
+	});
 
 	var sendEmail = function() {
 		try {
-			// create reusable transporter object using SMTP transport
-			var transporter = nodemailer.createTransport(ses({
-				region: 'us-west-2',
-			    accessKeyId: process.env.SES_ACCESS_KEY_ID,
-			    secretAccessKey: process.env.SES_SECRET_ACCESS_KEY,
-			    rateLimit: 5
-			}));
-
-			// NB! No need to recreate the transporter object. You can use
-			// the same transporter object for all e-mails
-
-			// setup e-mail data with unicode symbols
-			var mailOptions = {
-			    from: 'admin@lunchboxdc.me', // sender address
-			    to: 'lunchboxdc@gmail.com', // list of receivers
-			    subject: 'Test email', // Subject line
-			    html: '<b>Html</b>' // html body
+			var options = {
+			    from: 'admin@lunchboxdc.me',
+			    to: 'lunchboxdc@gmail.com',
+			    subject: 'Test email',
+			    html: '<b>Html</b>'
 			};
 
-			// send mail with defined transport object
-			transporter.sendMail(mailOptions, function(error, info){
+			piMailer.sendMail(options, function(error, info){
 			    if(error){
-			        console.log(error);
-			    }else{
-			        console.log('Message sent: ' + info.response);
+			        console.error(error);
+			    } else {
+			        console.info('Message sent: ' + info.response);
 			    }
 			});
 		} catch (e) {
-			console.log(e);
-			console.log(e.stack);
-		}	
-	}	
-
+			console.error(e);
+		}
+	};
 
 	return router;
-})();
+};

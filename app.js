@@ -1,4 +1,5 @@
 require('./common/logger');
+var appConfig = require('./common/appConfig');
 var express = require("express");
 var passport = require('passport');
 var expressSession = require('express-session');
@@ -16,15 +17,14 @@ if(process.env.OPENSHIFT_MONGODB_DB_URL) {
 mongoose.connect(dbUrl);
 
 var app = express();
-
 var hbConfig = {
 	extname: '.html',
     layoutsDir: path.join(app.settings.views, ""),
     defaultLayout: "main",
     partialsDir: [
-    	'views/partials',
-    	'views/admin/partials/',
-    	'views/public/partials'
+    	'./views/partials',
+    	'./views/admin/partials/',
+    	'./views/public/partials'
     ],
     helpers: {
     	section: function(name, options) {
@@ -56,21 +56,30 @@ app.use(express.static('assets'));
 var flash = require('connect-flash');
 app.use(flash());
 
-var publicRoutes = require('./routes/public');
+var publicRoutes = require('./routes/public')(passport);
 app.use('/', publicRoutes);
 
 var initPassport = require('./passport/init');
 initPassport(passport);
-var adminRoutes = require('./routes/admin')(passport);
-app.use('/admin', adminRoutes);
+var adminRoutes = require('./routes/admin');
+app.use('/admin', function(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/login');
+}, adminRoutes);
+
+var apiRoutes = require('./routes/api');
+app.use('/api', apiRoutes);
 
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.send(err);
-    console.log(err);
+    console.error(err);
 });
 
-app.set('port', process.env.PORT || 3000);
-app.listen(app.get('port'), process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0', function() {
-  console.log('Express server listening on port ' + app.get('port'));
+var port = (appConfig.port || 3000);
+var ip = '0.0.0.0';
+app.listen(port, ip, function() {
+  console.info('Pioneer Indoor app running at http://%s:%s', ip, port);
 });

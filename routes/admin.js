@@ -32,11 +32,9 @@ module.exports = (function() {
 			if (err) {
 				console.error(err);
 			}
-			var payLoad = {adminusers: adminusers};
-			var usersMessage = req.flash('usersMessage');
-			if(usersMessage.length>0 && usersMessage[0].length>0) {
-				payLoad['usersMessage'] = usersMessage[0];
-			}
+			var payLoad = _.merge({
+				adminusers: adminusers
+			}, req.flash());
 			res.render('admin/users', payLoad);
 		});
 	});
@@ -61,12 +59,13 @@ module.exports = (function() {
 				adminUser.token = utils.createHash(token);
 				adminUser.tokenExpires = moment().add(1, 'hours');
 				adminUser.save(function(err, user) {
+					var payLoad = {};
 					if (err) {
 						console.error('error adding user: ' + user);
-						req.flash('usersMessage', 'error adding user!');
+						payLoad['usersMessage'] = 'error adding user!';
 					}
 					piMailer.emailNewAdmin(user.firstName, user.email, token, user._id);
-					res.render('admin/newUserSuccess');
+					res.render('admin/newUserSuccess', payLoad);
 				});
 			}
 		});

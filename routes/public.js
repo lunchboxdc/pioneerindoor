@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var moment = require('moment');
 var bCrypt = require('bcrypt-nodejs');
+var _ = require('lodash');
 var piMailer = require('../email/piMailer');
 var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
@@ -51,7 +52,8 @@ module.exports = function(passport) {
 	});
 
 	router.get('/login', function(req, res) {
-		res.render('public/login', { authMessage: req.flash('authMessage') });
+		var payLoad =_.merge({}, req.flash());
+		res.render('public/login', payLoad);
 	});
 
 	router.post('/login', passport.authenticate('login', {
@@ -63,7 +65,7 @@ module.exports = function(passport) {
 	router.get('/register', function(req, res) {
 		if(req.query.a && req.query.z) {
 			AdminUser.findById(req.query.z, function (err, user) {
-				if(user && bCrypt.compareSync(req.query.a, user.token)) {
+				if(user && user.token && bCrypt.compareSync(req.query.a, user.token)) {
 					if(moment(user.tokenExpires).diff(moment())>0) {
 						console.debug('Valid registration token.');
 						var payLoad = {
@@ -72,37 +74,38 @@ module.exports = function(passport) {
 							lastName: user.lastName,
 							email: user.email
 						};
-						res.render('admin/register', payLoad);
+						res.render('public/register', payLoad);
 					} else {
 						console.debug('registration token expired');
-						res.render('admin/register', {registerError: 'We\'re sorry, the registration link provided has expired. Please contact the system administrator for a new one.'});
+						res.render('public/register', {registerMessage: 'We\'re sorry, the registration link provided has expired. Please contact the system administrator for a new one.'});
 					}
 				} else {
 					console.debug('No user found by token, %s', user.token);
-					res.render('admin/register', {registerError: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+					res.render('public/register', {registerMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
 				}
 			});
 		} else {
 			console.debug('the token query string parameter was not provided.');
-			res.render('admin/register', {registerError: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+			res.render('public/register', {registerMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
 		}
 	});
 
 	router.post('/register', function(req, res) {
 		AdminUser.findById(req.body.userId, function(err, user) {
-			if (err) {
-				res.render('admin/register', {registerError: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+			if (err || !user) {
+				res.render('public/register', {registerMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
 			} else {
 				user.password = utils.createHash(req.body.password1);
 				user.tokenExpires = undefined;
 				user.token = undefined;
-				user.save(function (err) {
+				user.save(function (err, user) {
 					if (err) {
-						res.send(err);
-					}
-					res.render('admin/register', {registerError: 'Thank you for registering'});
+						res.render('public/register', {registerMessage: 'Thank you for registering'});
+					} else {
+						req.flash('email', user.email);
+						res.redirect('/login');
+					}	
 				});
-
 			}
 		});
 	});

@@ -4,6 +4,10 @@
   "description": "Pioneer Indoor Percussion",
   "author": "Andy Hull",
   "private": true,
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "1.13.2",

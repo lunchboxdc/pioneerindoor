@@ -68,7 +68,7 @@ body {
 	color: #ffffff;
 	cursor: pointer;
 }
-.left-rail li.sign-out {
+.left-rail ul.secondary-group {
 	border-top: 1px solid #D3D3D3;
 	margin-top: 20px;
 }

@@ -7,14 +7,13 @@ module.exports = (function() {
 	var router = express.Router();
 
 	router.all('*', function (req, res, next) {
-		console.debug('Api: auth step');
 		var apiToken = req.headers['x-api-token'];
 		var userId = req.headers['x-user-id'];
 
 		if(userId && apiToken) {
 			AdminUser.findById(userId, function(err, user) {
 				if(user && bCrypt.compareSync(apiToken, user.apiToken)) {
-					console.debug('Api: successful api auth');
+					console.debug('Api: successful auth');
 					next();
 				} else {
 					console.debug('Api: user not found or bad token');
@@ -28,7 +27,8 @@ module.exports = (function() {
 	});
 
 	router.get('/users', function(req, res) {
-		AdminUser.find(function(err, adminUsers) {
+		var query = AdminUser.find();
+		query.exec(function(err, adminUsers) {
 			if (err) {
 				res.send(err);
 			} else {

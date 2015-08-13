@@ -17,7 +17,7 @@ if(process.env.OPENSHIFT_MONGODB_DB_URL) {
 mongoose.connect(dbUrl);
 
 var app = express();
-var hbConfig = {
+var hbs = exphbs.create({
 	extname: '.html',
     layoutsDir: path.join(app.settings.views, ""),
     defaultLayout: "main",
@@ -33,11 +33,20 @@ var hbConfig = {
     		}
     		this._sections[name] = options.fn(this);
     		return;
-    	}
+    	},
+        equals: function(a, b, options) {
+            if (a === b) {
+                return options.fn(this);
+            }
+            else {
+                return options.inverse(this);
+            }
+        }
     }
-}
+});
 
-app.engine('html', exphbs(hbConfig));
+var templates = hbs.getTemplates('./views/public/partials', {cache: true, precompiled: true});
+app.engine('html', hbs.engine);
 app.set('view engine', 'html');
 
 app.use(expressSession({

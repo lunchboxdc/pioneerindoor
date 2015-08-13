@@ -27,9 +27,15 @@ header {
 .site-nav li {
 	display:inline;
 	color: #ffffff;
-	padding:10px 20px;
+	padding: 5px;
+	margin: 15px;
 	font-weight: bold;
 	letter-spacing: .04em;
+}
+
+.site-nav li:hover, li.current-page {
+	cursor: pointer;
+	border-bottom: 2px solid #008000;
 }
 
 .slider {
@@ -60,16 +66,24 @@ header {
 	border-radius: 4px;
 }
 
+.audition-form .input-row {
+	margin: 10px 0;
+}
+
+.input-row label {
+	font-size: 14px;
+	margin-left: 1px;
+}
+
 .audition-form input, select, textarea {
 	background-color: #ffffff;
 	display: block;
 	width: 100%;
-	height: 34px;
+	height: 40px;
 	font-size: 16px;
-	padding: 10px 15px;
+	padding: 0 15px;
 	border: 0;
 	border-radius: 4px;
-	margin: 10px 0;
 	box-sizing: border-box;
 }
 

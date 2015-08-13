@@ -16,7 +16,10 @@ module.exports = function(passport) {
 	});
 
 	router.get('/audition',function(req,res) {
-		res.render('public/audition');
+		var payLoad =_.merge({
+			page: 'audition'
+		}, req.flash());
+		res.render('public/audition', payLoad);
 	});
 
 	router.post('/audition',function(req,res) {
@@ -104,7 +107,7 @@ module.exports = function(passport) {
 					} else {
 						req.flash('email', user.email);
 						res.redirect('/login');
-					}	
+					}
 				});
 			}
 		});

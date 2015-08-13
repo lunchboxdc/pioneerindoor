@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var moment = require('moment');
+var _ = require('lodash');
 var piMailer = require('../email/piMailer');
 var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');

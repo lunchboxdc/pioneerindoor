@@ -9,6 +9,34 @@
 	font-weight: bold;
 }
 
-body {
+@font-face {
+	font-family: SourceSansPro;
+	src: url('../font/source-sans-pro/SourceSansPro-Light.otf');
+	font-weight: 300;
+}
+
+* {
+	color: #444444;
 	font-family: SourceSansPro, sans-serif;
+}
+
+*:focus {
+	outline: none;
+}
+
+::-webkit-input-placeholder {
+	color: #d3d3d3;
+	font-weight: 300;
+}
+:-moz-placeholder {
+	color: #d3d3d3;
+	font-weight: 300;
+}
+::-moz-placeholder {
+	color: #d3d3d3;
+	font-weight: 300;
+}
+:-ms-input-placeholder {
+	color: #d3d3d3;
+	font-weight: 300;
 }

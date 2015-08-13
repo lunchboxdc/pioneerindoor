@@ -1,4 +1,4 @@
-{{#section 'head'}}  
+{{#section 'head'}}
   <link type="text/css" rel="stylesheet" href="/css/master.css"/>
 {{/section}}
 
@@ -12,30 +12,145 @@
   <form class="audition-form form" action="/audition" method="post">
     <div class="content-block">
       <section class="left">
-      	<input name="firstName" placeholder="First Name"/>
-      	<input name="lastName" placeholder="Last Name"/>
-        <input name="dob" placeholder="Birthdate"/>
-        <input name="phone" placeholder="Phone"/>
-        <input name="email" placeholder="Email"/>
-        <input name="school" placeholder="School Attending"/>
-        <input name="schoolYear" placeholder="Current Year In School"/>
-        <button type="submit">Sign Up</button>
+        <div class="input-row">
+          <label for="firstName">First Name</label>
+          <input id="firstName" name="firstName" placeholder="First Name"/>
+        </div>
+        <div class="input-row">
+          <label for="lastName">Last Name</label>
+          <input id="lastName" name="lastName" placeholder="Last Name"/>
+        </div>
+        <div class="input-row">
+          <label for="dob">Birthdate</label>
+          <input id="dob" name="dob" placeholder="Birthdate"/>
+        </div>
+        <div class="input-row">
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" placeholder="Phone"/>
+        </div>
+        <div class="input-row">
+          <label for="email">Email</label>
+          <input id="email" name="email" placeholder="Email"/>
+        </div>
+        <div class="input-row">
+          <label for="school">School Attending</label>
+          <input id="school" name="school" placeholder="School Attending"/>
+        </div>
+        <div class="input-row">
+          <label for="schoolYear">Current Year In School</label>
+          <input id="schoolYear" name="schoolYear" placeholder="Current Year In School"/>
+        </div>
       </section>
       <section class="right">
-        <input name="address1" placeholder="Address1"/>
-        <input name="address2" placeholder="Address2"/> 
-        <input name="city" placeholder="City"/> 
-        <select name="state" placeholder="State">
-          {{> stateOptions}}
-        </select>
-        <input name="zip" placeholder="Zipcode"/>
+        <div class="input-row">
+          <label for="address1">Address 1</label>
+          <input id="address1" name="address1" placeholder="Address 1"/>
+        </div>
+        <div class="input-row">
+          <label for="address2">Address 2</label>
+          <input id="address2" name="address2" placeholder="Address 2"/>
+        </div>
+        <div class="input-row">
+          <label for="city">City</label>
+          <input id="city" name="city" placeholder="City"/>
+        </div>
+        <div class="input-row">
+          <label for="state">State</label>
+          <select id="state" name="state">
+            {{> stateOptions}}
+          </select>
+        </div>
+        <div class="input-row">
+          <label for="zip">Zip</label>
+          <input id="zip" name="zip" placeholder="Zipcode"/>
+        </div>
       </section>
+    </div>
+    <div class="content-block">
+      <section class="left">
+        <div class="input-row">
+          <label for="pgFirstName">Parent/Guardian First Name</label>
+          <input id="pgFirstName" name="pgFirstName" placeholder="Parent/Guardian First Name"/>
+        </div>
+        <div class="input-row">
+          <label for="pgLastName">Parent/Guardian Last Name</label>
+          <input id="pgLastName" name="pgLastName" placeholder="Parent/Guardian Last Name"/>
+        </div>
+        <div class="input-row">
+          <label for="pgPhone1">Parent/Guardian Phone 1</label>
+          <input id="pgPhone1" name="pgPhone1" placeholder="Parent/Guardian Phone 1"/>
+        </div>
+        <div class="input-row">
+          <label for="pgPhone2">Parent/Guardian Phone 2</label>
+          <input id="pgPhone2" name="pgPhone2" placeholder="Parent/Guardian Phone 2"/>
+        </div>
+        <div class="input-row">
+          <label for="pgEmail1">Parent/Guardian Email 1</label>
+          <input id="pgEmail1" name="pgEmail1" placeholder="Parent/Guardian Email 1"/>
+        </div>
+        <div class="input-row">
+          <label for="pgEmail2">Parent/Guardian Email 2</label>
+          <input id="pgEmail2" name="pgEmail2" placeholder="Parent/Guardian Email 2"/>
+        </div>
+      </section>
+      <section class="right">
+        <div class="input-row">
+          <label for="pgAddress1">Parent/Guardian Address 1</label>
+          <input id="pgAddress1" name="pgAddress1" placeholder="Parent/Guardian Address 1"/>
+        </div>
+        <div class="input-row">
+          <label for="pgAddress2">Parent/Guardian Address 2</label>
+          <input id="pgAddress2" name="pgAddress2" placeholder="Parent/Guardian Address 2"/>
+        </div>
+        <div class="input-row">
+          <label for="pgCity">Parent/Guardian City</label>
+          <input id="pgCity" name="pgCity" placeholder="Parent/Guardian City"/>
+        </div>
+        <div class="input-row">
+          <label for="pgState">Parent/Guardian State</label>
+          <select id="pgState" name="pgState">
+            {{> stateOptions}}
+          </select>
+        </div>
+        <div class="input-row">
+          <label for="pgZip">Parent/Guardian Zip</label>
+          <input id="pgZip" name="pgZip" placeholder="Parent/Guardian Zipcode"/>
+        </div>
+      </section>
+    </div>
+    <div class="content-block">
+      <div class="input-row">
+        <label for="referral">How did you her about Pioneer Indoor?</label>
+        <select id="referral" name="referral">
+          <option value="">Select One</option>
+          <option value="returningFormer">Returning or former member</option>
+          <option value="friendFamily">Friend/Family member</option>
+          <option value="percussionInstructor">Percussion Instructor</option>
+          <option value="bandDirector">Band Director</option>
+          <option value="sawPIAtWGIEvent">I saw Pioneer Indoor perform at a WGI event</option>
+          <option value="sawPIAtChiEvent">I saw Pioneer Indoor perform at a Chicagoland event</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="input-row">
+        <label for="firstChoice">My first choice is to audition for</label>
+        <select id="firstChoice" name="firstChoice">
+          <option value="">Select One</option>
+          <option value="pitPercussion">Front ensemble (percussion)</option>
+          <option value="pitElectronics">Front ensemble (electronics)</option>
+          <option value="snare">Snare</option>
+          <option value="tenor">Tenor</option>
+          <option value="bass">Bass</option>
+          <option value="cymbals">Cymbals</option>
+          <option value="character">Character</option>
+        </select>
+      </div>
     </div>
   </form>
 </div>
 
 
-<!-- 
+<!--
 
         <select name="instrument" placeholder="Instrument">
           <option value="">Instrument</option>

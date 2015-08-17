@@ -3,10 +3,22 @@ var path = require('path');
 var moment = require('moment');
 var bCrypt = require('bcrypt-nodejs');
 var _ = require('lodash');
+var fs = require('fs');
+var handlebars  = require('handlebars');
 var piMailer = require('../email/piMailer');
 var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
 var utils = require('../common/utils');
+
+var instrumentTemplate;
+fs.readFile('views/public/partials/auditionInstruments.html', 'utf8', function (err, html) {
+	if(err) {
+		console.error('public: failed to load auditionInstruments template: '+err);
+	} else {
+		instrumentTemplate = handlebars.compile(html);
+	}
+});
+
 
 module.exports = function(passport) {
 	var router = express.Router();
@@ -19,6 +31,7 @@ module.exports = function(passport) {
 		var payLoad =_.merge({
 			page: 'audition'
 		}, req.flash());
+
 		res.render('public/audition', payLoad);
 	});
 
@@ -40,9 +53,10 @@ module.exports = function(passport) {
 			if (err) {
 				console.log(err);
 				res.redirect('/audition/error');
-			}
-			sendEmail();
-			res.redirect('/audition/confirm');
+			} else {
+				sendEmail();
+				res.redirect('/audition/confirm');
+			}	
 		});
 	});
 

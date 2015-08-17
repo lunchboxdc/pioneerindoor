@@ -1,5 +1,44 @@
 {{#section 'head'}}
   <link type="text/css" rel="stylesheet" href="/css/master.css"/>
+
+  <script>
+    var instrumentsChosen = 1;
+    function addInstrument() {
+      instrumentsChosen++;
+      $('#choiceRow'+instrumentsChosen).show();
+      if(instrumentsChosen===3) {
+        $('#addInstrumentButton').hide();
+      }
+    }
+
+    function onPrevEnsemble(e) {
+      if(e.checked) {
+        $('#prevEnsembleDescRow').removeClass('hidden');
+      } else {
+        $('#prevEnsembleDescRow').addClass('hidden');
+      }
+    }
+
+    function referralChange(e) {
+      if(e.value==='other') {
+        $('#referralOtherRow').removeClass('hidden');
+      } else {
+        $('#referralOtherRow').addClass('hidden');
+      }
+    }
+
+    function auditionSubmit(form) {
+      var retVal = validate(form, validationConstraints);
+      console.log(retVal);
+      return false;
+    }
+
+    var validationConstraints = {
+      firstName: {
+        presence: true,
+      }
+    };
+  </script>
 {{/section}}
 
 <div class="site-container">
@@ -9,9 +48,10 @@
     <h1>Audition</h1>
   </div>
 
-  <form class="audition-form form" action="/audition" method="post">
+  <form class="audition-form form" action="/audition" method="post" onsubmit="return auditionSubmit(this)">
     <div class="content-block">
-      <section class="left">
+      <h2>Your Information</h2>
+      <section>
         <div class="input-row">
           <label for="firstName">First Name</label>
           <input id="firstName" name="firstName" placeholder="First Name"/>
@@ -33,15 +73,11 @@
           <input id="email" name="email" placeholder="Email"/>
         </div>
         <div class="input-row">
-          <label for="school">School Attending</label>
-          <input id="school" name="school" placeholder="School Attending"/>
-        </div>
-        <div class="input-row">
-          <label for="schoolYear">Current Year In School</label>
-          <input id="schoolYear" name="schoolYear" placeholder="Current Year In School"/>
+          <label for="email2">Re-enter Email</label>
+          <input id="email2" name="email2" placeholder="Re-enter Email"/>
         </div>
       </section>
-      <section class="right">
+      <section>
         <div class="input-row">
           <label for="address1">Address 1</label>
           <input id="address1" name="address1" placeholder="Address 1"/>
@@ -54,111 +90,213 @@
           <label for="city">City</label>
           <input id="city" name="city" placeholder="City"/>
         </div>
-        <div class="input-row">
+        <div class="input-row large">
           <label for="state">State</label>
           <select id="state" name="state">
             {{> stateOptions}}
           </select>
         </div>
-        <div class="input-row">
-          <label for="zip">Zip</label>
+        <div class="input-row small">
+          <label for="zip">Zipcode</label>
           <input id="zip" name="zip" placeholder="Zipcode"/>
+        </div>
+        <div class="input-row">
+          <label for="school">School Attending</label>
+          <input id="school" name="school" placeholder="School Attending"/>
+        </div>
+        <div class="input-row">
+          <label for="schoolYear">Current Year In School</label>
+          <input id="schoolYear" name="schoolYear" placeholder="Current Year In School"/>
         </div>
       </section>
     </div>
     <div class="content-block">
-      <section class="left">
+      <h2>Parent/Guardian Information</h2>
+      <section>
         <div class="input-row">
-          <label for="pgFirstName">Parent/Guardian First Name</label>
-          <input id="pgFirstName" name="pgFirstName" placeholder="Parent/Guardian First Name"/>
+          <label for="pgFirstName">First Name</label>
+          <input id="pgFirstName" name="pgFirstName" placeholder="First Name"/>
         </div>
         <div class="input-row">
-          <label for="pgLastName">Parent/Guardian Last Name</label>
-          <input id="pgLastName" name="pgLastName" placeholder="Parent/Guardian Last Name"/>
+          <label for="pgLastName">Last Name</label>
+          <input id="pgLastName" name="pgLastName" placeholder="Last Name"/>
         </div>
         <div class="input-row">
-          <label for="pgPhone1">Parent/Guardian Phone 1</label>
-          <input id="pgPhone1" name="pgPhone1" placeholder="Parent/Guardian Phone 1"/>
+          <label for="pgPhone1">Phone 1</label>
+          <input id="pgPhone1" name="pgPhone1" placeholder="Phone 1"/>
         </div>
         <div class="input-row">
-          <label for="pgPhone2">Parent/Guardian Phone 2</label>
-          <input id="pgPhone2" name="pgPhone2" placeholder="Parent/Guardian Phone 2"/>
+          <label for="pgPhone2">Phone 2</label>
+          <input id="pgPhone2" name="pgPhone2" placeholder="Phone 2"/>
         </div>
         <div class="input-row">
-          <label for="pgEmail1">Parent/Guardian Email 1</label>
-          <input id="pgEmail1" name="pgEmail1" placeholder="Parent/Guardian Email 1"/>
+          <label for="pgEmail">Email</label>
+          <input id="pgEmail" name="pgEmail" placeholder="Email"/>
         </div>
         <div class="input-row">
-          <label for="pgEmail2">Parent/Guardian Email 2</label>
-          <input id="pgEmail2" name="pgEmail2" placeholder="Parent/Guardian Email 2"/>
+          <label for="pgEmail2">Re-enter Email</label>
+          <input id="pgEmail2" name="pgEmail2" placeholder="Re-enter Email"/>
         </div>
       </section>
-      <section class="right">
+      <section>
         <div class="input-row">
-          <label for="pgAddress1">Parent/Guardian Address 1</label>
-          <input id="pgAddress1" name="pgAddress1" placeholder="Parent/Guardian Address 1"/>
+          <label for="pgAddress1">Address 1</label>
+          <input id="pgAddress1" name="pgAddress1" placeholder="Address 1"/>
         </div>
         <div class="input-row">
-          <label for="pgAddress2">Parent/Guardian Address 2</label>
-          <input id="pgAddress2" name="pgAddress2" placeholder="Parent/Guardian Address 2"/>
+          <label for="pgAddress2">Address 2</label>
+          <input id="pgAddress2" name="pgAddress2" placeholder="Address 2"/>
         </div>
         <div class="input-row">
-          <label for="pgCity">Parent/Guardian City</label>
-          <input id="pgCity" name="pgCity" placeholder="Parent/Guardian City"/>
+          <label for="pgCity">City</label>
+          <input id="pgCity" name="pgCity" placeholder="City"/>
         </div>
-        <div class="input-row">
-          <label for="pgState">Parent/Guardian State</label>
-          <select id="pgState" name="pgState">
+        <div class="input-row large">
+          <label for="pg1State">State</label>
+          <select id="pg1State" name="pg1State">
             {{> stateOptions}}
           </select>
         </div>
-        <div class="input-row">
-          <label for="pgZip">Parent/Guardian Zip</label>
-          <input id="pgZip" name="pgZip" placeholder="Parent/Guardian Zipcode"/>
-        </div>
+        <div class="input-row small">
+          <label for="zip">Zipcode</label>
+          <input id="zip" name="zip" placeholder="Zipcode"/>
+        </div>  
       </section>
     </div>
-    <div class="content-block">
+    <div class="content-block">      
+      <h2>Audition Information</h2>      
+      <section>
+        <div class="input-row">
+          <label for="referral">How did you hear about Pioneer Indoor?</label>
+          <select id="referral" name="referral" onchange="referralChange(this)">
+            <option value="">Select One</option>
+            <option value="returningFormer">Returning or former member</option>
+            <option value="friendFamily">Friend/Family member</option>
+            <option value="percussionInstructor">Percussion Instructor</option>
+            <option value="bandDirector">Band Director</option>
+            <option value="sawPIAtWGIEvent">I saw Pioneer Indoor perform at a WGI event</option>
+            <option value="sawPIAtChiEvent">I saw Pioneer Indoor perform at a Chicagoland event</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div id="referralOtherRow" class="input-row hidden">
+          <label for="referralOther">Other</label>
+          <input id="referralOther" name="referralOther" placeholder="Other"/>
+        </div>
+
+        <div class="input-row">
+          <label for="yearsDrumming">Number of years drumming</label>
+          <select name="yearsDrumming">
+            <option value="">Select One</option>
+            <option value="lt1">Less than one year</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+        <!--div class="input-row">
+          <input id="prevEnsemble" type="checkbox" class="checkbox" onclick="onPrevEnsemble(this)"/>
+          <label for="prevEnsemble" class="checkbox-label">Have you previously marched in a DCI or WGI ensemble?</label>
+        </div-->
+        <div id="prevEnsembleDescRow" class="input-row">
+          <label for="prevEnsembleDesc">Please list the name of the organization, instrument, and years marched.</label>
+          <input id="prevEnsembleDesc" type="text"/>
+        </div>
+      </section>
+      <section>
+        <!-- instrument 1 -->
+        <div class="input-row">
+          <label for="choice1">My first choice is to audition for</label>
+          <select id="choice1" name="choice1">
+            <option value="">Select One</option>
+            <option value="pitPercussion">Front ensemble (percussion)</option>
+            <option value="pitElectronics">Front ensemble (electronics)</option>
+            <option value="snare">Snare</option>
+            <option value="tenor">Tenor</option>
+            <option value="bass">Bass</option>
+            <option value="cymbals">Cymbals</option>
+            <option value="character">Character</option>
+          </select>
+        </div>
+        <!-- instrument 2 -->
+        <div id="choiceRow2" class="input-row" style="display:none;">
+          <label for="choice2">My second choice is to audition for</label>
+          <select id="choice2" name="choice2">
+            <option value="">Select One</option>
+            <option value="pitPercussion">Front ensemble (percussion)</option>
+            <option value="pitElectronics">Front ensemble (electronics)</option>
+            <option value="snare">Snare</option>
+            <option value="tenor">Tenor</option>
+            <option value="bass">Bass</option>
+            <option value="cymbals">Cymbals</option>
+            <option value="character">Character</option>
+          </select>
+        </div>
+        <!-- instrument 3 -->
+        <div id="choiceRow3" class="input-row" style="display:none;">
+          <label for="choice3">My third choice is to audition for</label>
+          <select id="choice3" name="choice3">
+            <option value="">Select One</option>
+            <option value="pitPercussion">Front ensemble (percussion)</option>
+            <option value="pitElectronics">Front ensemble (electronics)</option>
+            <option value="snare">Snare</option>
+            <option value="tenor">Tenor</option>
+            <option value="bass">Bass</option>
+            <option value="cymbals">Cymbals</option>
+            <option value="character">Character</option>
+          </select>
+        </div>
+        <div id="addInstrumentButton" class="add-row" onclick="addInstrument()">
+          <div class="plus"></div>
+          <span>Add Instrument</span>
+        </div>
+      </section>  
+
+      
+
+
       <div class="input-row">
-        <label for="referral">How did you her about Pioneer Indoor?</label>
-        <select id="referral" name="referral">
-          <option value="">Select One</option>
-          <option value="returningFormer">Returning or former member</option>
-          <option value="friendFamily">Friend/Family member</option>
-          <option value="percussionInstructor">Percussion Instructor</option>
-          <option value="bandDirector">Band Director</option>
-          <option value="sawPIAtWGIEvent">I saw Pioneer Indoor perform at a WGI event</option>
-          <option value="sawPIAtChiEvent">I saw Pioneer Indoor perform at a Chicagoland event</option>
-          <option value="Other">Other</option>
-        </select>
+        <label for="specialTalents">Do you have any special talents you would like to share with the Pioneer Indoor staff?</label>
+        <input id="specialTalents" type="text"/>
       </div>
+
       <div class="input-row">
-        <label for="firstChoice">My first choice is to audition for</label>
-        <select id="firstChoice" name="firstChoice">
-          <option value="">Select One</option>
-          <option value="pitPercussion">Front ensemble (percussion)</option>
-          <option value="pitElectronics">Front ensemble (electronics)</option>
-          <option value="snare">Snare</option>
-          <option value="tenor">Tenor</option>
-          <option value="bass">Bass</option>
-          <option value="cymbals">Cymbals</option>
-          <option value="character">Character</option>
-        </select>
+        <label for="conflicts">Please list any known scheduling conflicts with the Pioneer Indoor rehearsal and performance schedule</label>
+        <input id="conflicts" type="text"/>
+      </div>
+
+      <div class="input-row">
+        <label for="goal">What is your goal if you are chosen to be a part of the Pioneer Indoor Percussion Ensemble?</label>
+        <textarea id="goal"></textarea>
       </div>
     </div>
+
+    <div class="content-block">
+      <div class="input-row">
+        <input id="agreement" type="checkbox" class="checkbox"/>
+        <label for="agreement"class="checkbox-label">I understand that by submitting my registration for the 2015 - 2016 season with the Pioneer Indoor Percussion Ensemble does not guarantee me a spot in the ensemble and my $50 audition registration fee is non-refundable.</label>
+      </div>
+      <div class="input-row">
+        <button class="center">Submit</button>
+      </div>  
+    </div>  
   </form>
 </div>
-
-
-<!--
-
-        <select name="instrument" placeholder="Instrument">
-          <option value="">Instrument</option>
-          <option value="snare">Snare</option>
-          <option value="tenors">Tenors</option>
-          <option value="bassDrum">Bass Drum</option>
-          <option value="pitKeyboard">Pit - Keyboard</option>
-          <option value="pitAux">Pit - Auxilliary</option>
-        </select>
-
--->

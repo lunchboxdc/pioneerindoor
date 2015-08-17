@@ -8,6 +8,12 @@ header {
 	width: 100%;
 }
 
+.center {
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
+}
+
 .logo {
 	display: inline-block;
 	width: 300px;
@@ -64,15 +70,37 @@ header {
 	padding: 15px;
 	background-color: #E8E8E8;
 	border-radius: 4px;
+	display: inline-block;
+	width: 100%;
 }
 
 .audition-form .input-row {
-	margin: 10px 0;
+	margin: 5px 0;
+	width: 100%;
+	display: inline-block;
+	/*overflow: hidden;
+	-moz-transition: height 0.5s;
+    -ms-transition: height 0.5s;
+    -o-transition: height 0.5s;
+    -webkit-transition: height 0.5s;
+    transition: height 0.5s;*/
 }
 
 .input-row label {
 	font-size: 14px;
 	margin-left: 1px;
+}
+
+.input-row.small {
+	width: 33%;
+}
+
+.input-row.medium {
+	width: 50%;
+}
+
+.input-row.large {
+	width: 66%;
 }
 
 .audition-form input, select, textarea {
@@ -87,8 +115,43 @@ header {
 	box-sizing: border-box;
 }
 
+.audition-form .checkbox {
+    opacity: 0;
+    position: absolute;   
+}
+
+.audition-form .checkbox, .checkbox-label {
+	display: inline-block;
+	position: fixed;
+    vertical-align: middle;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.audition-form .checkbox-label {
+	position: relative;
+}
+
+.audition-form .checkbox + .checkbox-label:before {
+    content: '';
+    background: #fff;
+    border: 2px solid #ddd;
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.audition-form .checkbox:checked + .checkbox-label:before{
+	background: #008000	;
+}
+
 .audition-form textarea {
 	padding: 6px 8px;
+	height: 200px;
 }
 
 .audition-form button {
@@ -97,8 +160,8 @@ header {
 	background-color: #008000;
 	color: #ffffff;
 	font-size: 18px;
-	padding: 12px;
-	width: 322px;
+	padding: 6px;
+	width: 280px;
 	cursor: pointer;
 }
 
@@ -112,8 +175,54 @@ header {
 	width: 50%;
 	padding: 15px;
 	box-sizing: border-box;
+	float: left;
 }
 
-.audition-form section.right {
-	float: right;
+.add-row {
+	display: inline;
+	padding-bottom: 10px;
+	cursor: pointer;
 }
+
+.add-row span {
+	margin-left: 5px;
+}
+
+.plus {
+  width: 15px;
+  height: 15px;
+  position: relative;
+  background-size: cover;
+  display: inline-block;
+  -webkit-filter: drop-shadow(1px 0px 1px black);
+  -moz-filter: drop-shadow(1px 0px 1px black);
+  filter: drop-shadow(1px 0px 1px black);
+}
+
+.plus:before, .plus:after {
+  content: "";
+  position: absolute;
+  z-index: ;
+  background: #008000;
+  border-radius:15px;  
+}
+
+.plus:before {
+  left: 50%;
+  width: 30%;
+  margin-left: -15%;
+  height: 100%;  
+}
+
+.plus:after {
+  top: 50%;
+  height: 30%;
+  margin-top: -15%;
+  width: 100%;  
+}
+
+.input-row.hidden {
+	height: 0;
+	overflow: hidden;
+}
+

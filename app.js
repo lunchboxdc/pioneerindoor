@@ -2,12 +2,12 @@ require('./common/logger');
 var appConfig = require('./common/appConfig');
 var express = require("express");
 var passport = require('passport');
-var expressSession = require('express-session');
 var mongoose = require('mongoose');
 var expressSession = require('express-session');
 var bodyParser = require('body-parser');
 var exphbs  = require('express-handlebars');
 var path = require('path');
+var favicon = require('serve-favicon');
 
 var dbUrl = 'mongodb://localhost/pi';
 if(process.env.OPENSHIFT_MONGODB_DB_URL) {
@@ -45,7 +45,7 @@ var hbs = exphbs.create({
     }
 });
 
-var templates = hbs.getTemplates('./views/public/partials', {cache: true, precompiled: true});
+
 app.engine('html', hbs.engine);
 app.set('view engine', 'html');
 
@@ -80,6 +80,8 @@ app.use('/admin', function(req, res, next) {
 
 var apiRoutes = require('./routes/api');
 app.use('/api', apiRoutes);
+
+app.use(favicon(__dirname + '/assets/image/favicon/favicon.ico'));
 
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);

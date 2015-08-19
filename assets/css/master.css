@@ -45,11 +45,19 @@ header {
 }
 
 .slider {
-	margin-top: 15px;
+	margin: 15px 0 0 0;
+	display: inline-block;
+	width: 100%;
+	border: none;
 }
 
 .slider img {
 	width: 100%;
+}
+
+ul.slides li {
+	height: 420px;
+	overflow: hidden;
 }
 
 .site-container section {
@@ -73,6 +81,20 @@ header {
 	display: inline-block;
 	width: 100%;
 	box-sizing: border-box;
+}
+
+.content-block.blog-post {
+	padding: 30px;
+}
+
+.blog-meta {
+	text-transform: uppercase;
+}
+
+.blog-meta span {
+	color: #B2B2B2;
+	font-size: 13px;
+	letter-spacing: .8px;
 }
 
 .content-block h2 {

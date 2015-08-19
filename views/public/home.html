@@ -54,24 +54,49 @@
   });
 
   $(function() {
+    $('#imageSlider').flexslider({
+      animation: "fade",
+      slideshowSpeed: 6000,
+      animationSpeed: 900,
+      randomize: true,
+      keyboard: false,
+      controlNav: false
+    });
     //$('.right-rail').html(facebookFeedHtml);
   });
 </script>
 <div class="site-container">
   {{> nav}}
 
-  <div class="slider">
-    <img src="/image/slider1.jpg"/>
+  <div id="imageSlider" class="slider flexslider">
+    <ul class="slides">
+      <li>
+        <img src="/image/slider1.jpg"/>
+      </li>
+      <li>
+        <img src="/image/slider2.jpg"/>
+      </li>
+      <li>
+        <img src="/image/slider3.jpg"/>
+      </li>
+      <li>
+        <img src="/image/slider4.jpg"/>
+      </li>
+      <li>
+        <img src="/image/slider5.jpg"/>
+      </li>
+      <li>
+        <img src="/image/slider6.jpg"/>
+      </li>
+    </ul>
   </div>
-
   <section class="main-content">
-    <div class="content-block">
-      <div>
-          <span>Andy Hull</span>
-          <span>29 July 2005</span>
+    <div class="content-block blog-post">
+      <div class="blog-meta">
+          <span>Kelly Dittrich | 19 Aug 2015</span>
       </div>    
-      <h1>The Beats Is Secure</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat....</p>
+      <h1>Welcome to Our New Website</h1>
+      <p>It took four finals appearances and two silver medals, but Pioneer Indoor finally has a new website. Portions of our site currently remain under construction, and new features will be coming throughout the next few months. As construction is completed, you'll be able to come to our new site for information about the ensemble, news on our upcoming season, schedules and audition details.</p>
     </div>
   </section>
 

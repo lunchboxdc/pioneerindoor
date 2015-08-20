@@ -58,7 +58,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//app.use(express.static('assets'));
+if(process.env.NODE_ENV !== 'prod') {
+    app.use('/assets', express.static('assets'));
+}    
 
  // Using the flash middleware provided by connect-flash to store messages in session
  // and displaying in templates

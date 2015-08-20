@@ -1,17 +1,17 @@
 @font-face {
 	font-family: SourceSansPro;
-	src: url('../font/source-sans-pro/SourceSansPro-Regular.otf');
+	src: url('/assets/font/source-sans-pro/SourceSansPro-Regular.otf');
 }
 
 @font-face {
 	font-family: SourceSansPro;
-	src: url('../font/source-sans-pro/SourceSansPro-Bold.otf');
+	src: url('/assets/font/source-sans-pro/SourceSansPro-Bold.otf');
 	font-weight: bold;
 }
 
 @font-face {
 	font-family: SourceSansPro;
-	src: url('../font/source-sans-pro/SourceSansPro-Light.otf');
+	src: url('/assets/font/source-sans-pro/SourceSansPro-Light.otf');
 	font-weight: 300;
 }
 

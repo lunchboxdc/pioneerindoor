@@ -58,7 +58,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(express.static('assets'));
+//app.use(express.static('assets'));
 
  // Using the flash middleware provided by connect-flash to store messages in session
  // and displaying in templates
@@ -92,5 +92,5 @@ app.use(function(err, req, res, next) {
 var port = (appConfig.port || 3000);
 var ip = '0.0.0.0';
 app.listen(port, ip, function() {
-  console.info('Pioneer Indoor app running at http://%s:%s', ip, port);
+    console.info('Pioneer Indoor app running at http://%s:%s', ip, port);
 });

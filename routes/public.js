@@ -8,6 +8,7 @@ var handlebars  = require('handlebars');
 var piMailer = require('../email/piMailer');
 var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
+var FacebookPost = require('../persistence/models/facebookPost');
 var utils = require('../common/utils');
 
 var instrumentTemplate;
@@ -24,7 +25,12 @@ module.exports = function(passport) {
 	var router = express.Router();
 
 	router.get('/',function(req,res) {
-		res.render('public/home');
+		FacebookPost.find(function(err, facebookPosts) {
+			if (err) {
+				console.error(err);
+			}
+			res.render('public/home', {facebookPosts: facebookPosts});
+		});
 	});
 
 	router.get('/audition',function(req,res) {
@@ -56,7 +62,7 @@ module.exports = function(passport) {
 			} else {
 				sendEmail();
 				res.redirect('/audition/confirm');
-			}	
+			}
 		});
 	});
 

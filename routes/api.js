@@ -2,6 +2,7 @@ var express = require('express');
 var bCrypt = require('bcrypt-nodejs');
 var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
+var FacebookPost = require('../persistence/models/facebookPost');
 
 module.exports = (function() {
 	var router = express.Router();
@@ -101,6 +102,26 @@ module.exports = (function() {
 				res.send(err);
 			} else {
 				res.json(auditionees);
+			}
+		});
+	});
+
+	router.get('/facebookPosts', function(req, res) {
+		FacebookPost.find(function(err, facebookPosts) {
+			if (err) {
+				res.send(err);
+			} else {
+				res.json(facebookPosts);
+			}
+		});
+	});
+
+	router.delete('/facebookPosts/all', function(req, res) {
+		FacebookPost.remove({}, function(err) {
+			if (err) {
+				res.send(err);
+			} else {
+				res.json({message: 'Successfully deleted all facebook posts'});
 			}
 		});
 	});

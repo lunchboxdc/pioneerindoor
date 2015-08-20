@@ -9,12 +9,7 @@ var exphbs  = require('express-handlebars');
 var path = require('path');
 var favicon = require('serve-favicon');
 
-var dbUrl = 'mongodb://localhost/pi';
-if(process.env.OPENSHIFT_MONGODB_DB_URL) {
-    dbUrl = process.env.OPENSHIFT_MONGODB_DB_URL;
-}
-
-mongoose.connect(dbUrl);
+mongoose.connect('mongodb://localhost/pi');
 
 var app = express();
 var hbs = exphbs.create({
@@ -60,7 +55,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 if(process.env.NODE_ENV !== 'prod') {
     app.use('/assets', express.static('assets'));
-}    
+}
 
  // Using the flash middleware provided by connect-flash to store messages in session
  // and displaying in templates

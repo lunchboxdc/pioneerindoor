@@ -1,4 +1,4 @@
-{{#section 'head'}}  
+{{#section 'head'}}
   <link type="text/css" rel="stylesheet" href="/assets/css/master.css"/>
 {{/section}}
 
@@ -15,7 +15,7 @@
       dataType: 'json',
       data: {redirect: false},
       beforeSend: function(xhr) {
-        xhr.setRequestHeader("Authorization", "OAuth 763105940474072|UnGwKT6yz37pyGdSHGCpHx6opQI");
+        xhr.setRequestHeader("", "");
       },
       error: function() {
         // error handler
@@ -32,7 +32,7 @@
       dataType: 'json',
       data: {limit: 20, fields: 'from,message,name,description,caption,picture,link,type'},
       beforeSend: function(xhr) {
-        xhr.setRequestHeader("Authorization", "OAuth 763105940474072|UnGwKT6yz37pyGdSHGCpHx6opQI");
+        xhr.setRequestHeader("", "");
       },
       error: function() {
         // error handler
@@ -94,14 +94,19 @@
     <div class="content-block blog-post">
       <div class="blog-meta">
           <span>Kelly Dittrich | 19 Aug 2015</span>
-      </div>    
+      </div>
       <h1>Welcome to Our New Website</h1>
       <p>It took four finals appearances and two silver medals, but Pioneer Indoor finally has a new website. Portions of our site currently remain under construction, and new features will be coming throughout the next few months. As construction is completed, you'll be able to come to our new site for information about the ensemble, news on our upcoming season, schedules and audition details.</p>
     </div>
   </section>
 
   <section class="right-rail">
-    
+    {{#each facebookPosts}}
+      <div class="content-block">
+        <p>{{story}}</p>
+        <p>{{message}}</p>
+      </div>
+    {{/each}}
   </section>
 
 </div>

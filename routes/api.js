@@ -107,13 +107,15 @@ module.exports = (function() {
 	});
 
 	router.get('/facebookPosts', function(req, res) {
-		FacebookPost.find(function(err, facebookPosts) {
-			if (err) {
-				res.send(err);
-			} else {
-				res.json(facebookPosts);
-			}
-		});
+		FacebookPost.find({})
+			.sort({created_time: 'desc'})
+			.exec(function(err, facebookPosts) {
+				if (err) {
+					res.send(err);
+				} else {
+					res.json(facebookPosts);
+				}
+			});
 	});
 
 	router.delete('/facebookPosts/all', function(req, res) {

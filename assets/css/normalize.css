@@ -18,10 +18,19 @@
 * {
 	color: #282828;
 	font-family: SourceSansPro, sans-serif;
+	font-weight: 300;
 }
 
 *:focus {
 	outline: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+h1, h2 {
+	font-weight: 600;
 }
 
 ::-webkit-input-placeholder {

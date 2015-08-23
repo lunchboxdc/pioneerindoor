@@ -60,7 +60,8 @@
       animationSpeed: 900,
       randomize: true,
       keyboard: false,
-      controlNav: false
+      controlNav: false,
+      pauseOnHover: true
     });
     //$('.right-rail').html(facebookFeedHtml);
   });
@@ -101,12 +102,7 @@
   </section>
 
   <section class="right-rail">
-    {{#each facebookPosts}}
-      <div class="content-block">
-        <p>{{story}}</p>
-        <p>{{message}}</p>
-      </div>
-    {{/each}}
+    {{> facebookFeed}}
   </section>
 
 </div>

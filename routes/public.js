@@ -25,12 +25,14 @@ module.exports = function(passport) {
 	var router = express.Router();
 
 	router.get('/',function(req,res) {
-		FacebookPost.find(function(err, facebookPosts) {
-			if (err) {
-				console.error(err);
-			}
-			res.render('public/home', {facebookPosts: facebookPosts});
-		});
+		FacebookPost.find({})
+			.sort({created_time: 'desc'})
+			.exec(function(err, facebookPosts) {
+				if (err) {
+					console.error(err);
+				}
+				res.render('public/home', {facebookPosts: facebookPosts});
+			});
 	});
 
 	router.get('/audition',function(req,res) {

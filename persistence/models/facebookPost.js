@@ -9,11 +9,15 @@ module.exports = mongoose.model('FacebookPost',{
 		unique: true,
 		dropDups: true
 	},
+	fromName: String,
 	name: String,
 	story: String,
 	message: String,
 	picture: String,
+	attachmentImage: String,
 	link: String,
+	description: String,
+	caption: String,
 	type: String,
 	created_time: Date
 });

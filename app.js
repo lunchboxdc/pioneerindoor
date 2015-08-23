@@ -11,6 +11,8 @@ var favicon = require('serve-favicon');
 
 mongoose.connect('mongodb://localhost/pi');
 
+//require('./common/scheduler');
+
 var app = express();
 var hbs = exphbs.create({
 	extname: '.html',

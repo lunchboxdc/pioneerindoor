@@ -19,7 +19,24 @@ module.exports = (function() {
 			if (err) {
 				console.error(err);
 			}
-			res.render('admin/auditionees', {auditionees: auditionees});
+			var payLoad = _.merge({
+				auditionees: auditionees
+			}, req.flash());
+			res.render('admin/auditionees', payLoad);
+		});
+	});
+
+	router.post('/auditionees/delete', function(req, res) {		
+		Auditionee.remove({
+			_id: req.body.auditioneeId
+		}, function(err, auditionee) {
+			if (err) {
+				console.error('error deleting auditionee: ' + auditionee);
+				req.flash('auditioneesMessage', 'error deleting auditionee!');
+			} else {
+				req.flash('auditioneesMessage', 'Successfully deleted auditionee');
+			}
+			res.redirect('/admin/auditionees');
 		});
 	});
 

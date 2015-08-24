@@ -3,11 +3,11 @@
 	<script>
 		function deleteUser(email, id) {
 			if(confirm('Are you sure you want to delete user with email, \''+email+'\'?')) {
-				var buyForm = $("<form></form>")
+				var form = $("<form></form>")
 						.attr({method: 'post', action: '/admin/users/delete', style: "display:none;"})
 						.append($('<input>').attr({type: 'hidden', name: 'userId', value: id}));
-				$('body').append(buyForm);
-				buyForm.submit();
+				$('body').append(form);
+				form.submit();
 			}
 		}
 	</script>

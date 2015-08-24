@@ -49,6 +49,10 @@ header {
 	display: inline-block;
 	width: 100%;
 	border: none;
+	border-bottom: 3px solid #008000;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
 }
 
 .slider img {
@@ -77,6 +81,8 @@ ul.slides li {
 	margin-top: 15px;
 	padding: 10px;
 	background-color: #E8E8E8;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
 	border-radius: 3px;
 	display: inline-block;
 	width: 100%;
@@ -182,7 +188,7 @@ ul.slides li {
 	height: 200px;
 }
 
-.audition-form button {
+.audition-form .button {
 	border-radius: 6px;
 	border: 0;
 	background-color: #008000;
@@ -192,6 +198,12 @@ ul.slides li {
 	width: 280px;
 	cursor: pointer;
 }
+
+.audition-form .button:disabled {
+	background-color: #2CB32C;
+	border: 4px solid #008000;
+	line-height: 1px;
+}	
 
 .form input, select, textarea {
 	-webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
@@ -223,6 +235,30 @@ section.two-column {
 	color: #008000;
 }
 
+.fb-post .fb-video {
+	position: relative;
+}
+
+.fb-post .fb-video img {
+	width: 100%;
+	height: 170px;
+	object-fit: none;
+	object-position: center;
+}
+
+.fb-post .fb-video i {
+	position: absolute;
+	margin: auto;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 52px;
+	height: 58px;
+	font-size: 60px;
+	color: white;
+}
+
 .fb-post .fb-image img {
 	width: 100%;
 }
@@ -252,5 +288,3 @@ section.two-column {
 .fb-post .fb-header a {
 	font-weight: bold;
 }
-
-

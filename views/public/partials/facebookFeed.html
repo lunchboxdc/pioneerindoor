@@ -18,5 +18,9 @@
 				<span class="domain">{{caption}}</span>
 			</div>
 		{{/equals}}
+		{{#equals type 'video'}}
+			<p>{{message}}</p>
+			<a href="{{link}}" target="_blank"><div class="fb-video"><img src="{{attachmentImage}}"><i class="fa fa-play-circle-o video-play"></i></div></a>
+		{{/equals}}
     </div>
 {{/each}}

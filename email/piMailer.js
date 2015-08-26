@@ -4,12 +4,21 @@ var handlebars  = require('handlebars');
 var fs = require('fs');
 var appConfig = require('../common/appConfig');
 
-var newUserTemplate;
-fs.readFile('email/templates/newAdminUser.html', 'utf8', function (err, html) {
+var adminRegistrationTemplate;
+fs.readFile(__dirname + '/templates/adminRegistration.html', 'utf8', function (err, html) {
     if(err) {
-        console.error('piMailer: failed to load newUser template: '+err);
+        console.error('piMailer: failed to load adminRegistrationTemplate template: '+err);
     } else {
-        newUserTemplate = handlebars.compile(html);
+        adminRegistrationTemplate = handlebars.compile(html);
+    }
+});
+
+var auditionConfirmationTemplate;
+fs.readFile(__dirname + '/templates/auditionConfirmation.html', 'utf8', function (err, html) {
+    if(err) {
+        console.error('piMailer: failed to load auditionConfirmationTemplate template: '+err);
+    } else {
+        auditionConfirmationTemplate = handlebars.compile(html);
     }
 });
 
@@ -22,12 +31,35 @@ var transport = nodemailer.createTransport(ses({
 
 module.exports = {
 
-    emailNewAdmin: function(firstName, email, token, userId) {
-        if(newUserTemplate) {
-            var emailHtml = newUserTemplate({host: appConfig.host, firstName: firstName, token: token, userId: userId});
+    sendAuditionConfirmation: function(firstName, email) {
+        if(auditionConfirmationTemplate) {
+            var emailHtml = auditionConfirmationTemplate({firstName: firstName});
+            var options = {
+                from: 'Pioneer Indoor <admin@lunchboxdc.me>',
+                sender: 'admin@lunchboxdc.me',
+                to: email,
+                subject: 'You\'re signed up!',
+                html: emailHtml
+            };
+
+            this.sendMail(options, function(error, info){
+                if(error){
+                    console.error(error);
+                } else {
+                    console.info('Audition Confirmation email sent for: %s - %s', firstName, email);
+                }
+            });
+        } else {
+            console.error("piMailer: auditionConfirmationTemplate is undefined.");
+        }
+    },
+
+    sendAdminRegistration: function(firstName, email, token, userId) {
+        if(adminRegistrationTemplate) {
+            var emailHtml = adminRegistrationTemplate({host: appConfig.host, firstName: firstName, token: token, userId: userId});
             var options = {
                 from: 'admin@lunchboxdc.me',
-                to: 'lunchboxdc@gmail.com',
+                to: email,
                 subject: 'Welcome to Pioneer Indoor',
                 html: emailHtml
             };

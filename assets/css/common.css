@@ -1,3 +1,19 @@
+.modal {
+  display:none;
+  background-color: #ffffff;
+  padding: 15px;
+  width: 800px;
+}
+.modal .b-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+.modal .b-close i {
+  font-size: 25px;
+  cursor: pointer;
+}
+
 .loader {
   font-size: 10px;
   margin: 50px auto;

@@ -27,19 +27,15 @@
       }
     }
 
-    function auditionSubmit(form) {
-      $('#submitButton').prop("disabled",true);
-      $('#submitButton').val("Please wait...");
-    }
-
     $(function() {
       $('#dob').mask('00/00/0000');
       $('#phone, #pg1Phone1, #pg1Phone2').mask('000-000-0000');
       $('#zip, #pg1Zip').mask('00000');
 
-      window.Parsley.on('form:error', function() {
-        $('#submitButton').prop("disabled",false);
-        $('#submitButton').val("Submit");
+      window.Parsley.on('form:submit', function() {
+        $('.hidden').prop("disabled",true);
+        $('#submitButton').prop("disabled",true);
+        $('#submitButton').val("Please wait...");
       });
     });
   </script>
@@ -52,7 +48,7 @@
     <h1>Audition</h1>
   </div>
 
-  <form class="audition-form form" action="/audition" method="post" onsubmit="return auditionSubmit();" data-parsley-validate>
+  <form class="audition-form form" action="/audition" method="post" data-parsley-validate>
     <div class="content-block">
       <h2>Your Information</h2>
       <section class="two-column">
@@ -127,7 +123,7 @@
         </div>
         <div class="input-row">
           <label for="pg1Phone1">Phone 1</label>
-          <input id="pg1Phone1" name="pgPhone1" placeholder="Phone 1"/>
+          <input id="pg1Phone1" name="pg1Phone1" placeholder="Phone 1"/>
         </div>
         <div class="input-row">
           <label for="pg1Phone2">Phone 2</label>

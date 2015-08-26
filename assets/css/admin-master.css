@@ -84,3 +84,44 @@ body {
 .admin-table th {
 	text-align: left;
 }
+
+.modal-content h3 {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.modal-content .section {
+	padding-bottom: 10px;
+	display: inline-block;
+	width: 100%;
+}
+
+.modal-content .block {
+	display: inline-block;
+	width: 100%;
+	float: left;
+}
+
+.modal-content .block.half {
+	width: 50%;
+}
+
+.modal-content .block .row {
+	margin-bottom: 5px;
+}
+.modal-content .block .row .row-block {
+	display: inline-block;
+}
+
+.modal-content .block .row .row-block.label {
+	float: left;
+	width: 300px;
+}
+
+.modal-content .half .row .row-block.label {
+	width: 120px;
+}
+
+.modal-content .block .row .row-block.label span {
+	font-weight: 400;
+}

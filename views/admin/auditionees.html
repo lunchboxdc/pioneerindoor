@@ -1,16 +1,30 @@
 {{#section 'head'}}
 	<link type="text/css" rel="stylesheet" href="/assets/css/admin-master.css"/>
 	<script>
+		var auditioneeTemplate;
+		$.get("/assets/template/auditioneeTemplate.html", function(data) {
+			auditioneeTemplate = Handlebars.compile(data);
+		});
+
 		function deleteAuditionee(firstName, lastName, id) {
 			if(confirm('Are you sure you want to delete auditionee, '+firstName+' '+lastName+'?')) {
 				var form = $("<form></form>")
-						.attr({method: 'post', action: '/admin/auditionees/delete', style: "display:none;"})
-						.append($('<input>').attr({type: 'hidden', name: 'auditioneeId', value: id}));
+					.attr({method: 'post', action: '/admin/auditionees/delete', style: "display:none;"})
+					.append($('<input>').attr({type: 'hidden', name: 'auditioneeId', value: id}));
 				$('body').append(form);
 				form.submit();
 			}
 		}
+
+		function showModal(id) {
+			var auditionee = auditionees.filter(function(obj) {
+				return obj._id == id;
+			});
+			$('#auditioneeModal .modal-content').html(auditioneeTemplate(auditionee[0]));
+			$('#auditioneeModal').bPopup();
+		}
 	</script>
+
 {{/section}}
 
 {{> leftRail}}
@@ -36,9 +50,9 @@
 				<th>Email</th>
 			</tr>
 		</thead>
-		<tbody>		
+		<tbody>
 			{{#each auditionees}}
-				<tr>
+				<tr onclick="showModal('{{_id}}')">
 					<td>{{firstName}}</td>
 					<td>{{lastName}}</td>
 					<td>{{address1}}</td>
@@ -52,5 +66,11 @@
 				</tr>
 			{{/each}}
 		</tbody>
-	</table>		
+	</table>
+	<div id="auditioneeModal" class="modal">
+		<span class="b-close"><i class="fa fa-times-circle"></i></span>
+
+		<div class="modal-content"></div>
+	</div>
+	<script>var auditionees = {{{auditioneesString}}};</script>
 </div>

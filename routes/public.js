@@ -49,7 +49,7 @@ module.exports = function(passport) {
 		auditionee.lastName = req.body.lastName;
 		auditionee.dob = req.body.dob;
 		auditionee.phone = req.body.phone;
-		auditionee.email = req.body.email;		
+		auditionee.email = req.body.email;
 		auditionee.address1 = req.body.address1;
 		auditionee.address2 = req.body.address2;
 		auditionee.city = req.body.city;
@@ -78,12 +78,12 @@ module.exports = function(passport) {
 		auditionee.conflicts = req.body.conflicts;
 		auditionee.goal = req.body.goal;
 
-		auditionee.save(function(err) {
+		auditionee.save(function(err, auditionee) {
 			if (err) {
 				console.log(err);
 				res.redirect('/audition/error');
 			} else {
-				sendEmail();
+				piMailer.sendAuditionConfirmation(auditionee.firstName, auditionee.email);
 				res.redirect('/audition/confirm');
 			}
 		});
@@ -155,27 +155,6 @@ module.exports = function(passport) {
 			}
 		});
 	});
-
-	var sendEmail = function() {
-		try {
-			var options = {
-			    from: 'admin@lunchboxdc.me',
-			    to: 'lunchboxdc@gmail.com',
-			    subject: 'Test email',
-			    html: '<b>Html</b>'
-			};
-
-			piMailer.sendMail(options, function(error, info){
-			    if(error){
-			        console.error(error);
-			    } else {
-			        console.info('Message sent: ' + info.response);
-			    }
-			});
-		} catch (e) {
-			console.error(e);
-		}
-	};
 
 	return router;
 };

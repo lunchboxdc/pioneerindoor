@@ -20,13 +20,14 @@ module.exports = (function() {
 				console.error(err);
 			}
 			var payLoad = _.merge({
-				auditionees: auditionees
+				auditionees: auditionees,
+				auditioneesString: JSON.stringify(auditionees)
 			}, req.flash());
 			res.render('admin/auditionees', payLoad);
 		});
 	});
 
-	router.post('/auditionees/delete', function(req, res) {		
+	router.post('/auditionees/delete', function(req, res) {
 		Auditionee.remove({
 			_id: req.body.auditioneeId
 		}, function(err, auditionee) {
@@ -82,7 +83,7 @@ module.exports = (function() {
 						console.error('error adding user: ' + user);
 						payLoad['usersMessage'] = 'error adding user!';
 					}
-					piMailer.emailNewAdmin(user.firstName, user.email, token, user._id);
+					piMailer.sendAdminRegistration(user.firstName, user.email, token, user._id);
 					res.render('admin/newUserSuccess', payLoad);
 				});
 			}

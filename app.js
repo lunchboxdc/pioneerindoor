@@ -11,9 +11,6 @@ var favicon = require('serve-favicon');
 
 mongoose.connect('mongodb://localhost/pi');
 
-require('./common/scheduler');
-
-var app = express();
 var hbs = exphbs.create({
 	extname: '.html',
     layoutsDir: path.join(app.settings.views, ""),
@@ -42,6 +39,23 @@ var hbs = exphbs.create({
     }
 });
 
+var app = express();
+
+//middleware and other components specific to either prod or non-prod
+if(process.env.NODE_ENV !== 'prod') {
+    //not behind nginx locally so lets serve out assets through node
+    app.use('/assets', express.static('assets'));
+} else {
+    //force ssl in prod
+    app.use(function(req, res, next) {
+        if(!req.secure) {
+            return res.redirect('https://'+req.get('host')+req.url);
+        }
+        next();
+    });
+    //run scheduler in prod
+    require('./common/scheduler');
+}
 
 app.engine('html', hbs.engine);
 app.set('view engine', 'html');
@@ -55,12 +69,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-if(process.env.NODE_ENV !== 'prod') {
-    app.use('/assets', express.static('assets'));
-}
-
- // Using the flash middleware provided by connect-flash to store messages in session
- // and displaying in templates
 var flash = require('connect-flash');
 app.use(flash());
 

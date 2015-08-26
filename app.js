@@ -50,12 +50,12 @@ if(process.env.NODE_ENV !== 'prod') {
     app.use('/assets', express.static('assets'));
 } else {
     //force ssl in prod
-    app.use(function(req, res, next) {
+    /*app.use(function(req, res, next) {
         if(!req.secure) {
             return res.redirect('https://'+req.get('host')+req.url);
         }
         next();
-    });
+    });*/
     //run scheduler in prod
     require('./common/scheduler');
 }

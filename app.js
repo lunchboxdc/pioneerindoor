@@ -11,6 +11,9 @@ var favicon = require('serve-favicon');
 
 mongoose.connect('mongodb://localhost/pi');
 
+var app = express();
+app.set('view engine', 'html');
+
 var hbs = exphbs.create({
 	extname: '.html',
     layoutsDir: path.join(app.settings.views, ""),
@@ -39,7 +42,7 @@ var hbs = exphbs.create({
     }
 });
 
-var app = express();
+app.engine('html', hbs.engine);
 
 //middleware and other components specific to either prod or non-prod
 if(process.env.NODE_ENV !== 'prod') {
@@ -56,9 +59,6 @@ if(process.env.NODE_ENV !== 'prod') {
     //run scheduler in prod
     require('./common/scheduler');
 }
-
-app.engine('html', hbs.engine);
-app.set('view engine', 'html');
 
 app.use(expressSession({
     resave: false,

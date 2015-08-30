@@ -8,6 +8,14 @@ header {
 	width: 100%;
 }
 
+a.blue-link {
+	color: blue;
+}
+
+.bold {
+	font-weight: bold;
+}
+
 .center {
 	display: block;
 	margin-right: auto;
@@ -77,9 +85,10 @@ ul.slides li {
 	float: right;
 }
 
-.content-block {
+.tile {
 	margin-top: 15px;
 	padding: 10px;
+	padding-bottom: 15px;
 	background-color: #E8E8E8;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
@@ -87,9 +96,13 @@ ul.slides li {
 	display: inline-block;
 	width: 100%;
 	box-sizing: border-box;
+	position: relative;
+}
+.tile ul {
+	margin: 0;
 }
 
-.content-block.blog-post {
+.tile.blog-post {
 	padding: 30px;
 }
 
@@ -104,16 +117,58 @@ ul.slides li {
 	letter-spacing: .8px;
 }
 
-.content-block h2 {
+.tile h2 {
 	padding-left: 10px;
 }
 
-.audition-form .input-row {
+.tile .block {
+	margin: 10px 0;
+}
+
+.tile .block .title {
+	margin-bottom: 5px;
+}
+
+.input-row {
+	position: relative;
 	width: 100%;
 	display: inline-block;
 	padding: 5px;
-	overflow: hidden;
 	box-sizing: border-box;
+}
+
+.pg-button {	
+	position: absolute;
+	right: 20px;
+	top: 30px;
+}
+
+.pg-button i {
+	font-size: 28px;
+	float: left;
+	padding-left: 3px;
+	cursor: pointer
+}
+
+.pg-button span {
+	font-size: 18px;
+	font-weight: bold;
+	float: left;
+	padding-top: 3px;
+	padding-left: 5px;
+	cursor: pointer;
+}
+
+.add-pg i {
+	color: #008000;
+}
+
+.remove-pg i {
+	color: red;
+}
+
+.hidden {
+	display: none;
 }
 
 .input-row.hidden {
@@ -137,14 +192,29 @@ ul.slides li {
 	width: 66%;
 }
 
+.input-row label.wrap {
+	width: 350px;
+	display: inline-block;
+}
+
+.audition-form .column {
+	float: left;
+	padding: 5px 10px;
+	box-sizing: border-box;
+}
+
+.audition-form .column.medium {
+	width: 50%;
+}
+
 .audition-form input, select, textarea {
 	background-color: #ffffff;
 	display: block;
 	width: 100%;
 	height: 40px;
 	font-size: 16px;
-	padding: 0 15px;
-	border: 0;
+	padding: 0 13px;
+	border: 2px solid #ffffff;
 	border-radius: 4px;
 	box-sizing: border-box;
 }
@@ -164,6 +234,7 @@ ul.slides li {
 
 .audition-form .checkbox-label {
 	position: relative;
+	margin-top: 10px;
 }
 
 .audition-form .checkbox + .checkbox-label:before {
@@ -185,7 +256,7 @@ ul.slides li {
 
 .audition-form textarea {
 	padding: 6px 8px;
-	height: 200px;
+	height: 180px;
 }
 
 .audition-form .button {
@@ -221,18 +292,40 @@ section.two-column {
 	float: left;
 }
 
-.add-row {
-	display: inline;
-	padding: 0 0 10px 5px;
+.add-button {
 	cursor: pointer;
 }
 
-.add-row span {
+.add-button i {
+	color: #008000;
+}
+
+.add-button span {
 	margin-left: 5px;
 }
 
-.add-row i {
-	color: #008000;
+.remove-button {
+	cursor: pointer;
+}
+
+.remove-button i {
+	color: red;
+}
+
+.important-info {
+	margin-left: 12px;
+	margin-bottom: 5px;
+}
+
+.important-info .label {
+	display: inline-block;
+	float: left;
+	width: 55px;
+}
+
+.important-info .content {
+	display: block;
+	margin-left: 55px;
 }
 
 .fb-post .fb-video {
@@ -287,4 +380,30 @@ section.two-column {
 
 .fb-post .fb-header a {
 	font-weight: bold;
+}
+
+.parsley-errors-list {
+	position: absolute;
+	right: 10px;
+	font-size: 14px;
+	padding: 0;
+}
+
+.parsley-errors-list li:first-child{
+   	display: inline;
+	font-weight: 400;
+	font-style: italic;
+	color: #ff6666;
+}​	
+
+.parsley-errors-list li {
+	display: none;
+}
+.checkbox-error .parsley-errors-list {
+	right: auto;
+	top: 0;
+}
+
+.audition-form .input-row .parsley-error {
+	border: 2px solid #ff6666;
 }

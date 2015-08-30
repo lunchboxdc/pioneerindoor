@@ -49,3 +49,7 @@ h1, h2 {
 	color: #d3d3d3;
 	font-weight: 300;
 }
+
+table {
+	border-collapse: collapse;
+}

@@ -72,19 +72,45 @@ body {
 	border-top: 1px solid #D3D3D3;
 	margin-top: 20px;
 }
-.content {
+.admin-body {
 	margin-left: 250px;
-}
-.content h1 {
-	margin: 0;
+	padding: 30px;
 }
 .admin-table {
-	width: 75%;
+	width: 100%;
 }
 .admin-table th {
 	text-align: left;
+	border-bottom: 2px solid #999999;
 }
-
+.admin-table th, td {
+	padding: 5px;
+}
+.admin-table .delete {
+	text-align: center;
+}
+.admin-table td.delete {
+	padding: 0;
+}
+.admin-table td.delete:hover {
+	background-color: #ff3b3b;
+}
+.admin-table td.delete span {
+	display: inline-block;
+}
+.admin-table td.delete i {
+	font-size: 25px;
+}
+.admin-table tbody tr {
+	cursor: pointer;
+}
+.admin-table tbody tr:hover {
+	background-color: #008000;
+	color: #ffffff;
+}
+.admin-table tbody td {
+	color: inherit;
+}
 .modal-content h3 {
 	font-weight: bold;
 	font-size: 16px;
@@ -113,6 +139,11 @@ body {
 	display: inline-block;
 }
 
+.modal-content .block .row .row-block.content {
+	display: block;
+	margin-left: 300px;
+}
+
 .modal-content .block .row .row-block.label {
 	float: left;
 	width: 300px;
@@ -122,6 +153,78 @@ body {
 	width: 120px;
 }
 
+.modal-content .half .row .row-block.content {
+	display: block;
+	margin-left: 120px;
+}
+
 .modal-content .block .row .row-block.label span {
 	font-weight: 400;
+}
+
+.register-content {
+	padding: 20px;
+}
+.register-content .input-row {
+	width: 300px;
+	padding: 5px;
+	position: relative;
+}
+.register-content .input-row label {
+	font-size: 14px;
+}	
+.register-content .input-row input {
+	background-color: #ffffff;
+	display: block;
+	width: 100%;
+	height: 40px;
+	font-size: 16px;
+	padding: 0 13px;
+	border: 2px solid #ffffff;
+	border-radius: 4px;
+	box-sizing: border-box;
+	-webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
+	-moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
+	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
+}
+.register-content .input-row button {
+	border-radius: 6px;
+	border: 0;
+	background-color: #008000;
+	color: #ffffff;
+	font-size: 18px;
+	padding: 12px;
+	width: 100%;
+	cursor: pointer;
+}
+
+.register-content .input-row.button-row {
+	margin-top: 20px;
+}
+
+.parsley-errors-list {
+	position: absolute;
+	right: 10px;
+	font-size: 14px;
+	padding: 0;
+	margin: 0;
+}
+
+.parsley-errors-list li:first-child{
+   	display: inline;
+	font-weight: 400;
+	font-style: italic;
+	color: #ff6666;
+}​	
+
+.parsley-errors-list li {
+	display: none;
+}
+.checkbox-error .parsley-errors-list {
+	right: auto;
+	top: 0;
+}
+
+.register-content .input-row .parsley-error {
+	border: 2px solid #ff6666;
 }

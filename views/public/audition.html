@@ -2,29 +2,32 @@
   <link type="text/css" rel="stylesheet" href="/assets/css/master.css"/>
 
   <script>
-    var instrumentsChosen = 1;
-    function addInstrument() {
-      instrumentsChosen++;
-      $('#auditionInstrumentRow'+instrumentsChosen).removeClass('hidden');
-      if(instrumentsChosen===3) {
-        $('#addInstrumentButton').hide();
+    function pg1AddressToggle(e) {
+      if(e.checked) {
+        $('#pg1AddressFields').addClass('hidden');
+      } else {
+        $('#pg1AddressFields').removeClass('hidden');
       }
     }
 
-    function onPrevEnsemble(e) {
+    function pg2AddressToggle(e) {
       if(e.checked) {
-        $('#prevEnsembleDescRow').removeClass('hidden');
+        $('#pg2AddressFields').addClass('hidden');
       } else {
-        $('#prevEnsembleDescRow').addClass('hidden');
+        $('#pg2AddressFields').removeClass('hidden');
       }
     }
 
     function referralChange(e) {
-      if(e.value==='other') {
+      if(e.value.toLowerCase()==='other') {
         $('#referralOtherRow').removeClass('hidden');
       } else {
         $('#referralOtherRow').addClass('hidden');
       }
+    }
+
+    function togglePG() {
+      $('#altPG, .add-pg').toggleClass('hidden');
     }
 
     $(function() {
@@ -37,19 +40,22 @@
         $('#submitButton').prop("disabled",true);
         $('#submitButton').val("Please wait...");
       });
-    });
+      $('.audition-form').parsley({
+          excluded: '.hidden *'
+      });
+    });  
   </script>
 {{/section}}
 
 <div class="site-container">
   {{> nav}}
 
-  <div class="content-block">
+  <div class="tile">
     <h1>Audition</h1>
   </div>
 
-  <form class="audition-form form" action="/audition" method="post" data-parsley-validate>
-    <div class="content-block">
+  <form class="audition-form form" action="/audition" method="post">
+    <div class="tile">
       <h2>Your Information</h2>
       <section class="two-column">
         <div class="input-row">
@@ -58,29 +64,29 @@
         </div>
         <div class="input-row">
           <label for="lastName">Last Name</label>
-          <input id="lastName" name="lastName" placeholder="Last Name"/>
+          <input id="lastName" name="lastName" placeholder="Last Name" required />
         </div>
         <div class="input-row">
           <label for="dob">Birthdate (mm/dd/yyyy)</label>
-          <input id="dob" name="dob" placeholder="Birthdate"/>
+          <input id="dob" name="dob" placeholder="Birthdate" required data-parsley-minlength="10" data-parsley-minlength-message="Birthdate must match this format mm/dd/yyyy" />
         </div>
         <div class="input-row">
           <label for="phone">Phone</label>
-          <input id="phone" name="phone" placeholder="Phone"/>
+          <input id="phone" name="phone" placeholder="Phone" required data-parsley-minlength="12" data-parsley-minlength-message="Phone number must be 10 digits"/>
         </div>
         <div class="input-row">
           <label for="email">Email</label>
-          <input id="email" name="email" placeholder="Email"/>
+          <input id="email" name="email" placeholder="Email" required data-parsley-type="email" />
         </div>
         <div class="input-row">
           <label for="email2">Re-enter Email</label>
-          <input id="email2" name="email2" placeholder="Re-enter Email"/>
+          <input id="email2" name="email2" placeholder="Re-enter Email" required data-parsley-equalto="#email" data-parsley-type="email" data-parsley-equalto-message="Email addresses should match" />
         </div>
       </section>
       <section class="two-column">
         <div class="input-row">
           <label for="address1">Address 1</label>
-          <input id="address1" name="address1" placeholder="Address 1"/>
+          <input id="address1" name="address1" placeholder="Address 1" required />
         </div>
         <div class="input-row">
           <label for="address2">Address 2</label>
@@ -88,17 +94,17 @@
         </div>
         <div class="input-row">
           <label for="city">City</label>
-          <input id="city" name="city" placeholder="City"/>
+          <input id="city" name="city" placeholder="City" required />
         </div>
         <div class="input-row large">
           <label for="state">State</label>
-          <select id="state" name="state">
+          <select id="state" name="state" required >
             {{> stateOptions}}
           </select>
         </div>
         <div class="input-row small">
           <label for="zip">Zipcode</label>
-          <input id="zip" name="zip" placeholder="Zipcode"/>
+          <input id="zip" name="zip" placeholder="Zipcode" required data-parsley-minlength="5" data-parsley-minlength-message="Zipcode must be 5 digits"/>
         </div>
         <div class="input-row">
           <label for="school">School Attending</label>
@@ -110,185 +116,262 @@
         </div>
       </section>
     </div>
-    <div class="content-block">
+    <div class="tile">
       <h2>Parent/Guardian Information</h2>
       <section class="two-column">
         <div class="input-row">
           <label for="pg1FirstName">First Name</label>
-          <input id="pg1FirstName" name="pg1FirstName" placeholder="First Name"/>
+          <input id="pg1FirstName" name="pg1FirstName" placeholder="First Name" required />
         </div>
         <div class="input-row">
           <label for="pg1LastName">Last Name</label>
-          <input id="pg1LastName" name="pg1LastName" placeholder="Last Name"/>
+          <input id="pg1LastName" name="pg1LastName" placeholder="Last Name" required />
         </div>
+        <div id="pg1AddressFields" class="hidden">
+          <div class="input-row">
+            <label for="pg1Address1">Address 1</label>
+            <input id="pg1Address1" name="pg1Address1" placeholder="Address 1" required />
+          </div>
+          <div class="input-row">
+            <label for="pg1Address2">Address 2</label>
+            <input id="pg1Address2" name="pg1Address2" placeholder="Address 2"/>
+          </div>
+          <div class="input-row">
+            <label for="pg1City">City</label>
+            <input id="pg1City" name="pg1City" placeholder="City" required />
+          </div>
+          <div class="input-row large">
+            <label for="pg1State">State</label>
+            <select id="pg1State" name="pg1State" required >
+              {{> stateOptions}}
+            </select>
+          </div>
+          <div class="input-row small">
+            <label for="pg1Zip">Zipcode</label>
+            <input id="pg1Zip" name="pg1Zip" placeholder="Zipcode" required />
+          </div>
+        </div>  
         <div class="input-row">
-          <label for="pg1Phone1">Phone 1</label>
-          <input id="pg1Phone1" name="pg1Phone1" placeholder="Phone 1"/>
-        </div>
-        <div class="input-row">
-          <label for="pg1Phone2">Phone 2</label>
-          <input id="pg1Phone2" name="pg1Phone2" placeholder="Phone 2"/>
-        </div>
-        <div class="input-row">
-          <label for="pg1Email">Email</label>
-          <input id="pg1Email" name="pg1Email" placeholder="Email"/>
-        </div>
-        <div class="input-row">
-          <label for="pg1Email2">Re-enter Email</label>
-          <input id="pg1Email2" name="pg1Email2" placeholder="Re-enter Email"/>
+          <input id="addressSameAsAuditionee" type="checkbox" class="checkbox" onclick="pg1AddressToggle(this)" checked/>
+          <label for="addressSameAsAuditionee" class="checkbox-label">Parent/guardian address same as your address</label>
         </div>
       </section>
       <section class="two-column">
         <div class="input-row">
-          <label for="pg1Address1">Address 1</label>
-          <input id="pg1Address1" name="pg1Address1" placeholder="Address 1"/>
+          <label for="pg1Phone1">Phone 1</label>
+          <input id="pg1Phone1" name="pg1Phone1" placeholder="Phone 1" required data-parsley-minlength="12" data-parsley-minlength-message="Phone number must be 10 digits" />
         </div>
         <div class="input-row">
-          <label for="pg1Address2">Address 2</label>
-          <input id="pg1Address2" name="pg1Address2" placeholder="Address 2"/>
+          <label for="pg1Phone2">Phone 2</label>
+          <input id="pg1Phone2" name="pg1Phone2" placeholder="Phone 2" data-parsley-minlength="12" data-parsley-minlength-message="Phone number must be 10 digits" />
         </div>
         <div class="input-row">
-          <label for="pg1City">City</label>
-          <input id="pg1City" name="pg1City" placeholder="City"/>
+          <label for="pg1Email">Email</label>
+          <input id="pg1Email" name="pg1Email" placeholder="Email" required data-parsley-type="email" />
         </div>
-        <div class="input-row large">
-          <label for="pg1State">State</label>
-          <select id="pg1State" name="pg1State">
-            {{> stateOptions}}
-          </select>
-        </div>
-        <div class="input-row small">
-          <label for="pg1Zip">Zipcode</label>
-          <input id="pg1Zip" name="pg1Zip" placeholder="Zipcode"/>
+        <div class="input-row">
+          <label for="pg1Email2">Re-enter Email</label>
+          <input id="pg1Email2" name="pg1Email2" placeholder="Re-enter Email" required data-parsley-equalto="#email" data-parsley-type="email" data-parsley-equalto-message="Email addresses should match" />
         </div>
       </section>
+      <div id="addPGbutton" class="pg-button add-pg" onclick="togglePG()">
+        <i class="fa fa-plus-square"></i>
+        <span>Add Parent/Guardian</span>
+      </div>
     </div>
-    <div class="content-block">
+
+
+    <div id="altPG" class="tile hidden">
+      <h2>Alternate Parent/Guardian Information</h2>
+      <section class="two-column">
+        <div class="input-row">
+          <label for="pg2FirstName">First Name</label>
+          <input id="pg2FirstName" name="pg2FirstName" placeholder="First Name" required />
+        </div>
+        <div class="input-row">
+          <label for="pg2LastName">Last Name</label>
+          <input id="pg2LastName" name="pg2LastName" placeholder="Last Name" required />
+        </div>
+        <div id="pg2AddressFields" class="hidden">
+          <div class="input-row">
+            <label for="pg2Address1">Address 1</label>
+            <input id="pg2Address1" name="pg2Address1" placeholder="Address 1" required />
+          </div>
+          <div class="input-row">
+            <label for="pg2Address2">Address 2</label>
+            <input id="pg2Address2" name="pg2Address2" placeholder="Address 2"/>
+          </div>
+          <div class="input-row">
+            <label for="pg2City">City</label>
+            <input id="pg2City" name="pg2City" placeholder="City" required />
+          </div>
+          <div class="input-row large">
+            <label for="pg2State">State</label>
+            <select id="pg2State" name="pg2State" required >
+              {{> stateOptions}}
+            </select>
+          </div>
+          <div class="input-row small">
+            <label for="pg2Zip">Zipcode</label>
+            <input id="pg2Zip" name="pg2Zip" placeholder="Zipcode" required />
+          </div>
+        </div>  
+        <div class="input-row">
+          <input id="pg2SameAddress" type="checkbox" class="checkbox" onclick="pg2AddressToggle(this)" checked/>
+          <label for="pg2SameAddress" class="checkbox-label">Address same as primary parent/guardian address</label>
+        </div>
+      </section>
+      <section class="two-column">
+        <div class="input-row">
+          <label for="pg2Phone1">Phone 1</label>
+          <input id="pg2Phone1" name="pg2Phone1" placeholder="Phone 1" required data-parsley-minlength="12" data-parsley-minlength-message="Phone number must be 10 digits" />
+        </div>
+        <div class="input-row">
+          <label for="pg2Phone2">Phone 2</label>
+          <input id="pg2Phone2" name="pg2Phone2" placeholder="Phone 2" data-parsley-minlength="12" data-parsley-minlength-message="Phone number must be 10 digits" />
+        </div>
+        <div class="input-row">
+          <label for="pg2Email">Email</label>
+          <input id="pg2Email" name="pg2Email" placeholder="Email" required data-parsley-type="email" />
+        </div>
+        <div class="input-row">
+          <label for="pg2Email2">Re-enter Email</label>
+          <input id="pg2Email2" name="pg2Email2" placeholder="Re-enter Email" required data-parsley-equalto="#email" data-parsley-type="email" data-parsley-equalto-message="Email addresses should match" />
+        </div>
+      </section>
+      <div id="removePGbutton" class="pg-button remove-pg" onclick="togglePG()">
+        <i class="fa fa-minus-square"></i>
+        <span>Remove Parent/Guardian</span>
+      </div>
+    </div>
+
+
+
+    <div class="tile">
       <h2>Audition Information</h2>
       <section class="two-column">
         <div class="input-row">
           <label for="referral">How did you hear about Pioneer Indoor?</label>
-          <select id="referral" name="referral" onchange="referralChange(this)">
+          <select id="referral" name="referral" onchange="referralChange(this)" required >
             <option value="">Select One</option>
-            <option value="returningFormer">Returning or former member</option>
-            <option value="friendFamily">Friend/Family member</option>
-            <option value="percussionInstructor">Percussion Instructor</option>
-            <option value="bandDirector">Band Director</option>
-            <option value="sawPIAtWGIEvent">I saw Pioneer Indoor perform at a WGI event</option>
-            <option value="sawPIAtChiEvent">I saw Pioneer Indoor perform at a Chicagoland event</option>
-            <option value="other">Other</option>
+            <option>Returning or former member</option>
+            <option>Friend/Family member</option>
+            <option>Percussion Instructor</option>
+            <option>Band Director</option>
+            <option>I saw Pioneer Indoor perform at a WGI event</option>
+            <option>I saw Pioneer Indoor perform at a Chicagoland event</option>
+            <option>Other</option>
           </select>
         </div>
 
         <div id="referralOtherRow" class="input-row hidden">
           <label for="referralOther">Other</label>
-          <input id="referralOther" name="referralOther" placeholder="Other"/>
+          <input id="referralOther" name="referralOther" placeholder="Other" required />
         </div>
 
         <div class="input-row">
           <label for="yearsDrumming">Number of years drumming</label>
-          <select name="yearsDrumming">
+          <select id="yearsDrumming" name="yearsDrumming" required >
             <option value="">Select One</option>
-            <option value="lt1">Less than one year</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-            <option value="15">15</option>
-            <option value="16">16</option>
-            <option value="17">17</option>
-            <option value="18">18</option>
-            <option value="19">19</option>
-            <option value="20">20</option>
+            <option>Less than one year</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+            <option>11</option>
+            <option>12</option>
+            <option>13</option>
+            <option>14</option>
+            <option>15</option>
+            <option>16</option>
+            <option>17</option>
+            <option>18</option>
+            <option>19</option>
+            <option>20</option>
           </select>
-        </div>
-        <div class="input-row">
-          <label for="experience">Please list any DCI or WGI experience (organization, instrument, and years marched)</label>
-          <input id="experience" name="experience"/>
         </div>
       </section>
       <section class="two-column">
         <!-- instrument 1 -->
         <div class="input-row">
           <label for="auditionInstrument1">My first choice is to audition for</label>
-          <select id="auditionInstrument1" name="auditionInstrument1">
+          <select id="auditionInstrument1" name="auditionInstrument1" required >
             <option value="">Select One</option>
-            <option value="pitPercussion">Front ensemble (percussion)</option>
-            <option value="pitElectronics">Front ensemble (electronics)</option>
-            <option value="snare">Snare</option>
-            <option value="tenor">Tenor</option>
-            <option value="bass">Bass</option>
-            <option value="cymbals">Cymbals</option>
-            <option value="character">Character</option>
+            <option>Front ensemble (percussion)</option>
+            <option>Front ensemble (electronics)</option>
+            <option>Snare</option>
+            <option>Tenor</option>
+            <option>Bass</option>
+            <option>Cymbals</option>
+            <option>Character</option>
           </select>
         </div>
         <!-- instrument 2 -->
-        <div id="auditionInstrumentRow2" class="input-row hidden">
+        <div id="auditionInstrumentRow2" class="input-row">
           <label for="auditionInstrument2">My second choice is to audition for</label>
           <select id="auditionInstrument2" name="auditionInstrument2">
             <option value="">Select One</option>
-            <option value="pitPercussion">Front ensemble (percussion)</option>
-            <option value="pitElectronics">Front ensemble (electronics)</option>
-            <option value="snare">Snare</option>
-            <option value="tenor">Tenor</option>
-            <option value="bass">Bass</option>
-            <option value="cymbals">Cymbals</option>
-            <option value="character">Character</option>
+            <option>Front ensemble (percussion)</option>
+            <option>Front ensemble (electronics)</option>
+            <option>Snare</option>
+            <option>Tenor</option>
+            <option>Bass</option>
+            <option>Cymbals</option>
+            <option>Character</option>
           </select>
         </div>
         <!-- instrument 3 -->
-        <div id="auditionInstrumentRow3" class="input-row hidden">
+        <div id="auditionInstrumentRow3" class="input-row">
           <label for="auditionInstrument3">My third choice is to audition for</label>
           <select id="auditionInstrument3" name="auditionInstrument3">
             <option value="">Select One</option>
-            <option value="pitPercussion">Front ensemble (percussion)</option>
-            <option value="pitElectronics">Front ensemble (electronics)</option>
-            <option value="snare">Snare</option>
-            <option value="tenor">Tenor</option>
-            <option value="bass">Bass</option>
-            <option value="cymbals">Cymbals</option>
-            <option value="character">Character</option>
+            <option>Front ensemble (percussion)</option>
+            <option>Front ensemble (electronics)</option>
+            <option>Snare</option>
+            <option>Tenor</option>
+            <option>Bass</option>
+            <option>Cymbals</option>
+            <option>Character</option>
           </select>
-        </div>
-        <div id="addInstrumentButton" class="add-row" onclick="addInstrument()">
-          <i class="fa fa-plus-square"></i>
-          <span>Add Instrument</span>
         </div>
       </section>
 
-      <section>
+      <section class="two-column">        
         <div class="input-row">
-          <label for="specialTalents">Do you have any special talents you would like to share with the Pioneer Indoor staff?</label>
-          <input id="specialTalents" name="specialTalents"/>
+          <label class="wrap" for="experience">Please list any DCI or WGI experience (organization, instrument, and years marched)</label>
+          <textarea id="experience" name="experience"></textarea>
         </div>
-
         <div class="input-row">
-          <label for="conflicts">Please list any known scheduling conflicts with the Pioneer Indoor rehearsal and performance schedule</label>
-          <input id="conflicts" name="conflicts"/>
+          <label class="wrap" for="specialTalents">Do you have any special talents you would like to share with the Pioneer Indoor staff?</label>
+          <textarea id="specialTalents" name="specialTalents"></textarea>
         </div>
+      </section>
 
+
+      <section class="two-column">
         <div class="input-row">
-          <label for="goal">What is your goal if you are chosen to be a part of the Pioneer Indoor Percussion Ensemble?</label>
-          <textarea id="goal" name="goal"></textarea>
+          <label class="wrap" for="conflicts">Please list any known scheduling conflicts with the Pioneer Indoor rehearsal and performance schedule</label>
+          <textarea id="conflicts" name="conflicts"></textarea>
+        </div>
+        <div class="input-row">
+          <label class="wrap" for="goal">What is your goal if you are chosen to be a part of the Pioneer Indoor Percussion Ensemble?</label>
+          <textarea id="goal" name="goal" required ></textarea>
         </div>
       </section>
     </div>
 
-    <div class="content-block">
+    <div class="tile">
       <section>
         <div class="input-row">
-          <input id="agreement" type="checkbox" class="checkbox"/>
+          <input id="agreement" type="checkbox" class="checkbox" required data-parsley-errors-container="#agreementError" data-parsley-error-message="Please accept the agreement before submitting"/>
           <label for="agreement" class="checkbox-label">I understand that by submitting my registration for the 2015 - 2016 season with the Pioneer Indoor Percussion Ensemble does not guarantee me a spot in the ensemble and my $50 audition registration fee is non-refundable.</label>
+          <div id="agreementError" class="checkbox-error"></div>
         </div>
         <div class="input-row">
           <input id="submitButton" type="submit" class="button center" value="Submit"/>

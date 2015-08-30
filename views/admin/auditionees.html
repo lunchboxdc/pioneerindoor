@@ -1,12 +1,26 @@
 {{#section 'head'}}
 	<link type="text/css" rel="stylesheet" href="/assets/css/admin-master.css"/>
 	<script>
+		Handlebars.registerHelper('notEmpty', function(val, options) {
+			if (typeof val!=='undefined' && val!==null && val.length>0) {
+				return options.fn(this);
+			}
+			return options.inverse(this);
+		});
+		Handlebars.registerHelper('equals', function(a, b, options) {
+			if (a === b) {
+				return options.fn(this);
+			}
+			return options.inverse(this);
+		});
+
 		var auditioneeTemplate;
 		$.get("/assets/template/auditioneeTemplate.html", function(data) {
 			auditioneeTemplate = Handlebars.compile(data);
 		});
 
-		function deleteAuditionee(firstName, lastName, id) {
+		function deleteAuditionee(firstName, lastName, id, e) {
+			e.stopPropagation();
 			if(confirm('Are you sure you want to delete auditionee, '+firstName+' '+lastName+'?')) {
 				var form = $("<form></form>")
 					.attr({method: 'post', action: '/admin/auditionees/delete', style: "display:none;"})
@@ -29,7 +43,7 @@
 
 {{> leftRail}}
 
-<div class="content">
+<div class="admin-body">
 	<h1>Auditionees</h1>
 
 	{{#if auditioneesMessage}}
@@ -39,30 +53,27 @@
 	<table class="admin-table">
 		<thead>
 			<tr>
-				<th>First Name</th>
-				<th>Last Name</th>
-				<th>Address 1</th>
-				<th>Address 2</th>
-				<th>City</th>
-				<th>State</th>
-				<th>Zip</th>
+				<th>Name</th>
+				<th>Birthdate</th>
 				<th>Phone</th>
 				<th>Email</th>
+				<th>Instrument</th>
+				<th>Instrument 2</th>
+				<th>Instrument 3</th>
+				<th class="delete">Delete</th>
 			</tr>
 		</thead>
 		<tbody>
 			{{#each auditionees}}
 				<tr onclick="showModal('{{_id}}')">
-					<td>{{firstName}}</td>
-					<td>{{lastName}}</td>
-					<td>{{address1}}</td>
-					<td>{{address2}}</td>
-					<td>{{city}}</td>
-					<td>{{state}}</td>
-					<td>{{zip}}</td>
+					<td>{{firstName}} {{lastName}}</td>
+					<td>{{dob}}</td>
 					<td>{{phone}}</td>
 					<td>{{email}}</td>
-					<td><button onclick="deleteAuditionee('{{firstName}}', '{{lastName}}', '{{_id}}')">Delete</button></td>
+					<td>{{auditionInstrument1}}</td>
+					<td>{{auditionInstrument2}}</td>
+					<td>{{auditionInstrument3}}</td>
+					<td class="delete" onclick="deleteAuditionee('{{firstName}}', '{{lastName}}', '{{_id}}', event)"><i class="fa fa-times-circle"></td>
 				</tr>
 			{{/each}}
 		</tbody>

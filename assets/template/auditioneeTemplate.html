@@ -5,13 +5,15 @@
 			<div class="row-block label">
 				<span>Address</span>
 			</div>
-			<div class="row-block">
+			<div class="row-block content">
 				<div>
 					<span>{{address1}}</span>
 				</div>
-				<div>
-					<span>{{address2}}</span>
-				</div>
+				{{#notEmpty address2}}
+					<div>
+						<span>{{address2}}</span>
+					</div>
+				{{/notEmpty}}
 				<div>
 					<span>{{city}},</span>
 					<span>{{state}}</span>
@@ -23,7 +25,7 @@
 			<div class="row-block label">
 				<span>Birthdate</span>
 			</div>
-			<div class="row-block">
+			<div class="row-block content">
 				<div>
 					<span>{{dob}}</span>
 				</div>
@@ -36,7 +38,7 @@
 			<div class="row-block label">
 				<span>Phone</span>
 			</div>
-			<div class="row-block">
+			<div class="row-block content">
 				<div>
 					<span>{{phone}}</span>
 				</div>
@@ -46,32 +48,36 @@
 			<div class="row-block label">
 				<span>Email</span>
 			</div>
-			<div class="row-block">
+			<div class="row-block content">
 				<div>
 					<span>{{email}}</span>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="row-block label">
-				<span>School</span>
-			</div>
-			<div class="row-block">
-				<div>
-					<span>{{school}}</span>
+		{{#notEmpty school}}
+			<div class="row">
+				<div class="row-block label">
+					<span>School</span>
+				</div>
+				<div class="row-block content">
+					<div>
+						<span>{{school}}</span>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="row-block label">
-				<span>Year in School</span>
-			</div>
-			<div class="row-block">
-				<div>
-					<span>{{schoolYear}}</span>
+		{{/notEmpty}}
+		{{#notEmpty schoolYear}}
+			<div class="row">
+				<div class="row-block label">
+					<span>Year in School</span>
+				</div>
+				<div class="row-block content">
+					<div>
+						<span>{{schoolYear}}</span>
+					</div>
 				</div>
 			</div>
-		</div>
+		{{/notEmpty}}
 	</div>
 </div>
 
@@ -82,7 +88,7 @@
 			<div class="row-block label">
 				<span>Name</span>
 			</div>
-			<div class="row-block">
+			<div class="row-block content">
 				<div>
 					<span>{{pg1FirstName}} {{pg1LastName}}</span>
 				</div>
@@ -92,13 +98,15 @@
 			<div class="row-block label">
 				<span>Address</span>
 			</div>
-			<div class="row-block">
+			<div class="row-block content">
 				<div>
 					<span>{{pg1Address1}}</span>
 				</div>
-				<div>
-					<span>{{pg1Address2}}</span>
-				</div>
+				{{#notEmpty pg1Address2}}
+					<div>
+						<span>{{pg1Address2}}</span>
+					</div>
+				{{/notEmpty}}
 				<div>
 					<span>{{pg1City}},</span>
 					<span>{{pg1State}}</span>
@@ -112,27 +120,29 @@
 			<div class="row-block label">
 				<span>Phone</span>
 			</div>
-			<div class="row-block">
+			<div class="row-block content">
 				<div>
 					<span>{{pg1Phone1}}</span>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="row-block label">
-				<span>Phone 2</span>
-			</div>
-			<div class="row-block">
-				<div>
-					<span>{{pg1Phone2}}</span>
+		{{#notEmpty pg1Phone2}}
+			<div class="row">
+				<div class="row-block label">
+					<span>Phone 2</span>
+				</div>
+				<div class="row-block content">
+					<div>
+						<span>{{pg1Phone2}}</span>
+					</div>
 				</div>
 			</div>
-		</div>
+		{{/notEmpty}}
 		<div class="row">
 			<div class="row-block label">
 				<span>Email</span>
 			</div>
-			<div class="row-block">
+			<div class="row-block content">
 				<div>
 					<span>{{pg1Email}}</span>
 				</div>
@@ -149,17 +159,23 @@
 			<div class="row-block label">
 				<span>How did you hear about Pioneer Indoor?</span>
 			</div>
-			<div class="row-block">
-				<div>
-					<span>{{referral}}</span>
-				</div>
+			<div class="row-block content">
+				{{#equals referral 'Other'}}
+					<div>
+						<span>(Other) {{referralOther}}</span>
+					</div>
+				{{else}}
+					<div>
+						<span>{{referral}}</span>
+					</div>
+				{{/equals}}
 			</div>
 		</div>
 		<div class="row">
 			<div class="row-block label">
 				<span>Number of years drumming</span>
 			</div>
-			<div class="row-block">
+			<div class="row-block content">
 				<div>
 					<span>{{yearsDrumming}}</span>
 				</div>
@@ -169,7 +185,7 @@
 			<div class="row-block label">
 				<span>DCI or WGI experience</span>
 			</div>
-			<div class="row-block">
+			<div class="row-block content">
 				<div>
 					<span>{{experience}}</span>
 				</div>
@@ -177,69 +193,69 @@
 		</div>
 		<div class="row">
 			<div class="row-block label">
-				<span>Audition Instrument 1</span>
+				<span>Audition Instrument</span>
 			</div>
-			<div class="row-block">
+			<div class="row-block content">
 				<div>
 					<span>{{auditionInstrument1}}</span>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="row-block label">
-				<span>Audition Instrument 2</span>
-			</div>
-			<div class="row-block">
-				<div>
-					<span>{{auditionInstrument2}}</span>
+		{{#notEmpty auditionInstrument2}}
+			<div class="row">
+				<div class="row-block label">
+					<span>Audition Instrument 2</span>
+				</div>
+				<div class="row-block content">
+					<div>
+						<span>{{auditionInstrument2}}</span>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="row-block label">
-				<span>Audition Instrument 3</span>
-			</div>
-			<div class="row-block">
-				<div>
-					<span>{{auditionInstrument3}}</span>
+		{{/notEmpty}}
+		{{#notEmpty auditionInstrument3}}
+			<div class="row">
+				<div class="row-block label">
+					<span>Audition Instrument 3</span>
+				</div>
+				<div class="row-block content">
+					<div>
+						<span>{{auditionInstrument3}}</span>
+					</div>
 				</div>
 			</div>
-		</div>
+		{{/notEmpty}}
 		<div class="row">
 			<div class="row-block label">
 				<span>Special Talents</span>
 			</div>
-			<div class="row-block">
+			<div class="row-block content">
 				<div>
 					<span>{{specialTalents}}</span>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="row-block label">
-				<span>Conflicts</span>
-			</div>
-			<div class="row-block">
-				<div>
-					<span>{{conflicts}}</span>
+		{{#notEmpty auditionInstrument3}}
+			<div class="row">
+				<div class="row-block label">
+					<span>Conflicts</span>
+				</div>
+				<div class="row-block content">
+					<div>
+						<span>{{conflicts}}</span>
+					</div>
 				</div>
 			</div>
-		</div>
+		{{/notEmpty}}
 		<div class="row">
 			<div class="row-block label">
 				<span>Goal</span>
 			</div>
-			<div class="row-block">
+			<div class="row-block content">
 				<div>
 					<span>{{goal}}</span>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-
-
-<div>
-	<label>Referral Other</label>
-	<span>{{referralOther}}</span>
 </div>

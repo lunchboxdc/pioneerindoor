@@ -37,8 +37,9 @@ module.exports = {
             var options = {
                 from: 'Pioneer Indoor <admin@lunchboxdc.me>',
                 sender: 'admin@lunchboxdc.me',
+                replyTo: 'pioneerindoordrums@gmail.com',
                 to: email,
-                subject: 'You\'re signed up!',
+                subject: 'You\'re registered for Pioneer Indoor auditions!',
                 html: emailHtml
             };
 

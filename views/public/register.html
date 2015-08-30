@@ -5,8 +5,8 @@
 <div class="register-content">
     <h1>Register</h1>
 
-    {{#if registerError}}
-        <div>{{registerError}}</div>
+    {{#if registerMessage}}
+        <div>{{registerMessage}}</div>
     {{else}}
         <form action="/register" method="post" data-parsley-validate>
             <input type="hidden" name="userId" value="{{userId}}"/>

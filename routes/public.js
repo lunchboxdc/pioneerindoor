@@ -126,7 +126,7 @@ module.exports = function(passport) {
 						res.render('public/register', {registerMessage: 'We\'re sorry, the registration link provided has expired. Please contact the system administrator for a new one.'});
 					}
 				} else {
-					console.debug('No user found by token, %s', user.token);
+					console.debug('No user found by token, %s', req.query.a);
 					res.render('public/register', {registerMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
 				}
 			});

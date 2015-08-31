@@ -67,7 +67,8 @@ module.exports = (function() {
 		AdminUser.findOne({ 'email': req.body.email }, function (err, user) {
 			if(user) {
 				console.info("New User: user already exists with email, %s", req.body.email);
-				res.render('admin/newUserExists');
+				req.flash('usersMessage', 'User already exists with email, '+req.body.email);
+				res.redirect('/admin/users');
 			} else {
 				console.info("New User: no user found for email, %s ... adding user with token.", req.body.email);
 				var token = require('crypto').randomBytes(32).toString('hex');
@@ -76,15 +77,17 @@ module.exports = (function() {
 				adminUser.lastName = req.body.lastName;
 				adminUser.email = req.body.email;
 				adminUser.token = utils.createHash(token);
-				adminUser.tokenExpires = moment().add(1, 'hours');
+				adminUser.tokenExpires = moment().add(1, 'days');
 				adminUser.save(function(err, user) {
-					var payLoad = {};
 					if (err) {
 						console.error('error adding user: ' + user);
-						payLoad['usersMessage'] = 'error adding user!';
+						req.flash('usersMessage', 'error adding user!');
+					} else {
+						req.flash('usersMessage', 'Successfully added user. A registration email has been sent.');
+						console.log('return user date: '+user);
 					}
 					piMailer.sendAdminRegistration(user.firstName, user.email, token, user._id);
-					res.render('admin/newUserSuccess', payLoad);
+					res.redirect('/admin/users');
 				});
 			}
 		});

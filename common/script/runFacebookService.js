@@ -1,6 +1,9 @@
 var FacebookService = require('../FacebookService');
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/pi');
+if(!mongooseConnected) {
+	mongoose.connect('mongodb://localhost/pi');
+}
 
 FacebookService.getPosts();
+FacebookService.getProfilePicture();

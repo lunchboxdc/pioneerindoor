@@ -13,6 +13,13 @@
 			}
 			return options.inverse(this);
 		});
+		Handlebars.registerHelper('formatDate', function(val) {
+			if(val && val.length>0) {
+				return moment(val).format('MMMM Do YYYY, h:mm a');
+			} else {
+				return;
+			}			
+		});
 
 		var auditioneeTemplate;
 		$.get("/assets/template/auditioneeTemplate.html", function(data) {

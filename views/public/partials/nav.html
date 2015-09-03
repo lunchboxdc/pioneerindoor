@@ -5,11 +5,11 @@
     <nav class="site-nav">
     	<ul>
     		<li {{#equals page 'audition'}} class="current-page"{{/equals}} onclick="window.location.href='/audition';">AUDITION</li>
-    		<li>SCHEDULE</li>
-    		<li>STAFF</li>
-            <li>MEDIA</li>
-            <li>ABOUT</li>
-            <li>CONTACT</li>
+    		<li {{#equals page 'schedule'}} class="current-page"{{/equals}} onclick="window.location.href='/schedule';">SCHEDULE</li>
+    		<li {{#equals page 'staff'}} class="current-page"{{/equals}} onclick="window.location.href='/staff';">STAFF</li>
+            <li {{#equals page 'media'}} class="current-page"{{/equals}} onclick="window.location.href='/media';">MEDIA</li>
+            <li {{#equals page 'about'}} class="current-page"{{/equals}} onclick="window.location.href='/about';">ABOUT</li>
+            <li {{#equals page 'contact'}} class="current-page"{{/equals}} onclick="window.location.href='/contact';">CONTACT</li>
     	</ul>
     </nav>
 </header>

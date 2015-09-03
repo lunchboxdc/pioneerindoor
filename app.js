@@ -9,7 +9,11 @@ var exphbs  = require('express-handlebars');
 var path = require('path');
 var favicon = require('serve-favicon');
 
+var mongooseConnected = false;
 mongoose.connect('mongodb://localhost/pi');
+mongoose.connection.on("connected", function(ref) {
+    mongooseConnected = true;
+});    
 
 var app = express();
 app.set('view engine', 'html');
@@ -46,16 +50,11 @@ app.engine('html', hbs.engine);
 
 //middleware and other components specific to either prod or non-prod
 if(process.env.NODE_ENV !== 'prod') {
+    //run facebook stuff once locally at startup
+    //require('./common/script/runFacebookService');
     //not behind nginx locally so lets serve out assets through node
     app.use('/assets', express.static('assets'));
 } else {
-    //force ssl in prod
-    /*app.use(function(req, res, next) {
-        if(!req.secure) {
-            return res.redirect('https://'+req.get('host')+req.url);
-        }
-        next();
-    });*/
     //run scheduler in prod
     require('./common/scheduler');
 }
@@ -100,4 +99,11 @@ var port = (appConfig.port || 3000);
 var ip = '0.0.0.0';
 app.listen(port, ip, function() {
     console.info('Pioneer Indoor app running at http://%s:%s', ip, port);
+});
+
+process.on('SIGINT', function() {  
+  mongoose.connection.close(function () { 
+    console.log('Mongoose default connection disconnected through app termination'); 
+    process.exit(0); 
+  }); 
 });

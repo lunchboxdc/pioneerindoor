@@ -235,7 +235,7 @@
 				</div>
 			</div>
 		</div>
-		{{#notEmpty auditionInstrument3}}
+		{{#notEmpty conflicts}}
 			<div class="row">
 				<div class="row-block label">
 					<span>Conflicts</span>
@@ -254,6 +254,16 @@
 			<div class="row-block content">
 				<div>
 					<span>{{goal}}</span>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="row-block label">
+				<span>Submit Date</span>
+			</div>
+			<div class="row-block content">
+				<div>
+					<span>{{formatDate submitDate}}</span>
 				</div>
 			</div>
 		</div>

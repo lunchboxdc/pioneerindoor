@@ -33,5 +33,6 @@ module.exports = mongoose.model('Auditionee',{
 	auditionInstrument3: String,
 	specialTalents: String,
 	conflicts: String,
-	goal: String
+	goal: String,
+	submitDate: Date
 });

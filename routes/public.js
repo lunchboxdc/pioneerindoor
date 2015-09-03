@@ -77,11 +77,13 @@ module.exports = function(passport) {
 		auditionee.specialTalents = req.body.specialTalents;
 		auditionee.conflicts = req.body.conflicts;
 		auditionee.goal = req.body.goal;
+		auditionee.submitDate = moment();
 
 		auditionee.save(function(err, auditionee) {
 			if (err) {
 				console.log(err);
-				res.redirect('/audition/error');
+				req.flash('auditionMessage', 'An error has occurred. Please try again later.');
+				res.redirect('/audition');
 			} else {
 				piMailer.sendAuditionConfirmation(auditionee.firstName, auditionee.email);
 				res.redirect('/audition/confirm');
@@ -93,8 +95,44 @@ module.exports = function(passport) {
 		res.render('public/auditionConfirm');
 	});
 
-	router.get('/audition/error',function(req,res) {
-		res.render('public/auditionError');
+	router.get('/schedule',function(req,res) {
+		var payLoad =_.merge({
+			page: 'schedule'
+		}, req.flash());
+
+		res.render('public/construction', payLoad);
+	});
+
+	router.get('/staff',function(req,res) {
+		var payLoad =_.merge({
+			page: 'staff'
+		}, req.flash());
+
+		res.render('public/construction', payLoad);
+	});
+
+	router.get('/media',function(req,res) {
+		var payLoad =_.merge({
+			page: 'media'
+		}, req.flash());
+
+		res.render('public/construction', payLoad);
+	});
+
+	router.get('/about',function(req,res) {
+		var payLoad =_.merge({
+			page: 'about'
+		}, req.flash());
+
+		res.render('public/construction', payLoad);
+	});
+
+	router.get('/contact',function(req,res) {
+		var payLoad =_.merge({
+			page: 'contact'
+		}, req.flash());
+
+		res.render('public/construction', payLoad);
 	});
 
 	router.get('/login', function(req, res) {

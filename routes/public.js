@@ -124,15 +124,7 @@ module.exports = function(passport) {
 			page: 'about'
 		}, req.flash());
 
-		res.render('public/construction', payLoad);
-	});
-
-	router.get('/contact',function(req,res) {
-		var payLoad =_.merge({
-			page: 'contact'
-		}, req.flash());
-
-		res.render('public/construction', payLoad);
+		res.render('public/about', payLoad);
 	});
 
 	router.get('/login', function(req, res) {

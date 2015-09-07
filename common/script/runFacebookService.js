@@ -1,9 +1,9 @@
 var FacebookService = require('../FacebookService');
-var mongoose = require('mongoose');
+var ConnectionManager = require('../../persistence/ConnectionManager');
 
-if(!mongooseConnected) {
-	mongoose.connect('mongodb://localhost/pi');
-}
+ConnectionManager.open();
 
 FacebookService.getPosts();
 FacebookService.getProfilePicture();
+
+ConnectionManager.close();

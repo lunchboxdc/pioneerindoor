@@ -2,18 +2,14 @@ require('./common/logger');
 var appConfig = require('./common/appConfig');
 var express = require("express");
 var passport = require('passport');
-var mongoose = require('mongoose');
+var ConnectionManager = require('./persistence/ConnectionManager');
 var expressSession = require('express-session');
 var bodyParser = require('body-parser');
 var exphbs  = require('express-handlebars');
 var path = require('path');
 var favicon = require('serve-favicon');
 
-var mongooseConnected = false;
-mongoose.connect('mongodb://localhost/pi');
-mongoose.connection.on("connected", function(ref) {
-    mongooseConnected = true;
-});    
+ConnectionManager.open();
 
 var app = express();
 app.set('view engine', 'html');
@@ -101,9 +97,6 @@ app.listen(port, ip, function() {
     console.info('Pioneer Indoor app running at http://%s:%s', ip, port);
 });
 
-process.on('SIGINT', function() {  
-  mongoose.connection.close(function () { 
-    console.log('Mongoose default connection disconnected through app termination'); 
-    process.exit(0); 
-  }); 
+process.on('SIGINT', function() {
+    ConnectionManager.close();
 });

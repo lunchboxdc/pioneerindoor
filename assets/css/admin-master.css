@@ -83,7 +83,7 @@ body {
 	text-align: left;
 	border-bottom: 2px solid #999999;
 }
-.admin-table th, 
+.admin-table th,
 .admin-table td {
 	padding: 5px;
 }
@@ -134,6 +134,8 @@ body {
 }
 
 .modal-content .block .row {
+	display: inline-block;
+	width: 100%;
 	margin-bottom: 5px;
 }
 .modal-content .block .row .row-block {
@@ -163,6 +165,20 @@ body {
 	font-weight: 400;
 }
 
+.modal-content .footer {
+	margin-top: 30px;
+}
+
+.modal-content .footer .block .row .row-block.label {
+	float: left;
+	width: 85px;
+}
+
+.modal-content .footer .block .row .row-block.content {
+	display: block;
+	margin-left: auto;
+}
+
 .register-content {
 	padding: 20px;
 }
@@ -173,7 +189,7 @@ body {
 }
 .register-content .input-row label {
 	font-size: 14px;
-}	
+}
 .register-content .input-row input {
 	background-color: #ffffff;
 	display: block;
@@ -216,7 +232,7 @@ body {
 	font-weight: 400;
 	font-style: italic;
 	color: #ff6666;
-}​	
+}​
 
 .parsley-errors-list li {
 	display: none;

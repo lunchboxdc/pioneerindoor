@@ -1,4 +1,3 @@
-var CronJob = require('cron').CronJob;
 var request = require('request');
 var async = require('async');
 var fs = require('fs');

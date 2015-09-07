@@ -99,19 +99,25 @@
 				<span>Address</span>
 			</div>
 			<div class="row-block content">
-				<div>
-					<span>{{pg1Address1}}</span>
-				</div>
-				{{#notEmpty pg1Address2}}
+				{{#notEmpty pg1Address1}}
 					<div>
-						<span>{{pg1Address2}}</span>
+						<span>{{pg1Address1}}</span>
+					</div>
+					{{#notEmpty pg1Address2}}
+						<div>
+							<span>{{pg1Address2}}</span>
+						</div>
+					{{/notEmpty}}
+					<div>
+						<span>{{pg1City}},</span>
+						<span>{{pg1State}}</span>
+						<span>{{pg1Zip}}</span>
+					</div>
+				{{else}}
+					<div>
+						<span>Same as auditionee</span>
 					</div>
 				{{/notEmpty}}
-				<div>
-					<span>{{pg1City}},</span>
-					<span>{{pg1State}}</span>
-					<span>{{pg1Zip}}</span>
-				</div>
 			</div>
 		</div>
 	</div>
@@ -152,6 +158,85 @@
 </div>
 
 
+{{#notEmpty pg2FirstName}}
+	<div class="section">
+		<h3>Alternate Parent/Guardian</h3>
+		<div class="block half">
+			<div class="row">
+				<div class="row-block label">
+					<span>Name</span>
+				</div>
+				<div class="row-block content">
+					<div>
+						<span>{{pg2FirstName}} {{pg2LastName}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="row-block label">
+					<span>Address</span>
+				</div>
+				<div class="row-block content">
+					{{#notEmpty pg2Address1}}
+						<div>
+							<span>{{pg2Address1}}</span>
+						</div>
+						{{#notEmpty pg2Address2}}
+							<div>
+								<span>{{pg2Address2}}</span>
+							</div>
+						{{/notEmpty}}
+						<div>
+							<span>{{pg2City}},</span>
+							<span>{{pg2State}}</span>
+							<span>{{pg2Zip}}</span>
+						</div>
+					{{else}}
+						<div>
+							<span>Same as auditionee</span>
+						</div>
+					{{/notEmpty}}
+				</div>
+			</div>
+		</div>
+		<div class="block half">
+			<div class="row">
+				<div class="row-block label">
+					<span>Phone</span>
+				</div>
+				<div class="row-block content">
+					<div>
+						<span>{{pg2Phone1}}</span>
+					</div>
+				</div>
+			</div>
+			{{#notEmpty pg2Phone2}}
+			<div class="row">
+				<div class="row-block label">
+					<span>Phone 2</span>
+				</div>
+				<div class="row-block content">
+					<div>
+						<span>{{pg2Phone2}}</span>
+					</div>
+				</div>
+			</div>
+			{{/notEmpty}}
+			<div class="row">
+				<div class="row-block label">
+					<span>Email</span>
+				</div>
+				<div class="row-block content">
+					<div>
+						<span>{{pg2Email}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{{/notEmpty}}
+
+
 <div class="section">
 	<h3>Audition Information</h3>
 	<div class="block">
@@ -178,16 +263,6 @@
 			<div class="row-block content">
 				<div>
 					<span>{{yearsDrumming}}</span>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="row-block label">
-				<span>DCI or WGI experience</span>
-			</div>
-			<div class="row-block content">
-				<div>
-					<span>{{experience}}</span>
 				</div>
 			</div>
 		</div>
@@ -225,16 +300,30 @@
 				</div>
 			</div>
 		{{/notEmpty}}
-		<div class="row">
-			<div class="row-block label">
-				<span>Special Talents</span>
-			</div>
-			<div class="row-block content">
-				<div>
-					<span>{{specialTalents}}</span>
+		{{#notEmpty experience}}
+			<div class="row">
+				<div class="row-block label">
+					<span>DCI or WGI experience</span>
+				</div>
+				<div class="row-block content">
+					<div>
+						<span>{{experience}}</span>
+					</div>
 				</div>
 			</div>
-		</div>
+		{{/notEmpty}}
+		{{#notEmpty specialTalents}}
+			<div class="row">
+				<div class="row-block label">
+					<span>Special Talents</span>
+				</div>
+				<div class="row-block content">
+					<div>
+						<span>{{specialTalents}}</span>
+					</div>
+				</div>
+			</div>
+		{{/notEmpty}}
 		{{#notEmpty conflicts}}
 			<div class="row">
 				<div class="row-block label">
@@ -257,9 +346,14 @@
 				</div>
 			</div>
 		</div>
+	</div>
+</div>
+
+<div class="section footer">
+	<div class="block">
 		<div class="row">
 			<div class="row-block label">
-				<span>Submit Date</span>
+				<span>Submitted:</span>
 			</div>
 			<div class="row-block content">
 				<div>

@@ -113,5 +113,9 @@ module.exports = (function() {
 		}
 	});
 
+	router.get('/email/audition', function(req, res) {
+		res.render('admin/email/audition');
+	});
+
 	return router;
 })();

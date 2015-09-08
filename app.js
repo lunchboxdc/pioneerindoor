@@ -20,8 +20,9 @@ var hbs = exphbs.create({
     defaultLayout: "main",
     partialsDir: [
     	'./views/partials',
-    	'./views/admin/partials/',
-    	'./views/public/partials'
+    	'./views/admin/partials',
+    	'./views/public/partials',
+        './email/templates'
     ],
     helpers: {
     	section: function(name, options) {

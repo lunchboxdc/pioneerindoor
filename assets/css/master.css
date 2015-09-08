@@ -1,3 +1,7 @@
+input[type="text"]:focus, textarea:focus, select:focus {
+  box-shadow: 0 0 6px #008000 !important;
+}
+
 input[type="checkbox"] {
     display: none !important;
 }
@@ -162,7 +166,7 @@ ul.slides li {
 }
 
 .tile .block {
-	margin: 10px 0;
+	margin: 25px;
 }
 
 .tile .block .title {

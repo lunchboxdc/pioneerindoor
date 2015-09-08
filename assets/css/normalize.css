@@ -51,6 +51,10 @@ h1, h2 {
 	font-weight: 300;
 }
 
+body {
+	overflow-y:scroll;
+}
+
 table {
 	border-collapse: collapse;
 }

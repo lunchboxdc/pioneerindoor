@@ -18,6 +18,13 @@
 				return moment(val).format('MMMM Do YYYY, h:mm a');
 			} else {
 				return;
+			}
+		});
+		Handlebars.registerHelper('getAge', function(val) {
+			if(val && val.length>0) {
+				return moment().diff(moment(val), 'years');
+			} else {
+				return;
 			}			
 		});
 

@@ -43,7 +43,7 @@
       $('.audition-form').parsley({
           excluded: '.hidden *'
       });
-    });  
+    });
   </script>
 {{/section}}
 
@@ -51,14 +51,18 @@
   {{> nav}}
 
   <div class="tile">
-    <h2>2015 - 2016 Pioneer Indoor Audition Registration</h2>
-    <h4>Please complete the following form to submit your registration. Upon submission you will receive this year's music and warmup packet.</h4>
-    <h4>Audition fee: $50 due upon arrival at auditions on Saturday, November 7.</h4>
+    <div class="header">
+      <h2>2015 - 2016 Pioneer Indoor Audition Registration</h2>
+      <h4>Please complete the following form to submit your registration. Upon submission you will receive this year's music and warmup packet.</h4>
+      <h4>Audition fee: $50 due upon arrival at auditions on Saturday, November 7.</h4>
+    </div>
   </div>
 
   <form class="audition-form form" action="/audition" method="post">
     <div class="tile">
-      <h2>Your Information</h2>
+      <div class="header">
+        <h2>Your Information</h2>
+      </div>
       <section class="two-column">
         <div class="input-row">
           <label for="firstName">First Name <span class="required-indicator">*</span></label>
@@ -119,7 +123,9 @@
       </section>
     </div>
     <div class="tile">
-      <h2>Parent/Guardian Information</h2>
+      <div class="header">
+        <h2>Parent/Guardian Information</h2>
+      </div>
       <section class="two-column">
         <div class="input-row">
           <label for="pg1FirstName">First Name <span class="required-indicator">*</span></label>
@@ -152,7 +158,7 @@
             <label for="pg1Zip">Zipcode <span class="required-indicator">*</span></label>
             <input id="pg1Zip" name="pg1Zip" placeholder="Zipcode" required />
           </div>
-        </div>  
+        </div>
         <div class="input-row">
           <input id="addressSameAsAuditionee" type="checkbox" class="checkbox" onclick="pg1AddressToggle(this)" checked/>
           <label for="addressSameAsAuditionee" class="checkbox-label">Address same as your address</label>
@@ -184,7 +190,9 @@
 
 
     <div id="altPG" class="tile hidden">
-      <h2>Alternate Parent/Guardian Information</h2>
+      <div class="header">
+        <h2>Alternate Parent/Guardian Information</h2>
+      </div>
       <section class="two-column">
         <div class="input-row">
           <label for="pg2FirstName">First Name <span class="required-indicator">*</span></label>
@@ -217,7 +225,7 @@
             <label for="pg2Zip">Zipcode <span class="required-indicator">*</span></label>
             <input id="pg2Zip" name="pg2Zip" placeholder="Zipcode" required />
           </div>
-        </div>  
+        </div>
         <div class="input-row">
           <input id="pg2SameAddress" type="checkbox" class="checkbox" onclick="pg2AddressToggle(this)" checked/>
           <label for="pg2SameAddress" class="checkbox-label">Address same as primary parent/guardian address</label>
@@ -250,7 +258,9 @@
 
 
     <div class="tile">
-      <h2>Audition Information</h2>
+      <div class="header">
+        <h2>Audition Information</h2>
+      </div>
       <section class="two-column">
         <div class="input-row">
           <label for="referral">How did you hear about Pioneer Indoor? <span class="required-indicator">*</span></label>
@@ -344,7 +354,7 @@
         </div>
       </section>
 
-      <section class="two-column">        
+      <section class="two-column">
         <div class="input-row">
           <label class="wrap" for="experience">Please list any DCI or WGI experience (organization, instrument, and years marched)</label>
           <textarea id="experience" name="experience"></textarea>

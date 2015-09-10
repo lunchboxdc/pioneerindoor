@@ -19,5 +19,6 @@ module.exports = mongoose.model('FacebookPost',{
 	description: String,
 	caption: String,
 	type: String,
+	status_type: String,
 	created_time: Date
 });

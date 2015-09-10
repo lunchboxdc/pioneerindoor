@@ -3,7 +3,9 @@
     	<div class="fb-header">
     		<a href="https://www.facebook.com/PioneerIndoor" target="_blank"><img src="/assets/image/fbPicture.jpg"></a>
     		<div>
-    			<a href="https://www.facebook.com/PioneerIndoor" target="_blank">{{fromName}}</a>
+    			<a href="https://www.facebook.com/PioneerIndoor" target="_blank">
+					{{fromName}}
+    			</a>
     		</div>
     	</div>
         {{#equals type 'photo'}}
@@ -11,7 +13,7 @@
 			<div class="fb-image"><img src="{{attachmentImage}}"></div>
 		{{/equals}}
 		{{#equals type 'link'}}
-			<a href="{{message}}">{{message}}</a>
+			<p><a href="{{message}}">{{message}}</a></p>
 			<div class="fb-link">
 				<span>{{name}}</span>
 				<span>{{description}}</span>
@@ -20,7 +22,7 @@
 		{{/equals}}
 		{{#equals type 'video'}}
 			<p>{{message}}</p>
-			<a href="{{link}}" target="_blank"><div class="fb-video"><img src="{{attachmentImage}}"><i class="fa fa-play-circle-o video-play"></i></div></a>
+			<a href="{{link}}" target="_blank"><div class="fb-video"><img src="{{attachmentImage}}"><i class="fa fa-play-circle video-play"></i></div></a>
 		{{/equals}}
     </div>
 {{/each}}

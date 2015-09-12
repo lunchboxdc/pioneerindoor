@@ -1,58 +1,8 @@
 {{#section 'head'}}
-  <link type="text/css" rel="stylesheet" href="/assets/css/master.css"/>
+  <link type="text/css" rel="stylesheet" href="/assets/css/master.css?v={{assetsVersion}}"/>
 {{/section}}
 
 <script>
-  //getFbPicture();
-  //getFbPosts();
-
-  //var facebookTemplate = Handlebars.compile($('#facebookTemplate').html());
-  var facebookFeedHtml;
-
-  function getFbPicture() {
-    $.ajax({
-      url: 'https://graph.facebook.com/v2.3/PioneerIndoor/picture',
-      dataType: 'json',
-      data: {redirect: false},
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader("", "");
-      },
-      error: function() {
-        // error handler
-      },
-      success: function(json) {
-        console.log(json);
-      }
-    });
-  }
-
-  function getFbPosts() {
-    $.ajax({
-      url: 'https://graph.facebook.com/v2.3/PioneerIndoor/posts',
-      dataType: 'json',
-      data: {limit: 20, fields: 'from,message,name,description,caption,picture,link,type'},
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader("", "");
-      },
-      error: function() {
-        // error handler
-      },
-      success: function(json) {
-        facebookFeedHtml = facebookTemplate(json.data);
-        $('.right-rail').html(facebookFeedHtml);
-      }
-    });
-  }
-
-  Handlebars.registerHelper('equals', function(a, b, options) {
-      if (a === b) {
-        return options.fn(this);
-      }
-      else {
-        return options.inverse(this);
-      }
-  });
-
   $(function() {
     $('#imageSlider').flexslider({
       animation: "fade",
@@ -62,7 +12,6 @@
       controlNav: false,
       pauseOnHover: true
     });
-    //$('.right-rail').html(facebookFeedHtml);
   });
 </script>
 <div class="site-container">

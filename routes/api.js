@@ -3,6 +3,7 @@ var bCrypt = require('bcrypt-nodejs');
 var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
 var FacebookPost = require('../persistence/models/facebookPost');
+var Assets = require('../persistence/models/Assets');
 
 module.exports = (function() {
 	var router = express.Router();
@@ -124,6 +125,27 @@ module.exports = (function() {
 				res.send(err);
 			} else {
 				res.json({message: 'Successfully deleted all facebook posts'});
+			}
+		});
+	});
+
+	router.get('/assetsVersion', function(req, res) {
+		Assets.find({})
+			.exec(function(err, results) {
+				if (err) {
+					res.send(err);
+				} else {
+					res.json(results);
+				}
+			});
+	});
+
+	router.delete('/assetsVersion', function(req, res) {
+		Assets.remove({}, function(err) {
+			if (err) {
+				res.send(err);
+			} else {
+				res.json({message: 'Successfully deleted assets version'});
 			}
 		});
 	});

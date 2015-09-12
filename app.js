@@ -39,6 +39,9 @@ var hbs = exphbs.create({
             else {
                 return options.inverse(this);
             }
+        },
+        assetsVersion: function() {
+            return ConnectionManager.getAssetsVersion();
         }
     }
 });

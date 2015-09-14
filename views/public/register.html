@@ -1,4 +1,5 @@
 {{#section 'head'}}
+<title>Pioneer Indoor | Create password</title>
 <link type="text/css" rel="stylesheet" href="/assets/css/admin-master.css?v={{assetsVersion}}"/>
 {{/section}}
 
@@ -22,12 +23,12 @@
                 <label for="email">Email</label>
                 <input id="email" name="email" value="{{email}}" required data-parsley-type="email" />
             </div>
-            <div class="input-row"> 
+            <div class="input-row">
                 <label for="password">Password</label>
                 <input id="password" type="password" name="password1" placeholder="password" required data-parsley-minlength="8" data-parsley-minlength-message="Password must be at least 8 characters" />
             </div>
-            <div class="input-row">  
-                <label for="password2">Re-enter password</label>  
+            <div class="input-row">
+                <label for="password2">Re-enter password</label>
                 <input id="password2" type="password" name="password2" placeholder="Re-enter password" required data-parsley-minlength="8" data-parsley-minlength-message="Password must be at least 8 characters" data-parsley-equalto="#password" data-parsley-equalto-message="Passwords should match" />
             </div>
             <div class="input-row button-row">

@@ -14,6 +14,16 @@
   cursor: pointer;
 }
 
+.error {
+  border: 2px solid #ff6666;
+  padding: 10px;
+  color: #ff6666;
+  background-color: #FDE5E5;
+  border-radius: 4px;
+  font-weight: 400;
+  margin: 10px 0;
+}
+
 .loader {
   font-size: 10px;
   margin: 50px auto;

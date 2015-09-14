@@ -1,5 +1,13 @@
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   	box-shadow: 0 0 6px #008000 !important;
+}
+
+input.parsley-error:focus,
+textarea.parsley-error:focus,
+select.parsley-error:focus {
+  	box-shadow: 0 0 6px #ff6666 !important;
 }
 
 input[type="checkbox"] {
@@ -169,6 +177,10 @@ ul.slides li {
 	margin-bottom: 5px;
 }
 
+.tile article {
+	padding: 0 15px 15px;
+}
+
 .header {
 	padding: 0 10px;
 }
@@ -182,7 +194,7 @@ ul.slides li {
 }
 
 .input-row .required-indicator {
-	color: #E00000;
+	color: #ff6666;
 	font-size: 20px;
 	position: absolute;
 	margin-left: 2px;
@@ -440,12 +452,76 @@ section.two-column {
 	border: 2px solid #ff6666;
 }
 
-.construction h1 {
-	text-align: center;
+.construction {
+	padding: 25px 10px;
+}
+
+.construction p {
+	font-size: 20px;
+}
+
+.construction .pane {
+	padding: 0 30px;
+	box-sizing: border-box;
 }
 
 .construction img {
 	width: 250px;
 	display: block;
 	margin: auto;
+}
+
+.bio article {
+	padding: 15px;
+}
+
+.bio .header h2,
+.bio .header h5 {
+	margin: 0;
+}
+
+.bio .header h5 {
+	font-style: italic;
+	font-size: 16px;
+	font-weight: 400;
+}
+
+.bio img {
+	height: 220px;
+	float: left;
+	margin-right: 22px;
+}
+
+footer {
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+	margin: 45px 0 15px;
+}
+
+footer .center {
+	display: inline-block;
+}
+
+footer .logo-container {
+	display: inline-block;
+	float: left;
+}
+
+footer .logo-container .logo {
+	width: 150px;
+}
+
+footer .social-links {
+	display: inline-block;
+	padding: 2px 20px;
+	float: left;
+	border-left: 1px solid #999;
+	margin: 6px 20px;
+}
+
+footer .social-links i {
+	font-size: 35px;
+	color: #999;
+	padding-right: 10px;
 }

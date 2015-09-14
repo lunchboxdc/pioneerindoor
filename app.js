@@ -40,6 +40,27 @@ var hbs = exphbs.create({
                 return options.inverse(this);
             }
         },
+        selectOption: function(selectedValue, option, value) {
+            if(typeof value !== 'string') {
+                value = option;
+            }
+            var html = '<option value="' + value +'"';
+            if(selectedValue && selectedValue[0] === value) {
+                html += ' selected="selected"';
+            }
+            html += '>'+ option + '</option>';
+            return html;
+        },
+        preselectCheckbox: function(val) {
+            if(val=="true") {
+                return 'checked';
+            }
+        },
+        preselectCheckboxFalse: function(val) {
+            if(val!="false") {
+                return 'checked';
+            }
+        },
         assetsVersion: function() {
             return ConnectionManager.getAssetsVersion();
         }

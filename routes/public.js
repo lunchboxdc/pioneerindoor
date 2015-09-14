@@ -11,14 +11,6 @@ var Auditionee = require('../persistence/models/auditionee');
 var FacebookPost = require('../persistence/models/facebookPost');
 var utils = require('../common/utils');
 
-var instrumentTemplate;
-fs.readFile('views/public/partials/auditionInstruments.html', 'utf8', function (err, html) {
-	if(err) {
-		console.error('public: failed to load auditionInstruments template: '+err);
-	} else {
-		instrumentTemplate = handlebars.compile(html);
-	}
-});
 
 
 module.exports = function(passport) {
@@ -27,6 +19,7 @@ module.exports = function(passport) {
 	router.get('/',function(req,res) {
 		FacebookPost.find({})
 			.sort({created_time: 'desc'})
+			.limit(4)
 			.exec(function(err, facebookPosts) {
 				if (err) {
 					console.error(err);
@@ -92,7 +85,12 @@ module.exports = function(passport) {
 		auditionee.save(function(err, auditionee) {
 			if (err) {
 				console.log(err);
-				req.flash('auditionMessage', 'An error has occurred. Please try again later.');
+				for(var field in req.body) {
+					if (req.body.hasOwnProperty(field)) {
+						req.flash(field, req.body[field]);
+					}
+				}
+				req.flash('auditionMessage', 'We\'re sorry, something went wrong. Please try again. If the error continues, please email <a href="mailto:admin@pioneerindoordrums.org">admin@pioneerindoordrums.org</a>');
 				res.redirect('/audition');
 			} else {
 				piMailer.sendAuditionConfirmation(auditionee.firstName, auditionee.email);
@@ -118,7 +116,7 @@ module.exports = function(passport) {
 			page: 'staff'
 		}, req.flash());
 
-		res.render('public/construction', payLoad);
+		res.render('public/staff', payLoad);
 	});
 
 	router.get('/media',function(req,res) {

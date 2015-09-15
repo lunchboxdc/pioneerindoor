@@ -58,7 +58,7 @@ a.blue-link {
 }
 
 .bold {
-	font-weight: bold;
+	font-weight: bold !important;
 }
 
 .center {
@@ -446,6 +446,18 @@ section.two-column {
 .checkbox-error .parsley-errors-list {
 	left: 36px;
 	margin-top: 5px;
+}
+
+.schedule .item {
+	font-weight: 400;
+	display: block;
+	line-height: 30px;
+}
+
+.schedule .item i {
+	position: absolute;
+	margin-left: -22px;
+	margin-top: 7px;
 }
 
 .audition-form .input-row .parsley-error {

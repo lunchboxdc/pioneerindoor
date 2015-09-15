@@ -108,7 +108,7 @@ module.exports = function(passport) {
 			page: 'schedule'
 		}, req.flash());
 
-		res.render('public/construction', payLoad);
+		res.render('public/schedule', payLoad);
 	});
 
 	router.get('/staff',function(req,res) {

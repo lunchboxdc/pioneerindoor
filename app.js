@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var exphbs  = require('express-handlebars');
 var path = require('path');
 var favicon = require('serve-favicon');
+var moment = require('moment');
 
 ConnectionManager.open();
 
@@ -38,6 +39,13 @@ var hbs = exphbs.create({
             }
             else {
                 return options.inverse(this);
+            }
+        },
+        facebookDate: function(val) {
+            if(val && val.length>0) {
+                return moment(val).format('MMM D');
+            } else {
+                return;
             }
         },
         selectOption: function(selectedValue, option, value) {
@@ -75,7 +83,7 @@ if(process.env.NODE_ENV !== 'prod') {
     //require('./common/script/runFacebookService');
     //not behind nginx locally so lets serve out assets through node
     app.use('/assets', express.static('assets'));
-    //require('./common/scheduler');
+    require('./common/scheduler');
 } else {
     //run scheduler in prod
     require('./common/scheduler');

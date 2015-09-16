@@ -148,7 +148,21 @@ ul.slides li {
 }
 
 .tile.blog-post {
-	padding: 30px;
+	padding: 12px;
+}
+
+.blog-image {
+	display: inline-block;
+	width: 100%;
+	margin-bottom: 6px;
+}
+
+.blog-image img {
+	width: 100%;
+}
+
+.blog-content {
+	padding: 12px 18px 0;
 }
 
 .blog-meta {
@@ -432,6 +446,21 @@ section.two-column {
 .fb-post .fb-header a {
 	font-weight: bold;
 	color: #000000;
+}
+
+.fb-footer {
+	margin-top: 8px;
+}
+
+.fb-footer i {
+	font-size: 26px;
+	color: #2f5790;
+	float: left;
+}
+
+.fb-footer .post-time {
+	display: inline-block;
+	margin: 3px 5px 0;
 }
 
 .parsley-errors-list {

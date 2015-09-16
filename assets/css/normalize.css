@@ -18,7 +18,7 @@
 * {
 	color: #282828;
 	font-family: SourceSansPro, sans-serif;
-	font-weight: 300;
+	font-weight: 400;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -30,6 +30,7 @@
 a {
 	text-decoration: none;
 	color: #0044E8;
+	font-weight: 300;
 }
 
 h1 {
@@ -42,21 +43,26 @@ h2 {
 	font-weight: 600;
 }
 
+h3 {
+	font-size: 20px;
+	font-weight: 600;
+}
+
 ::-webkit-input-placeholder {
-	color: #d3d3d3;
-	font-weight: 300;
+	color: #bbbbbb;
+	font-weight: 400;
 }
 :-moz-placeholder {
-	color: #d3d3d3;
-	font-weight: 300;
+	color: #bbbbbb;
+	font-weight: 400;
 }
 ::-moz-placeholder {
-	color: #d3d3d3;
-	font-weight: 300;
+	color: #bbbbbb;
+	font-weight: 400;
 }
 :-ms-input-placeholder {
-	color: #d3d3d3;
-	font-weight: 300;
+	color: #bbbbbb;
+	font-weight: 400;
 }
 
 body {

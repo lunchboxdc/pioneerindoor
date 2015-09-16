@@ -2,12 +2,14 @@ input:focus,
 textarea:focus,
 select:focus {
   	box-shadow: 0 0 6px #008000 !important;
+	border: 1px solid #65BD65 !important;
 }
 
 input.parsley-error:focus,
 textarea.parsley-error:focus,
 select.parsley-error:focus {
   	box-shadow: 0 0 6px #ff6666 !important;
+	border: 1px solid #ff6666 !important;
 }
 
 input[type="checkbox"] {
@@ -166,7 +168,6 @@ ul.slides li {
 
 .tile p {
 	line-height: 24px;
-	font-weight: 400;
 }
 
 .tile .block {
@@ -175,6 +176,10 @@ ul.slides li {
 
 .tile .block .title {
 	margin-bottom: 5px;
+}
+
+.tile .block ul {
+	padding-left: 18px;
 }
 
 .tile article {
@@ -275,7 +280,7 @@ ul.slides li {
 	height: 40px;
 	font-size: 16px;
 	padding: 0 13px;
-	border: 2px solid #ffffff;
+	border: 1px solid #ffffff;
 	border-radius: 4px;
 	box-sizing: border-box;
 }
@@ -341,7 +346,6 @@ section.two-column {
 }
 
 .important-info {
-	margin-left: 12px;
 	margin-bottom: 5px;
 }
 
@@ -407,6 +411,10 @@ section.two-column {
 	padding: 10px;
 }
 
+.fb-post .fb-link span {
+	font-weight: 300;
+}
+
 .fb-post .fb-header {
 	display: inline-block;
 }
@@ -448,6 +456,10 @@ section.two-column {
 	margin-top: 5px;
 }
 
+.schedule {
+	padding: 10px 30px 30px;
+}
+
 .schedule .item {
 	font-weight: 400;
 	display: block;
@@ -456,12 +468,14 @@ section.two-column {
 
 .schedule .item i {
 	position: absolute;
-	margin-left: -22px;
-	margin-top: 7px;
+	margin-left: -18px;
+	margin-top: 9px;
+	color: #008000;
+	font-size: 14px;
 }
 
 .audition-form .input-row .parsley-error {
-	border: 2px solid #ff6666;
+	border: 1px solid #ff6666;
 }
 
 .construction {

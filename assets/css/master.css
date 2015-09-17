@@ -42,7 +42,7 @@ input[type="checkbox"]:checked + label:before {
 }
 
 body {
-	background-color: #151B19;
+	background-color: #001000;
 }
 
 header {

@@ -35,8 +35,8 @@ module.exports = {
         if(auditionConfirmationTemplate) {
             var emailHtml = auditionConfirmationTemplate({firstName: firstName});
             var options = {
-                from: 'Pioneer Indoor <admin@lunchboxdc.me>',
-                sender: 'admin@lunchboxdc.me',
+                from: 'Pioneer Indoor <admin@pioneerindoordrums.org>',
+                sender: 'admin@pioneerindoordrums.org',
                 replyTo: 'pioneerindoordrums@gmail.com',
                 to: email,
                 subject: 'You\'re registered for Pioneer Indoor auditions!',
@@ -59,7 +59,7 @@ module.exports = {
         if(adminRegistrationTemplate) {
             var emailHtml = adminRegistrationTemplate({host: appConfig.host, firstName: firstName, token: token, userId: userId});
             var options = {
-                from: 'admin@lunchboxdc.me',
+                from: 'admin@pioneerindoordrums.org',
                 to: email,
                 subject: 'Welcome to Pioneer Indoor',
                 html: emailHtml

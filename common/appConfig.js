@@ -6,7 +6,7 @@ if(process.env.NODE_ENV === 'prod') {
 	if(process.env.PORT) {
 		configObject["port"] = process.env.PORT;
 	}
-    configObject["host"] = "https://www.lunchboxdc.me";
+    configObject["host"] = "https://www.pioneerindoordrums.org";
     configObject["logLevel"] = "error";
 } else {
     configObject["port"] = "3000";

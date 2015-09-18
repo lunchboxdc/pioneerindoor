@@ -15,7 +15,9 @@ module.exports = (function() {
 	});
 
 	router.get('/auditionees', function(req, res) {
-		Auditionee.find(function(err, auditionees) {
+		Auditionee.find({})
+		.sort({submitDate:'asc'})
+		.exec(function(err, auditionees) {
 			if (err) {
 				console.error(err);
 			}

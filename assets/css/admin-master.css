@@ -142,8 +142,9 @@ body {
 .modal-content .block .row {
 	display: inline-block;
 	width: 100%;
-	margin-bottom: 5px;
+	margin-bottom: 10px;
 }
+
 .modal-content .block .row .row-block {
 	display: inline-block;
 }
@@ -151,6 +152,10 @@ body {
 .modal-content .block .row .row-block.content {
 	display: block;
 	margin-left: 300px;
+}
+
+.modal-content .block .row .row-block.content span {
+	white-space: pre-wrap;
 }
 
 .modal-content .block .row .row-block.label {

@@ -71,6 +71,14 @@ var hbs = exphbs.create({
         },
         assetsVersion: function() {
             return ConnectionManager.getAssetsVersion();
+        },
+        isProduction: function(options) {
+            if (process.env.NODE_ENV === 'prod') {
+                return options.fn(this);
+            }
+            else {
+                return options.inverse(this);
+            }
         }
     }
 });

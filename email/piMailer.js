@@ -36,7 +36,7 @@ module.exports = {
             var emailHtml = auditionConfirmationTemplate({firstName: firstName});
             var options = {
                 from: 'Pioneer Indoor <admin@pioneerindoordrums.org>',
-                sender: 'admin@pioneerindoordrums.org',
+                sender: 'director@pioneerindoordrums.org',
                 replyTo: 'pioneerindoordrums@gmail.com',
                 to: email,
                 subject: 'You\'re registered for Pioneer Indoor auditions!',

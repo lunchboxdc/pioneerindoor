@@ -59,15 +59,21 @@
 
 		function openSendReminderModal() {
 			$('#reminderEmailModal .email-template').html(reminderEmailTemplate({firstName: '{First Name}'}));
+			$('#sendReminderEmails').show();
+			$('#actionsMessage').hide();
 			$('#reminderEmailModal').bPopup();
 		}
 
 		function sendReminderEmails() {
 			$.post( "/admin/email/sendAuditioneeReminder", function() {
-				$('#reminderEmailModal .modal-content').html("Successfully queued reminder emails.");
+				$('#actionsMessage').html("Successfully queued reminder emails.");
+				$('#sendReminderEmails').hide();
+				$('#actionsMessage').show();
 			})
 			.fail(function() {
-				$('#reminderEmailModal .modal-content').html("Error! Failed to queue reminder emails.");
+				$('#actionsMessage').html("Error! Failed to queue reminder emails.");
+				$('#sendReminderEmails').hide();
+				$('#actionsMessage').show();
 			});
 		}
 
@@ -124,7 +130,10 @@
 		<span class="b-close"><i class="fa fa-times-circle"></i></span>
 
 		<div class="modal-content">
-			<div class="modal-actions"><button class="button" style="width: 100px;" onclick="sendReminderEmails()">Send</button></div>
+			<div class="modal-actions">
+				<button id="sendReminderEmails" class="button" style="width: 100px;" onclick="sendReminderEmails()">Send</button>
+				<span id="actionsMessage"></span>
+			</div>
 			<div class="email-template"></div>
 		</div>
 	</div>

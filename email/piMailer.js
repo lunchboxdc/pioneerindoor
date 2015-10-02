@@ -22,6 +22,15 @@ fs.readFile(__dirname + '/templates/auditionConfirmation.html', 'utf8', function
     }
 });
 
+var auditionReminderTemplate;
+fs.readFile(__dirname + '/templates/auditionReminder.html', 'utf8', function (err, html) {
+    if(err) {
+        console.error('piMailer: failed to load auditionReminderTemplate template: '+err);
+    } else {
+        auditionReminderTemplate = handlebars.compile(html);
+    }
+});
+
 var transport = nodemailer.createTransport(ses({
     region: 'us-west-2',
     accessKeyId: process.env.SES_ACCESS_KEY_ID,
@@ -35,7 +44,7 @@ module.exports = {
         if(auditionConfirmationTemplate) {
             var emailHtml = auditionConfirmationTemplate({firstName: firstName});
             var options = {
-                from: 'Pioneer Indoor <admin@pioneerindoordrums.org>',
+                from: 'Pioneer Indoor <director@pioneerindoordrums.org>',
                 sender: 'director@pioneerindoordrums.org',
                 replyTo: 'pioneerindoordrums@gmail.com',
                 to: email,
@@ -52,6 +61,33 @@ module.exports = {
             });
         } else {
             console.error("piMailer: auditionConfirmationTemplate is undefined.");
+        }
+    },
+
+    sendAuditionReminder: function(auditionees) {
+        if(auditionReminderTemplate) {
+
+            auditionees.forEach(function(auditionee) {
+                var emailHtml = auditionReminderTemplate(auditionee);
+                var options = {
+                    to: auditionee.email,
+                    from: 'Pioneer Indoor <director@pioneerindoordrums.org>',
+                    sender: 'director@pioneerindoordrums.org',
+                    replyTo: 'pioneerindoordrums@gmail.com',
+                    subject: 'Pioneer Indoor 2016 Auditions - Important Information',
+                    html: emailHtml
+                };
+
+                this.sendMail(options, function(error, info){
+                    if(error){
+                        console.error(error);
+                    } else {
+                        console.info('Audition reminder email sent to: %s', auditionee.email);
+                    }
+                });
+            },this);
+        } else {
+            console.error("piMailer: auditionReminderTemplate is undefined.");
         }
     },
 

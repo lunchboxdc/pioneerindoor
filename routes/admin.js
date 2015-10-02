@@ -115,8 +115,20 @@ module.exports = (function() {
 		}
 	});
 
-	router.get('/email/audition', function(req, res) {
-		res.render('admin/email/audition');
+	router.post('/email/sendAuditioneeReminder', function(req, res) {
+		Auditionee.find({})
+		.exec(function(err, auditionees) {
+			if (err) {
+				console.error(err);
+				res.send(500, err);
+			}
+			piMailer.sendAuditionReminder(auditionees);
+			res.send({});
+		});
+	});
+
+	router.get('/email/:template', function(req, res) {
+		res.sendFile(process.cwd() + '/email/templates/'+req.params.template+'.html');
 	});
 
 	return router;

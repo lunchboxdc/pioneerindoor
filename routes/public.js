@@ -11,6 +11,10 @@ var Auditionee = require('../persistence/models/auditionee');
 var FacebookPost = require('../persistence/models/facebookPost');
 var utils = require('../common/utils');
 
+var packetsPath = process.cwd() + '/assets/auditionMaterials/';
+var batteryPacket = 'BatteryPacket.pdf';
+var cymbalPacket = 'CymbalPacket.pdf';
+var frontEnsemblePacket = 'FrontEnsemblePacket.pdf';
 
 
 module.exports = function(passport) {
@@ -192,6 +196,39 @@ module.exports = function(passport) {
 				});
 			}
 		});
+	});
+
+	router.get('/packets/battery', function(req, res) {
+		var fileStats = fs.statSync(packetsPath+batteryPacket);
+		res.writeHeader(200,{
+			"Content-Length":fileStats.size,
+			"Content-Type":"application/octet-stream",
+			"Content-Disposition": "attachment; filename='"+batteryPacket+"'"
+		});
+		var fReadStream = fs.createReadStream(packetsPath+batteryPacket);
+		fReadStream.pipe(res);
+	});
+
+	router.get('/packets/cymbal', function(req, res) {
+		var fileStats = fs.statSync(packetsPath+cymbalPacket);
+		res.writeHeader(200,{
+			"Content-Length":fileStats.size,
+			"Content-Type":"application/octet-stream",
+			"Content-Disposition": "attachment; filename='"+cymbalPacket+"'"
+		});
+		var fReadStream = fs.createReadStream(packetsPath+cymbalPacket);
+		fReadStream.pipe(res);
+	});
+
+	router.get('/packets/frontEnsemble', function(req, res) {
+		var fileStats = fs.statSync(packetsPath+frontEnsemblePacket);
+		res.writeHeader(200,{
+			"Content-Length":fileStats.size,
+			"Content-Type":"application/octet-stream",
+			"Content-Disposition": "attachment; filename='"+frontEnsemblePacket+"'"
+		});
+		var fReadStream = fs.createReadStream(packetsPath+frontEnsemblePacket);
+		fReadStream.pipe(res);
 	});
 
 	return router;

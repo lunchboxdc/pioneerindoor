@@ -9,6 +9,7 @@ module.exports = {
             if(!process.env.FB_TOKEN) {
                 console.error("FB_TOKEN environment variable missing!");
             } else {
+                console.debug('FacebookService: getting posts.');
                 request({
                     url: 'https://graph.facebook.com/v2.3/PioneerIndoor/posts',
                     qs: {limit: 10, fields: 'from,name,story,message,description,caption,picture,link,type,status_type,attachments'},
@@ -46,10 +47,10 @@ module.exports = {
                                 facebookPost.save(function (err) {
                                     if (err) {
                                         if (err.code !== 11000) {
-                                            console.log(err.message);
+                                            console.error(err.message);
                                         }
                                     } else {
-                                        console.log('FacebookService: added post.');
+                                        console.info('FacebookService: added post.');
                                     }
                                 });
                             }
@@ -65,10 +66,11 @@ module.exports = {
         if(!process.env.FB_TOKEN) {
             console.error("FB_TOKEN environment variable missing!");
         } else {
+            console.debug('FacebookService: getting profile picture.');
             var uri = 'https://graph.facebook.com/v2.3/PioneerIndoor/picture';
             request.head(uri, function(err, res, body) {
                 request(uri).pipe(fs.createWriteStream(__dirname+'/../assets/image/fbPicture.jpg')).on('close', function() {
-                    console.log('finished');
+                    console.info('FacebookService: updated profile picture');
                 });
             });
         }

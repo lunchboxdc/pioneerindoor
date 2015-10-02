@@ -1,6 +1,16 @@
 {{#section 'head'}}
 	<link type="text/css" rel="stylesheet" href="/assets/css/admin-master.css?v={{assetsVersion}}"/>
 	<script>
+		var auditioneeTemplate;
+		$.get("/assets/template/auditioneeTemplate.html", function(data) {
+			auditioneeTemplate = Handlebars.compile(data);
+		});
+
+		var reminderEmailTemplate;
+		$.get("/admin/email/auditionReminder", function(data) {
+			reminderEmailTemplate = Handlebars.compile(data);
+		});
+
 		Handlebars.registerHelper('notEmpty', function(val, options) {
 			if (typeof val!=='undefined' && val!==null && val.length>0) {
 				return options.fn(this);
@@ -25,12 +35,7 @@
 				return moment().diff(moment(val), 'years');
 			} else {
 				return;
-			}			
-		});
-
-		var auditioneeTemplate;
-		$.get("/assets/template/auditioneeTemplate.html", function(data) {
-			auditioneeTemplate = Handlebars.compile(data);
+			}
 		});
 
 		function deleteAuditionee(firstName, lastName, id, e) {
@@ -51,6 +56,21 @@
 			$('#auditioneeModal .modal-content').html(auditioneeTemplate(auditionee[0]));
 			$('#auditioneeModal').bPopup();
 		}
+
+		function openSendReminderModal() {
+			$('#reminderEmailModal .email-template').html(reminderEmailTemplate({firstName: '{First Name}'}));
+			$('#reminderEmailModal').bPopup();
+		}
+
+		function sendReminderEmails() {
+			$.post( "/admin/email/sendAuditioneeReminder", function() {
+				$('#reminderEmailModal .modal-content').html("Successfully queued reminder emails.");
+			})
+			.fail(function() {
+				$('#reminderEmailModal .modal-content').html("Error! Failed to queue reminder emails.");
+			});
+		}
+
 	</script>
 
 {{/section}}
@@ -59,6 +79,8 @@
 
 <div class="admin-body">
 	<h1>Auditionees</h1>
+
+	<div class="action-container"><button class="button" style="width: 200px;" onclick="openSendReminderModal();">Send Reminder Email</button></div>
 
 	{{#if auditioneesMessage}}
 		<div>{{auditioneesMessage}}</div>
@@ -96,6 +118,15 @@
 		<span class="b-close"><i class="fa fa-times-circle"></i></span>
 
 		<div class="modal-content"></div>
+	</div>
+
+	<div id="reminderEmailModal" class="modal">
+		<span class="b-close"><i class="fa fa-times-circle"></i></span>
+
+		<div class="modal-content">
+			<div class="modal-actions"><button class="button" style="width: 100px;" onclick="sendReminderEmails()">Send</button></div>
+			<div class="email-template"></div>
+		</div>
 	</div>
 	<script>var auditionees = {{{auditioneesString}}};</script>
 </div>

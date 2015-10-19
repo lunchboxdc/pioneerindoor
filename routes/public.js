@@ -115,6 +115,14 @@ module.exports = function(passport) {
 		res.render('public/schedule', payLoad);
 	});
 
+	router.get('/faq',function(req,res) {
+		var payLoad =_.merge({
+			page: 'faq'
+		}, req.flash());
+
+		res.render('public/faq', payLoad);
+	});
+
 	router.get('/staff',function(req,res) {
 		var payLoad =_.merge({
 			page: 'staff'

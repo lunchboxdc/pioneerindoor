@@ -73,3 +73,7 @@ body {
 table {
 	border-collapse: collapse;
 }
+
+img {
+	border: none;
+}

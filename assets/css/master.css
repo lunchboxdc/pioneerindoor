@@ -47,7 +47,7 @@ body {
 
 header {
 	display: inline-block;
-	margin-top: 15px;
+	margin: 20px 0;
 	width: 100%;
 }
 
@@ -59,8 +59,14 @@ a.blue-link {
 	color: blue;
 }
 
+.semi-bold {
+	font-weight: 400 !important;
+	color: inherit;
+}
+
 .bold {
 	font-weight: bold !important;
+	color: inherit;
 }
 
 .center {
@@ -71,7 +77,10 @@ a.blue-link {
 
 .logo {
 	display: inline-block;
-	width: 300px;
+}
+
+.logo img {
+	vertical-align: bottom;
 }
 
 .site-container {
@@ -82,14 +91,17 @@ a.blue-link {
 
 .site-nav {
 	float: right;
-	line-height: 69px;
+}
+
+.site-nav ul {
+	margin-top: 40px;
 }
 
 .site-nav li {
 	display:inline;
 	color: #ffffff;
 	padding: 5px;
-	margin: 15px;
+	margin-left: 20px;
 	font-weight: bold;
 	letter-spacing: .04em;
 }
@@ -101,7 +113,7 @@ a.blue-link {
 }
 
 .slider {
-	margin: 15px 0 0 0;
+	margin: 0 0 10px;
 	display: inline-block;
 	width: 100%;
 	border: none;
@@ -134,7 +146,7 @@ ul.slides li {
 }
 
 .tile {
-	margin-top: 15px;
+	margin-bottom: 15px;
 	padding: 10px;
 	padding-bottom: 15px;
 	background-color: rgb(245, 245, 245);
@@ -551,7 +563,7 @@ footer {
 	display: inline-block;
 	width: 100%;
 	text-align: center;
-	margin: 45px 0 15px;
+	margin: 25px 0;
 }
 
 footer .center {
@@ -563,20 +575,20 @@ footer .logo-container {
 	float: left;
 }
 
-footer .logo-container .logo {
-	width: 150px;
-}
-
 footer .social-links {
 	display: inline-block;
-	padding: 2px 20px;
+	padding: 2px 0 2px 10px;
 	float: left;
 	border-left: 1px solid #999;
-	margin: 6px 20px;
+	margin: 6px 0 6px 20px;
+}
+
+footer .social-links a {
+	display: inline-block;
 }
 
 footer .social-links i {
 	font-size: 35px;
 	color: #999;
-	padding-right: 10px;
+	width: 40px;
 }

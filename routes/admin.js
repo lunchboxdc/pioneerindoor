@@ -6,6 +6,8 @@ var piMailer = require('../email/piMailer');
 var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
 var utils = require('../common/utils');
+var csv = require('fast-csv');
+var fs = require('fs');
 
 module.exports = (function() {
 	var router = express.Router();
@@ -27,6 +29,24 @@ module.exports = (function() {
 			}, req.flash());
 			res.render('admin/auditionees', payLoad);
 		});
+	});
+
+	router.get('/auditionees/export', function(req, res) {
+		Auditionee.find({})
+			.exec(function(err, auditionees) {
+				if (err) {
+					console.error(err);
+				}
+
+				csv.writeToString(auditionees, {headers: true}, function(data) {
+					res.writeHeader(200,{
+						"Content-Length":data.length,
+						"Content-Type":"application/octet-stream",
+						"Content-Disposition": "attachment; filename='export.csv'"
+					});
+					res.send(data);
+				});
+			});
 	});
 
 	router.post('/auditionees/delete', function(req, res) {

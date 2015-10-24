@@ -86,7 +86,10 @@
 <div class="admin-body">
 	<h1>Auditionees</h1>
 
-	<div class="action-container"><button class="button" style="width: 200px;" onclick="openSendReminderModal();">Send Reminder Email</button></div>
+	<div class="action-container">
+		<button class="button" onclick="openSendReminderModal();">Send Reminder Email</button>
+		<button class="button" onclick="window.location.href='/admin/auditionees/export'">Export to CSV</button>
+	</div>
 
 	{{#if auditioneesMessage}}
 		<div>{{auditioneesMessage}}</div>

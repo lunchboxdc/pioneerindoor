@@ -6,7 +6,7 @@ var piMailer = require('../email/piMailer');
 var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
 var utils = require('../common/utils');
-var csv = require('fast-csv');
+var csv = require('express-csv');
 var fs = require('fs');
 
 module.exports = (function() {
@@ -38,14 +38,102 @@ module.exports = (function() {
 					console.error(err);
 				}
 
-				csv.writeToString(auditionees, {headers: true}, function(data) {
-					res.writeHeader(200,{
-						"Content-Length":data.length,
-						"Content-Type":"application/octet-stream",
-						"Content-Disposition": "attachment; filename='export.csv'"
-					});
-					res.send(data);
-				});
+				var auditioneesExport = [{
+					firstName:'First Name',
+					lastName:'Last Name',
+					dob:'Birthdate',
+					phone:'Phone',
+					email:'Email',
+					address1:'Address 1',
+					address2:'Address 2',
+					city:'City',
+					state:'State',
+					zip:'Zip',
+					school:'School',
+					schoolYear:'Year In School',
+					pg1FirstName:'Parent/guardian 1 First Name',
+					pg1LastName:'Parent/guardian 1 Last Name',
+					pg1Phone1:'Parent/guardian 1 Phone 1',
+					pg1Phone2:'Parent/guardian 1 Phone 2',
+					pg1Email:'Parent/guardian 1 Email',
+					pg1Address1:'Parent/guardian 1 Address 1',
+					pg1Address2:'Parent/guardian 1 Address 2',
+					pg1City:'Parent/guardian 1 City',
+					pg1State:'Parent/guardian 1 State',
+					pg1Zip:'Parent/guardian 1 Zip',
+					pg2FirstName:'Parent/guardian 2 First Name',
+					pg2LastName:'Parent/guardian 2 First Name',
+					pg2Phone1:'Parent/guardian 2 Phone 1',
+					pg2Phone2:'Parent/guardian 2 Phone 2',
+					pg2Email:'Parent/guardian 2 Email',
+					pg2Address1:'Parent/guardian 2 Address 1',
+					pg2Address2:'Parent/guardian 2 Address 2',
+					pg2City:'Parent/guardian 2 City',
+					pg2State:'Parent/guardian 2 State',
+					pg2Zip:'Parent/guardian 2 Zip',
+					referral:'Referral',
+					referralOther:'Referral (Other)',
+					yearsDrumming:'Number of years drumming',
+					experience:'Experience',
+					auditionInstrument1:'Audition Instrument 1',
+					auditionInstrument2:'Audition Instrument 2',
+					auditionInstrument3:'Audition Instrument 3',
+					specialTalents:'Special Talents',
+					conflicts:'Conflicts',
+					goal:'Goal',
+					submitDate:'Submit Date'
+				}];
+				for(var i=0; i<auditionees.length; i++) {
+					var exportRow = {};
+					exportRow.firstName=auditionees[i].firstName;
+					exportRow.lastName=auditionees[i].lastName;
+					exportRow.dob=auditionees[i].dob;
+					exportRow.phone=auditionees[i].phone;
+					exportRow.email=auditionees[i].email;
+					exportRow.address1=auditionees[i].address1;
+					exportRow.address2=auditionees[i].address2;
+					exportRow.city=auditionees[i].city;
+					exportRow.state=auditionees[i].state;
+					exportRow.zip=auditionees[i].zip;
+					exportRow.school=auditionees[i].school;
+					exportRow.schoolYear=auditionees[i].schoolYear;
+					exportRow.pg1FirstName=auditionees[i].pg1FirstName;
+					exportRow.pg1LastName=auditionees[i].pg1LastName;
+					exportRow.pg1Phone1=auditionees[i].pg1Phone1;
+					exportRow.pg1Phone2=auditionees[i].pg1Phone2;
+					exportRow.pg1Email=auditionees[i].pg1Email;
+					exportRow.pg1Address1=auditionees[i].pg1Address1;
+					exportRow.pg1Address2=auditionees[i].pg1Address2;
+					exportRow.pg1City=auditionees[i].pg1City;
+					exportRow.pg1State=auditionees[i].pg1State;
+					exportRow.pg1Zip=auditionees[i].pg1Zip;
+					exportRow.pg2FirstName=auditionees[i].pg2FirstName;
+					exportRow.pg2LastName=auditionees[i].pg2LastName;
+					exportRow.pg2Phone1=auditionees[i].pg2Phone1;
+					exportRow.pg2Phone2=auditionees[i].pg2Phone2;
+					exportRow.pg2Email=auditionees[i].pg2Email;
+					exportRow.pg2Address1=auditionees[i].pg2Address1;
+					exportRow.pg2Address2=auditionees[i].pg2Address2;
+					exportRow.pg2City=auditionees[i].pg2City;
+					exportRow.pg2State=auditionees[i].pg2State;
+					exportRow.pg2Zip=auditionees[i].pg2Zip;
+					exportRow.referral=auditionees[i].referral;
+					exportRow.referralOther=auditionees[i].referralOther;
+					exportRow.yearsDrumming=auditionees[i].yearsDrumming;
+					exportRow.experience=auditionees[i].experience;
+					exportRow.auditionInstrument1=auditionees[i].auditionInstrument1;
+					exportRow.auditionInstrument2=auditionees[i].auditionInstrument2;
+					exportRow.auditionInstrument3=auditionees[i].auditionInstrument3;
+					exportRow.specialTalents=auditionees[i].specialTalents;
+					exportRow.conflicts=auditionees[i].conflicts;
+					exportRow.goal=auditionees[i].goal;
+					exportRow.submitDate=auditionees[i].submitDate;
+					auditioneesExport.push(exportRow);
+				}
+
+				var fileName = "pioneerIndoorAuditionees_"+moment().format('YYYY-MM-DD')+".csv";
+				res.setHeader('Content-disposition', 'attachment; filename='+fileName);
+				res.csv(auditioneesExport);
 			});
 	});
 

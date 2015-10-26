@@ -278,3 +278,25 @@ body {
 	border: 1px solid #cacaca;
 	padding: 15px;
 }
+
+.stats-container {
+	display: inline-block;
+	margin-bottom: 20px;
+}
+
+.stats-container .total-block {
+	display: inline-block;
+	float: left;
+	min-width: 170px;
+}
+
+.stats-container .stat-block {
+	display: inline-block;
+	float: left;
+	min-width: 250px;
+}
+
+.stats-container .stat-block .stat-block-header {
+	font-weight: bold;
+	margin-bottom: 10px;
+}

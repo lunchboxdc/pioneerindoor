@@ -23,9 +23,44 @@ module.exports = (function() {
 			if (err) {
 				console.error(err);
 			}
+
+			var stats = {
+				total: 0,
+				firstChoice: {},
+				secondChoice: {},
+				thirdChoice: {}
+			};
+
+			for(var i=0; i<auditionees.length; i++) {
+				stats.total++;
+
+				var auditionInsrument1 = auditionees[i].auditionInstrument1;
+				var auditionInsrument2 = auditionees[i].auditionInstrument2;
+				var auditionInsrument3 = auditionees[i].auditionInstrument3;
+
+				if(typeof stats.firstChoice[auditionInsrument1]==='undefined') {
+					stats.firstChoice[auditionees[i].auditionInstrument1] = 1;
+				} else {
+					stats.firstChoice[auditionees[i].auditionInstrument1]++;
+				}
+
+				if(typeof stats.secondChoice[auditionInsrument2]==='undefined') {
+					stats.secondChoice[auditionees[i].auditionInstrument2] = 1;
+				} else {
+					stats.secondChoice[auditionees[i].auditionInstrument2]++;
+				}
+
+				if(typeof stats.thirdChoice[auditionInsrument3]==='undefined') {
+					stats.thirdChoice[auditionees[i].auditionInstrument3] = 1;
+				} else {
+					stats.thirdChoice[auditionees[i].auditionInstrument3]++;
+				}
+			}
+
 			var payLoad = _.merge({
 				auditionees: auditionees,
-				auditioneesString: JSON.stringify(auditionees)
+				auditioneesString: JSON.stringify(auditionees),
+				stats: stats
 			}, req.flash());
 			res.render('admin/auditionees', payLoad);
 		});

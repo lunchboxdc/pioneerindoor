@@ -91,6 +91,28 @@
 		<button class="button" onclick="window.location.href='/admin/auditionees/export'">Export to CSV</button>
 	</div>
 
+	<div class="stats-container">
+		<div class="total-block"><span class="bold">Total Auditionees:</span> {{stats.total}}</div>
+		<div class="stat-block">
+			<div class="stat-block-header">Instrument 1</div>
+			{{#each stats.firstChoice}}
+				<div>{{@key}}: {{this}}</div>
+			{{/each}}
+		</div>
+		<div class="stat-block">
+			<div class="stat-block-header">Instrument 2</div>
+			{{#each stats.secondChoice}}
+				<div>{{@key}}: {{this}}</div>
+			{{/each}}
+		</div>
+		<div class="stat-block">
+			<div class="stat-block-header">Instrument 3</div>
+			{{#each stats.thirdChoice}}
+				<div>{{@key}}: {{this}}</div>
+			{{/each}}
+		</div>
+	</div>
+
 	{{#if auditioneesMessage}}
 		<div>{{auditioneesMessage}}</div>
 	{{/if}}
@@ -102,7 +124,7 @@
 				<th>Birthdate</th>
 				<th>Phone</th>
 				<th>Email</th>
-				<th>Instrument</th>
+				<th>Instrument 1</th>
 				<th>Instrument 2</th>
 				<th>Instrument 3</th>
 				<th class="delete">Delete</th>

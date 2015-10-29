@@ -86,6 +86,10 @@
 <div class="admin-body">
 	<h1>Auditionees</h1>
 
+	{{#if auditioneesMessage}}
+		<div>{{auditioneesMessage}}</div>
+	{{/if}}
+
 	<div class="action-container">
 		<button class="button" onclick="openSendReminderModal();">Send Reminder Email</button>
 		<button class="button" onclick="window.location.href='/admin/auditionees/export'">Export to CSV</button>
@@ -113,10 +117,6 @@
 		</div>
 	</div>
 
-	{{#if auditioneesMessage}}
-		<div>{{auditioneesMessage}}</div>
-	{{/if}}
-
 	<table class="admin-table">
 		<thead>
 			<tr>
@@ -140,7 +140,7 @@
 					<td>{{auditionInstrument1}}</td>
 					<td>{{auditionInstrument2}}</td>
 					<td>{{auditionInstrument3}}</td>
-					<td class="delete" onclick="deleteAuditionee('{{firstName}}', '{{lastName}}', '{{_id}}', event)"><i class="fa fa-times-circle"></td>
+					<td class="delete" onclick="deleteAuditionee('{{firstName}}', '{{lastName}}', '{{_id}}', event)"><i class="fa fa-times-circle"></i></td>
 				</tr>
 			{{/each}}
 		</tbody>

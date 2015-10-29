@@ -4,8 +4,10 @@
     <link type="text/css" rel="stylesheet" href="/assets/css/admin-master.css?v={{assetsVersion}}"/>
 {{/section}}
 
-<div class="register-content">
-    <h1>Register</h1>
+<div class="auth-container register">
+    <img class="login-logo" src="/assets/image/logo-black.svg">
+
+    <h2>Register</h2>
 
     {{#if registerMessage}}
         <div>{{registerMessage}}</div>
@@ -26,7 +28,7 @@
             </div>
             <div class="input-row">
                 <label for="password">Password</label>
-                <input id="password" type="password" name="password1" placeholder="password" required data-parsley-minlength="8" data-parsley-minlength-message="Password must be at least 8 characters" />
+                <input id="password" type="password" name="password1" placeholder="password" autofocus required data-parsley-minlength="8" data-parsley-minlength-message="Password must be at least 8 characters" />
             </div>
             <div class="input-row">
                 <label for="password2">Re-enter password</label>

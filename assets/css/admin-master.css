@@ -12,24 +12,52 @@ body {
 .semi-bold {
 	font-weight: 400;
 }
-.main-container {
+.error-message {
+	border: 1px solid #ff4747;
+	border-radius: 4px;
+	padding: 5px;
+	background-color: #ffdfdf;
+}
+.error-message span {
+	color: #940000;
+}
+.success-message {
+	border: 1px solid #009400;
+	border-radius: 4px;
+	padding: 5px;
+	background-color: #dcffd8;
+}
+.success-message span {
+	color: #083A08;
+}
+.auth-container {
 	margin-left: auto;
 	margin-right: auto;
-	width: 400px;
+	width: 340px;
 	padding: 15px;
+}
+.auth-container h2 {
+	text-align: center;
+}
+.auth-container .button {
+	width: 100%;
+}
+.auth-container .error-message {
+	margin-bottom: 10px;
 }
 .login-logo {
 	display: block;
 	margin: 20px auto;
-	width: 200px;
+	width: 250px;
 }
 .credentials {
 	display: block;
 	margin-right: auto;
 	margin-left: auto;
-	width: 300px;
+	width: 100%;
 	font-size: 16px;
 	padding: 10px;
+	box-sizing: border-box;
 }
 .email {
 	border-top-left-radius: 4px;
@@ -49,8 +77,15 @@ body {
 	color: #ffffff;
 	font-size: 18px;
 	padding: 10px;
-	width: 322px;
 	cursor: pointer;
+}
+.forgot-password {
+	margin: 10px;
+	text-align: center;
+}
+.forgot-password a {
+	font-size: 20px;
+	font-weight: 400;
 }
 .logo {
 	margin: 20px;
@@ -192,19 +227,14 @@ body {
 	display: block;
 	margin-left: auto;
 }
-
-.register-content {
-	padding: 20px;
-}
-.register-content .input-row {
-	width: 300px;
-	padding: 5px;
+.input-row {
+	margin-bottom: 10px;
 	position: relative;
 }
-.register-content .input-row label {
+.input-row label {
 	font-size: 14px;
 }
-.register-content .input-row input {
+.input-row input {
 	background-color: #ffffff;
 	display: block;
 	width: 100%;
@@ -218,24 +248,14 @@ body {
 	-moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
 	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
 }
-.register-content .input-row button {
-	border-radius: 6px;
-	border: 0;
-	background-color: #008000;
-	color: #ffffff;
-	font-size: 18px;
-	padding: 12px;
-	width: 100%;
-	cursor: pointer;
-}
 
-.register-content .input-row.button-row {
+.input-row.button-row {
 	margin-top: 20px;
 }
 
 .parsley-errors-list {
 	position: absolute;
-	right: 10px;
+	right: 0px;
 	font-size: 14px;
 	padding: 0;
 	margin: 0;
@@ -256,7 +276,7 @@ body {
 	top: 0;
 }
 
-.register-content .input-row .parsley-error {
+.register .input-row .parsley-error {
 	border: 2px solid #ff6666;
 }
 
@@ -299,4 +319,8 @@ body {
 .stats-container .stat-block .stat-block-header {
 	font-weight: bold;
 	margin-bottom: 10px;
+}
+
+.new-user-container {
+	width: 300px;
 }

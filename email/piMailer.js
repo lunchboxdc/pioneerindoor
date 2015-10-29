@@ -13,6 +13,15 @@ fs.readFile(__dirname + '/templates/adminRegistration.html', 'utf8', function (e
     }
 });
 
+var adminForgotPasswordTemplate;
+fs.readFile(__dirname + '/templates/adminForgotPassword.html', 'utf8', function (err, html) {
+    if(err) {
+        console.error('piMailer: failed to load adminForgotPasswordTemplate template: '+err);
+    } else {
+        adminForgotPasswordTemplate = handlebars.compile(html);
+    }
+});
+
 var auditionConfirmationTemplate;
 fs.readFile(__dirname + '/templates/auditionConfirmation.html', 'utf8', function (err, html) {
     if(err) {
@@ -105,11 +114,33 @@ module.exports = {
                 if(error){
                     console.error(error);
                 } else {
-                    console.info('New User email sent for: %s - %s', firstName, email);
+                    console.info('Registration email sent for: %s - %s', firstName, email);
                 }
             });
         } else {
-            console.error("piMailer: newUserTemplate is undefined.");
+            console.error("piMailer: adminRegistrationTemplate is undefined.");
+        }
+    },
+
+    sendForgotPasswordEmail: function(firstName, email, token, userId) {
+        if(adminForgotPasswordTemplate) {
+            var emailHtml = adminForgotPasswordTemplate({host: appConfig.host, firstName: firstName, token: token, userId: userId});
+            var options = {
+                from: 'admin@pioneerindoordrums.org',
+                to: email,
+                subject: 'Reset your Pioneer Indoor password',
+                html: emailHtml
+            };
+
+            this.sendMail(options, function(error, info){
+                if(error){
+                    console.error(error);
+                } else {
+                    console.info('Forgot password email sent for: %s - %s', firstName, email);
+                }
+            });
+        } else {
+            console.error("piMailer: adminForgotPasswordTemplate is undefined.");
         }
     },
 

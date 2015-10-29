@@ -212,7 +212,7 @@ module.exports = (function() {
 		AdminUser.findOne({ 'email': req.body.email }, function (err, user) {
 			if(user) {
 				console.info("New User: user already exists with email, %s", req.body.email);
-				req.flash('usersMessage', 'User already exists with email, '+req.body.email);
+				req.flash('errorMessage', 'User already exists with email, '+req.body.email);
 				res.redirect('/admin/users');
 			} else {
 				console.info("New User: no user found for email, %s ... adding user with token.", req.body.email);
@@ -226,9 +226,9 @@ module.exports = (function() {
 				adminUser.save(function(err, user) {
 					if (err) {
 						console.error('error adding user: ' + user);
-						req.flash('usersMessage', 'error adding user!');
+						req.flash('errorMessage', 'error adding user!');
 					} else {
-						req.flash('usersMessage', 'Successfully added user. A registration email has been sent.');
+						req.flash('successMessage', 'Successfully added user. A registration email has been sent.');
 						console.log('return user date: '+user);
 					}
 					piMailer.sendAdminRegistration(user.firstName, user.email, token, user._id);
@@ -241,7 +241,7 @@ module.exports = (function() {
 	router.post('/users/delete', function(req, res) {
 		if(req.body.userId === req.user._id.toString()) {
 			console.log("you can't delete the user you're logged in with!");
-			req.flash('usersMessage', 'you can\'t delete the user you\'re logged in with!');
+			req.flash('errorMessage', 'you can\'t delete the user you\'re logged in with!');
 			res.redirect('/admin/users');
 		} else {
 			AdminUser.remove({
@@ -249,9 +249,9 @@ module.exports = (function() {
 			}, function(err, user) {
 				if (err) {
 					console.error('error deleting user: ' + user);
-					req.flash('usersMessage', 'error deleting user!');
+					req.flash('errorMessage', 'error deleting user!');
 				} else {
-					req.flash('usersMessage', 'Successfully deleted user');
+					req.flash('successMessage', 'Successfully deleted user');
 				}
 				res.redirect('/admin/users');
 			});

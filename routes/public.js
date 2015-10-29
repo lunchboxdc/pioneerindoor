@@ -158,6 +158,88 @@ module.exports = function(passport) {
 		failureFlash : true
 	}));
 
+	router.get('/forgotPassword', function(req, res) {
+		var payLoad =_.merge({}, req.flash());
+		res.render('public/forgotPassword', payLoad);
+	});
+
+	router.post('/forgotPassword', function(req, res) {
+		AdminUser.findOne({ 'email': req.body.email }, function (err, adminUser) {
+			if(adminUser) {
+				var token = require('crypto').randomBytes(32).toString('hex');
+				adminUser.token = token;
+				adminUser.token = utils.createHash(token);
+				adminUser.tokenExpires = moment().add(1, 'days');
+				adminUser.save(function (err) {
+					if (err) {
+						console.error("Error setting token and token expiration for forgot password for: "+adminUser.email, err);
+						req.flash('errorMessage', 'We\'re sorry, an error occurred. Please try again.');
+						res.redirect('/forgotPassword');
+					} else {
+						piMailer.sendForgotPasswordEmail(adminUser.firstName, adminUser.email, token, adminUser._id);
+						console.info("Successfully sent forgot password email to: "+adminUser.email);
+						res.render('public/forgotPasswordSuccess');
+					}
+				});
+			} else {
+				req.flash('errorMessage', 'We\'re sorry, we were unable to find an account with that email address. Please try again.');
+				res.redirect('/forgotPassword');
+			}
+		});
+	});
+
+	router.get('/resetPassword', function(req, res) {
+		if(req.query.a && req.query.z) {
+			AdminUser.findById(req.query.z, function (err, user) {
+				if(err) {
+					console.error("Error looking up resetPassword userId and token.",err);
+					res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+				}
+				if(user && user.token && bCrypt.compareSync(req.query.a, user.token)) {
+					if(moment(user.tokenExpires).diff(moment())>0) {
+						console.debug('Valid forgot password token.');
+						var payLoad = {
+							userId: user._id
+						};
+						res.render('public/resetPassword', payLoad);
+					} else {
+						console.debug('forgot password token expired');
+						res.render('public/resetPassword', {errorMessage: 'We\'re sorry, the forgot password link provided has expired. Please go back to the \'forgot password\' page and generate another email.'});
+					}
+				} else {
+					console.debug('Forgot password: No user found by token, %s', req.query.a);
+					res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+				}
+			});
+		} else {
+			console.debug('the token query string parameter was not provided.');
+			res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+		}
+	});
+
+	router.post('/resetPassword', function(req, res) {
+		AdminUser.findById(req.body.userId, function(err, user) {
+			if (err || !user) {
+				console.error("Error resetting password for userId: " + req.body.userId);
+				res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+			} else {
+				user.password = utils.createHash(req.body.password1);
+				user.tokenExpires = undefined;
+				user.token = undefined;
+				user.save(function (err, user) {
+					if (err) {
+						console.error("Error removing token and expiration from user: " + user.email);
+						res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+					} else {
+						console.info("Successfully reset password for: " + user.email);
+						req.flash('email', user.email);
+						res.redirect('/login');
+					}
+				});
+			}
+		});
+	});
+
 	router.get('/register', function(req, res) {
 		if(req.query.a && req.query.z) {
 			AdminUser.findById(req.query.z, function (err, user) {
@@ -196,7 +278,7 @@ module.exports = function(passport) {
 				user.token = undefined;
 				user.save(function (err, user) {
 					if (err) {
-						res.render('public/register', {registerMessage: 'Thank you for registering'});
+						res.render('public/register', {registerMessage: 'We\'re sorry, an error occurred. Please contact the system administrator.'});
 					} else {
 						req.flash('email', user.email);
 						res.redirect('/login');

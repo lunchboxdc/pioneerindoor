@@ -4,16 +4,29 @@
 	<link type="text/css" rel="stylesheet" href="/assets/css/admin-master.css?v={{assetsVersion}}"/>
 {{/section}}
 
-<div class="main-container">
+<div class="auth-container">
 	<img class="login-logo" src="/assets/image/logo-black.svg">
-	<div class="login-container">
-		<form action="/login" method="post">
-			<input type="text" class="credentials email" name="username" placeholder="Email" autofocus value="{{email}}"/>
-			<input type="password" class="credentials pass" name="password" placeholder="Password"/>
+
+	{{#if errorMessage}}
+		<div class="error-message">
+			<span>{{errorMessage}}</span>
+		</div>
+	{{/if}}
+
+	<form action="/login" method="post">
+		<div class="input-row">
+			<label for="email">Email</label>
+			<input type="text" id="email" class="credentials email" name="username" placeholder="Email" autofocus value="{{email}}"/>
+		</div>
+
+		<div class="input-row">
+			<label for="password">Password</label>
+			<input type="password" id="password" class="credentials pass" name="password" placeholder="Password"/>
+		</div>
+
+		<div class="input-row button-row">
 			<button type="submit" class="credentials button">Sign In</button>
-			{{#if authMessage}}
-				<div>{{authMessage}}</div>
-			{{/if}}
-		</form>
-	</div>
+		</div>
+	</form>
+	<div class="forgot-password"><a href="/forgotPassword">Forgot Password</a></div>
 </div>

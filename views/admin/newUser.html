@@ -6,12 +6,24 @@
 
 <div class="admin-body">
 	<h1>New Admin User</h1>
-	<form action="/admin/users/new" method="post">
-		<input name="firstName" placeholder="First Name"/>
-    	<input name="lastName" placeholder="Last Name"/>
-      	<input name="email" placeholder="Email"/>
-		<div class="controls">
-			<button class="button" type="submit">Create</button>
-		</div>
-	</form>
+
+	<div class="new-user-container">
+		<form action="/admin/users/new" method="post">
+			<div class="input-row">
+				<label for="firstName">First Name</label>
+				<input id="firstName" name="firstName" autofocus placeholder="First Name"/>
+			</div>
+			<div class="input-row">
+				<label for="lastName">Last Name</label>
+				<input id="lastName" name="lastName" placeholder="Last Name"/>
+			</div>
+			<div class="input-row">
+				<label for="email">Email</label>
+				<input id="email" name="email" placeholder="Email"/>
+			</div>
+			<div class="input-row button-row">
+				<button class="button" type="submit">Create</button>
+			</div>
+		</form>
+	</div>
 </div>

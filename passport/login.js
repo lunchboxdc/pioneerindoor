@@ -7,16 +7,23 @@ module.exports = function(passport) {
             passReqToCallback : true
         },
         function(req, email, password, done) {
-            AdminUser.findOne({'email':  email},
-                function(err, user) {
+            AdminUser.findOne({'email':  email}, function(err, user) {
                     if (err) {
                         return done(err);
                     }
 
                     if (!user || !isValidPassword(password, user)) {
-                        return done(null, false, req.flash('authMessage', 'Incorrect email or password'));
+                        return done(null, false, req.flash('errorMessage', 'Incorrect email or password'));
                     }
-                    return done(null, user);
+
+                    user.tokenExpires = undefined;
+                    user.token = undefined;
+                    user.save(function (err, user) {
+                        if (err) {
+                            console.error("Error clearing token properties from user object on login: "+user.email);
+                        }
+                        return done(null, user);
+                    });
                 }
             );
 
@@ -26,4 +33,4 @@ module.exports = function(passport) {
     var isValidPassword = function(password, user) {
         return bCrypt.compareSync(password, user.password);
     }
-}
+};

@@ -106,6 +106,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
+//temporary middleware to parse raw body on post requests
+//app.use(function(req, res, next) {
+//    var data = '';
+//    req.setEncoding('utf8');
+//    req.on('data', function(chunk) {
+//        data += chunk;
+//    });
+//    req.on('end', function() {
+//        req.rawBody = data;
+//    });
+//    next();
+//});
+
 var flash = require('connect-flash');
 app.use(flash());
 

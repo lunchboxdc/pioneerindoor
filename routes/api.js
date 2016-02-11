@@ -119,6 +119,12 @@ module.exports = (function() {
 			});
 	});
 
+	router.post('/facebookPosts', function(req, res) {
+		var posts = JSON.parse(req.rawBody);
+		console.log(posts);
+		res.send("done");
+	});
+
 	router.delete('/facebookPosts/all', function(req, res) {
 		FacebookPost.remove({}, function(err) {
 			if (err) {

@@ -147,6 +147,14 @@ module.exports = function(passport) {
 		res.render('public/about', payLoad);
 	});
 
+	router.get('/support',function(req,res) {
+		var payLoad =_.merge({
+			page: 'support'
+		}, req.flash());
+
+		res.render('public/support', payLoad);
+	});
+
 	router.get('/login', function(req, res) {
 		var payLoad =_.merge({}, req.flash());
 		res.render('public/login', payLoad);

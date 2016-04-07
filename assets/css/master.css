@@ -161,10 +161,6 @@ ul.slides li {
 	margin: 0;
 }
 
-.tile.blog-post {
-	padding: 12px;
-}
-
 .blog-image {
 	display: inline-block;
 	width: 100%;
@@ -190,6 +186,14 @@ ul.slides li {
 	color: #888888;
 	font-size: 13px;
 	letter-spacing: .8px;
+}
+
+.blog-block {
+	margin: 16px 0 0;
+}
+
+.blog-block span {
+	display: block;
 }
 
 .tile h4 {

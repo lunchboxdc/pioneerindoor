@@ -161,6 +161,10 @@ ul.slides li {
 	margin: 0;
 }
 
+/*.tile.blog-post {*/
+	/*padding: 12px 12px 24px;*/
+/*}*/
+
 .blog-image {
 	display: inline-block;
 	width: 100%;
@@ -189,7 +193,7 @@ ul.slides li {
 }
 
 .blog-block {
-	margin: 16px 0 0;
+	margin: 16px 0 16px;
 }
 
 .blog-block span {

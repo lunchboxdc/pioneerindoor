@@ -3,34 +3,48 @@ var Assets = require('./models/Assets');
 var mongooseConnected = false;
 var assetsVersion = 0;
 
+mongoose.Promise = require('bluebird');
+
 module.exports = {
-	open: function() {
+	open: function(callback) {
+
+
 		if(!mongooseConnected) {
-			mongoose.connect('mongodb://localhost/pi');
-			mongoose.connection.on("open", function(ref) {
-				console.info('Mongoose connection opened');
-			    mongooseConnected = true;
-				Assets.findOne(function(err, assets) {
-					if (err) {
-						console.error('error getting assets version!'+err);
-					} else {
-						if(!assets) {
-							assets = new Assets();
-							assets.version = 0;
+			try {
+				mongoose.connect('mongodb://localhost/pi');
+				var promise = mongoose.connection.on("open", function() {
+					console.info('Mongoose connection opened');
+					mongooseConnected = true;
+					Assets.findOne(function (err, assets) {
+						if (err) {
+							console.error('error getting assets version!' + err);
 						} else {
-							assets.version++;
-						}						
-					
-						assets.save(function(err, assets){
-							if(err) {
-								console.log('error saving assets version: ' + err);
+							if (!assets) {
+								assets = new Assets();
+								assets.version = 0;
 							} else {
-								assetsVersion = assets.version;
+								assets.version++;
 							}
-						});
-					}
+
+							assets.save(function (err, assets) {
+								if (err) {
+									console.log('error saving assets version: ' + err);
+								} else {
+									assetsVersion = assets.version;
+								}
+							});
+						}
+					});
 				});
-			});
+
+				mongoose.connection.on('error',function (e) {
+					console.error('failed to connect to database' + e);
+				});
+			} catch (e) {
+				console.error('failed to connect to database' + e);
+			}
+
+			return promise;
 		}
 	},
 	close: function() {
@@ -46,4 +60,4 @@ module.exports = {
 	getAssetsVersion: function() {
 		return assetsVersion;
 	}
-}
+};

@@ -17,14 +17,14 @@ module.exports = {
                     headers: {
                         "Authorization": process.env.FB_TOKEN
                     }
-                }, function(error, response, body){
+                }, function(error, response, body) {
                     if(error) {
                         console.error(error.stack);
                     } else {
                         var json = JSON.parse(body);
-                        async.each(json.data, function(post, callback) {
+                        async.each(json.data, function(post) {
                             var story = post.story ? post.story.toLowerCase() : '';
-                            if(story.indexOf("profile picture")<0 && story.indexOf("cover photo")<0 && story.indexOf("shared")<0) {
+                            if(story.indexOf("profile picture") < 0 && story.indexOf("cover photo") < 0 && story.indexOf("shared") < 0) {
                                 var facebookPost = new FacebookPost();
                                 facebookPost.postId = post.id;
                                 facebookPost.fromName = post.from.name;

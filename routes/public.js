@@ -37,7 +37,8 @@ module.exports = function(passport) {
 			page: 'audition'
 		}, req.flash());
 
-		res.render('public/audition', payLoad);
+		//res.render('public/audition', payLoad);
+		res.render('public/audition-soon', payLoad);
 	});
 
 	router.post('/audition',function(req,res) {

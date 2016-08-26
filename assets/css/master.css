@@ -83,7 +83,7 @@ a.blue-link {
 	vertical-align: bottom;
 }
 
-.site-container {
+.site-center {
 	margin-right:auto;
 	margin-left:auto;
 	width:1050px;
@@ -134,15 +134,19 @@ ul.slides li {
 	overflow: hidden;
 }
 
-.site-container section {
+.site-body {
+	flex: 1;
+}
+
+.site-body section {
 	display: inline-block;
 }
 
-.site-container section.main-content {
+.site-body section.main-content {
 	width: 65%;
 }
 
-.site-container section.right-rail {
+.site-body section.right-rail {
 	width: 32%;
 	float: right;
 }

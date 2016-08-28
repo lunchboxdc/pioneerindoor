@@ -23,7 +23,7 @@ module.exports = function(passport) {
 	router.get('/',function(req,res) {
 		FacebookPost.find({})
 			.sort({created_time: 'desc'})
-			.limit(4)
+			.limit(5)
 			.exec(function(err, facebookPosts) {
 				if (err) {
 					console.error(err);

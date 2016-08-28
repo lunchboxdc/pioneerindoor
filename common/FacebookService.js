@@ -49,7 +49,7 @@ module.exports = {
                                     if (err) {
                                         console.error(err)
                                     } else {
-                                        console.info('FacebookService: added post.');
+                                        console.info('FacebookService: added/updated post.');
                                     }
                                 });
                             }

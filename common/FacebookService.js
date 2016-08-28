@@ -26,7 +26,8 @@ module.exports = {
                             var story = post.story ? post.story.toLowerCase() : '';
                             if(story.indexOf("profile picture") < 0 && story.indexOf("cover photo") < 0 && story.indexOf("shared") < 0) {
                                 var facebookPost = new FacebookPost();
-                                facebookPost.postId = post.id;
+                                facebookPost.isNew = false;
+                                facebookPost._id = post.id;
                                 facebookPost.fromName = post.from.name;
                                 facebookPost.name = post.name;
                                 facebookPost.story = post.story;
@@ -46,9 +47,7 @@ module.exports = {
 
                                 facebookPost.save(function (err) {
                                     if (err) {
-                                        if (err.code !== 11000) {
-                                            console.error(err.message);
-                                        }
+                                        console.error(err)
                                     } else {
                                         console.info('FacebookService: added post.');
                                     }

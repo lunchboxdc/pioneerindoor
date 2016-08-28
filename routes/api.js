@@ -4,6 +4,8 @@ var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
 var FacebookPost = require('../persistence/models/facebookPost');
 var Assets = require('../persistence/models/Assets');
+var FacebookService = require('../common/FacebookService');
+var async = require('async');
 
 module.exports = (function() {
 	var router = express.Router();
@@ -154,6 +156,11 @@ module.exports = (function() {
 				res.json({message: 'Successfully deleted assets version'});
 			}
 		});
+	});
+
+	router.get('/runFacebookService', function(req, res) {
+		FacebookService.getPosts();
+		res.send("Facebook service is running");
 	});
 
 	return router;

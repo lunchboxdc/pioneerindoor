@@ -2,13 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
-module.exports = mongoose.model('FacebookPost',{
-	id: ObjectId,
-	postId: {
-		type: String,
-		unique: true,
-		dropDups: true
-	},
+module.exports = mongoose.model('FacebookPost', {
+	//id: ObjectId,
+	_id: String,
 	fromName: String,
 	name: String,
 	story: String,

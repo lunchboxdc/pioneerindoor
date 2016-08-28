@@ -159,6 +159,7 @@ module.exports = (function() {
 	});
 
 	router.get('/runFacebookService', function(req, res) {
+		console.info('Running facebook service...');
 		FacebookService.getPosts();
 		res.send("Facebook service is running");
 	});

@@ -26,7 +26,6 @@ module.exports = {
                             var story = post.story ? post.story.toLowerCase() : '';
                             if(story.indexOf("profile picture") < 0 && story.indexOf("cover photo") < 0 && story.indexOf("shared") < 0) {
                                 var facebookPost = new FacebookPost();
-                                facebookPost.isNew = false;
                                 facebookPost._id = post.id;
                                 facebookPost.fromName = post.from.name;
                                 facebookPost.name = post.name;
@@ -47,9 +46,20 @@ module.exports = {
 
                                 facebookPost.save(function (err) {
                                     if (err) {
-                                        console.error(err)
+                                        if (err.code === 11000) {
+                                            facebookPost.isNew = false;
+                                            facebookPost.save(function(err) {
+                                                if (err) {
+                                                    console.error(err);
+                                                } else {
+                                                    console.info('FacebookService: updated post.');
+                                                }
+                                            });
+                                        } else {
+                                            console.error(err);
+                                        }
                                     } else {
-                                        console.info('FacebookService: added/updated post.');
+                                        console.info('FacebookService: added post.');
                                     }
                                 });
                             }

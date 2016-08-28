@@ -2,7 +2,7 @@ var CronJob = require('cron').CronJob;
 var FacebookService = require('./FacebookService');
 
 var facebookPostJob = new CronJob({
-    cronTime: '00 * * * * *',
+    cronTime: '00 */10 * * * *',
     onTick: function() {
         FacebookService.getPosts();
         FacebookService.getProfilePicture();

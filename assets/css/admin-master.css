@@ -6,6 +6,37 @@ body {
 	height: 100%;
 	margin: 0px;
 }
+
+input,
+select,
+textarea {
+	background-color: #ffffff;
+	display: block;
+	height: 40px;
+	font-size: 16px;
+	padding: 0 13px;
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	-webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
+	-moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
+	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+	box-shadow: 0 0 6px #008000 !important;
+	border: 1px solid #65BD65 !important;
+}
+
+input.parsley-error:focus,
+textarea.parsley-error:focus,
+select.parsley-error:focus {
+	box-shadow: 0 0 6px #ff6666 !important;
+	border: 1px solid #ff6666 !important;
+}
+
 .bold {
 	font-weight: bold;
 }
@@ -261,7 +292,7 @@ body {
 	margin: 0;
 }
 
-.parsley-errors-list li:first-child{
+.parsley-errors-list li:first-child {
    	display: inline;
 	font-weight: 400;
 	font-style: italic;
@@ -271,6 +302,7 @@ body {
 .parsley-errors-list li {
 	display: none;
 }
+
 .checkbox-error .parsley-errors-list {
 	right: auto;
 	top: 0;
@@ -280,11 +312,23 @@ body {
 	border: 2px solid #ff6666;
 }
 
-.action-container {
-	margin: 30px 0;
+.full-width {
+	margin: 15px 0;
+	display: inline-block;
+	width: 100%;
 }
 
-.action-container .button {
+.action-container {
+	display: inline-block;
+	float: left;
+}
+
+.action-row:not(:last-child) {
+	margin-bottom: 20px;
+}
+
+.action-row button,
+.action-row select {
 	width: 200px;
 	margin-right: 20px;
 }
@@ -301,19 +345,14 @@ body {
 
 .stats-container {
 	display: inline-block;
-	margin-bottom: 20px;
-}
-
-.stats-container .total-block {
-	display: inline-block;
-	float: left;
-	min-width: 170px;
+	float: right;
+	margin-right: 20px;
 }
 
 .stats-container .stat-block {
 	display: inline-block;
 	float: left;
-	min-width: 250px;
+	margin-left: 35px;
 }
 
 .stats-container .stat-block .stat-block-header {

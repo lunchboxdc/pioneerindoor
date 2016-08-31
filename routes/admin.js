@@ -16,55 +16,117 @@ module.exports = (function() {
 		res.render('admin/home');
 	});
 
-	router.get('/auditionees', function(req, res) {
-		Auditionee.find({})
-		.sort({submitDate:'asc'})
-		.exec(function(err, auditionees) {
-			if (err) {
-				console.error(err);
-			}
+	var auditioneesRoute = function(req, res) {
+		Auditionee.aggregate(
+			[
+				{'$group': {_id: '$season'}},
+				{'$sort': {_id: -1}}
+			])
+			.exec(function(err, seasonsResult) {
+				var seasons = [];
+				var selectedSeason = 0;
 
-			var stats = {
-				total: 0,
-				firstChoice: {},
-				secondChoice: {},
-				thirdChoice: {}
-			};
-
-			for(var i=0; i<auditionees.length; i++) {
-				stats.total++;
-
-				var auditionInsrument1 = auditionees[i].auditionInstrument1;
-				var auditionInsrument2 = auditionees[i].auditionInstrument2;
-				var auditionInsrument3 = auditionees[i].auditionInstrument3;
-
-				if(typeof stats.firstChoice[auditionInsrument1]==='undefined') {
-					stats.firstChoice[auditionees[i].auditionInstrument1] = 1;
-				} else {
-					stats.firstChoice[auditionees[i].auditionInstrument1]++;
+				if (err) {
+					console.error(err);
+				}
+				for (var i = 0; i < seasonsResult.length; i++) {
+					seasons.push(seasonsResult[i]._id);
 				}
 
-				if(typeof stats.secondChoice[auditionInsrument2]==='undefined') {
-					stats.secondChoice[auditionees[i].auditionInstrument2] = 1;
-				} else {
-					stats.secondChoice[auditionees[i].auditionInstrument2]++;
+				selectedSeason = seasons[0];
+				if (req.body.season) {
+					selectedSeason = parseInt(req.body.season);
 				}
 
-				if(typeof stats.thirdChoice[auditionInsrument3]==='undefined') {
-					stats.thirdChoice[auditionees[i].auditionInstrument3] = 1;
-				} else {
-					stats.thirdChoice[auditionees[i].auditionInstrument3]++;
-				}
-			}
+				Auditionee.find({season: selectedSeason})
+					.sort({submitDate:'asc'})
+					.exec(function(err, auditionees) {
+						if (err) {
+							console.error(err);
+						}
 
-			var payLoad = _.merge({
-				auditionees: auditionees,
-				auditioneesString: JSON.stringify(auditionees),
-				stats: stats
-			}, req.flash());
-			res.render('admin/auditionees', payLoad);
-		});
-	});
+						var total = 0;
+
+						var stats = {
+							firstChoice: {
+								'Front ensemble (percussion)': 0,
+								'Front ensemble (electronics)': 0,
+								'Snare': 0,
+								'Tenor': 0,
+								'Bass': 0,
+								'Cymbals': 0,
+								'Character': 0
+							},
+							secondChoice: {
+								'Front ensemble (percussion)': 0,
+								'Front ensemble (electronics)': 0,
+								'Snare': 0,
+								'Tenor': 0,
+								'Bass': 0,
+								'Cymbals': 0,
+								'Character': 0
+							},
+							thirdChoice: {
+								'Front ensemble (percussion)': 0,
+								'Front ensemble (electronics)': 0,
+								'Snare': 0,
+								'Tenor': 0,
+								'Bass': 0,
+								'Cymbals': 0,
+								'Character': 0
+							}
+						};
+
+						for (var i = 0; i < auditionees.length; i++) {
+							total++;
+
+							var firstChoice = auditionees[i].auditionInstrument1;
+							if (firstChoice.length > 0) {
+								stats.firstChoice[firstChoice]++;
+							}
+							var secondChoice = auditionees[i].auditionInstrument2;
+							if (secondChoice.length > 0) {
+								stats.secondChoice[secondChoice]++;
+							}
+							var thirdChoice = auditionees[i].auditionInstrument3;
+							if (thirdChoice.length > 0) {
+								stats.thirdChoice[thirdChoice]++;
+							}
+						}
+
+						for (var choice in stats) {
+							if (!stats.hasOwnProperty(choice)) continue;
+
+							var instruments = stats[choice];
+							for (var instrument in instruments) {
+								if (!instruments.hasOwnProperty(instrument)) continue;
+
+								var count = instruments[instrument];
+								if (count < 1) {
+									delete instruments[instrument];
+								}
+							}
+
+							if (_.isEmpty(instruments)) {
+								delete stats[choice];
+							}
+						}
+
+						var payLoad = _.merge({
+							auditionees: auditionees,
+							auditioneesString: JSON.stringify(auditionees),
+							stats: stats,
+							total: total,
+							seasons: seasons,
+							selectedSeason: selectedSeason
+						}, req.flash());
+						res.render('admin/auditionees', payLoad);
+					});
+			});
+	};
+
+	router.get('/auditionees', auditioneesRoute);
+	router.post('/auditionees', auditioneesRoute);
 
 	router.get('/auditionees/export', function(req, res) {
 		Auditionee.find({})
@@ -118,7 +180,8 @@ module.exports = (function() {
 					goal:'Goal',
 					submitDate:'Submit Date'
 				}];
-				for(var i=0; i<auditionees.length; i++) {
+
+				for (var i = 0; i < auditionees.length; i++) {
 					var exportRow = {};
 					exportRow.firstName=auditionees[i].firstName;
 					exportRow.lastName=auditionees[i].lastName;
@@ -166,8 +229,8 @@ module.exports = (function() {
 					auditioneesExport.push(exportRow);
 				}
 
-				var fileName = "pioneerIndoorAuditionees_"+moment().format('YYYY-MM-DD')+".csv";
-				res.setHeader('Content-disposition', 'attachment; filename='+fileName);
+				var fileName = 'pioneerIndoorAuditionees_' + moment().format('YYYY-MM-DD') + '.csv';
+				res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
 				res.csv(auditioneesExport);
 			});
 	});

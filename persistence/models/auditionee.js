@@ -44,5 +44,7 @@ module.exports = mongoose.model('Auditionee',{
 	specialTalents: String,
 	conflicts: String,
 	goal: String,
-	submitDate: Date
+	submitDate: Date,
+	season: Number,
+	deleted: Boolean
 });

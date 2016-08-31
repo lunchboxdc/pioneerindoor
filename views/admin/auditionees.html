@@ -1,150 +1,95 @@
 {{#section 'head'}}
 	<link type="text/css" rel="stylesheet" href="/assets/css/admin-master.css?v={{assetsVersion}}"/>
-	<script>
-		var auditioneeTemplate;
-		$.get("/assets/template/auditioneeTemplate.html", function(data) {
-			auditioneeTemplate = Handlebars.compile(data);
-		});
-
-		var reminderEmailTemplate;
-		$.get("/admin/email/auditionReminder", function(data) {
-			reminderEmailTemplate = Handlebars.compile(data);
-		});
-
-		Handlebars.registerHelper('notEmpty', function(val, options) {
-			if (typeof val!=='undefined' && val!==null && val.length>0) {
-				return options.fn(this);
-			}
-			return options.inverse(this);
-		});
-		Handlebars.registerHelper('equals', function(a, b, options) {
-			if (a === b) {
-				return options.fn(this);
-			}
-			return options.inverse(this);
-		});
-		Handlebars.registerHelper('formatDate', function(val) {
-			if(val && val.length>0) {
-				return moment(val).format('MMMM Do YYYY, h:mm a');
-			} else {
-				return;
-			}
-		});
-		Handlebars.registerHelper('getAge', function(val) {
-			if(val && val.length>0) {
-				return moment().diff(moment(val), 'years');
-			} else {
-				return;
-			}
-		});
-
-		function deleteAuditionee(firstName, lastName, id, e) {
-			e.stopPropagation();
-			if(confirm('Are you sure you want to delete auditionee, '+firstName+' '+lastName+'?')) {
-				var form = $("<form></form>")
-					.attr({method: 'post', action: '/admin/auditionees/delete', style: "display:none;"})
-					.append($('<input>').attr({type: 'hidden', name: 'auditioneeId', value: id}));
-				$('body').append(form);
-				form.submit();
-			}
-		}
-
-		function showModal(id) {
-			var auditionee = auditionees.filter(function(obj) {
-				return obj._id == id;
-			});
-			$('#auditioneeModal .modal-content').html(auditioneeTemplate(auditionee[0]));
-			$('#auditioneeModal').bPopup();
-		}
-
-		function openSendReminderModal() {
-			$('#reminderEmailModal .email-template').html(reminderEmailTemplate({firstName: '{First Name}'}));
-			$('#sendReminderEmails').show();
-			$('#actionsMessage').hide();
-			$('#reminderEmailModal').bPopup();
-		}
-
-		function sendReminderEmails() {
-			$.post( "/admin/email/sendAuditioneeReminder", function() {
-				$('#actionsMessage').html("Successfully queued reminder emails.");
-				$('#sendReminderEmails').hide();
-				$('#actionsMessage').show();
-			})
-			.fail(function() {
-				$('#actionsMessage').html("Error! Failed to queue reminder emails.");
-				$('#sendReminderEmails').hide();
-				$('#actionsMessage').show();
-			});
-		}
-
-	</script>
-
+	<script src="/assets/script/adminAuditionees.js?v={{assetsVersion}}"></script>
 {{/section}}
 
 {{> leftRail}}
 
 <div class="admin-body">
-	<h1>Auditionees</h1>
+	<div class="full-width">
+		<h1>Auditionees</h1>
+	</div>
 
 	{{#if auditioneesMessage}}
 		<div>{{auditioneesMessage}}</div>
 	{{/if}}
 
-	<div class="action-container">
-		<button class="button" onclick="openSendReminderModal();">Send Reminder Email</button>
-		<button class="button" onclick="window.location.href='/admin/auditionees/export'">Export to CSV</button>
+	<div class="full-width">
+		<div class="action-container">
+			<div class="action-row">
+				<button class="button" onclick="openSendReminderModal();">Send Reminder Email</button>
+				<button class="button" onclick="window.location.href='/admin/auditionees/export'">Export to CSV</button>
+			</div>
+			<div class="action-row">
+				<form action="/admin/auditionees" method="post">
+					<label for="season">Season</label>
+					<select id="season" name="season" onchange="this.form.submit()">
+						{{#each seasons}}
+							{{{selectOption ../selectedSeason this}}}
+						{{/each}}
+					</select>
+				</form>
+			</div>
+		</div>
+
+		<div class="stats-container">
+			<div class="stat-block"><span class="bold">Total Auditionees:</span> {{total}}</div>
+			<div class="stat-block">
+				<div class="stat-block-header">Instrument 1</div>
+				{{#each stats.firstChoice}}
+					<div>{{@key}}: {{this}}</div>
+				{{/each}}
+			</div>
+			{{#if stats.secondChoice}}
+				<div class="stat-block">
+					<div class="stat-block-header">Instrument 2</div>
+					{{#each stats.secondChoice}}
+						<div>{{@key}}: {{this}}</div>
+					{{/each}}
+				</div>
+			{{/if}}
+			{{#if stats.thirdChoice}}
+				<div class="stat-block">
+					<div class="stat-block-header">Instrument 3</div>
+					{{#each stats.thirdChoice}}
+						<div>{{@key}}: {{this}}</div>
+					{{/each}}
+				</div>
+			{{/if}}
+		</div>
 	</div>
 
-	<div class="stats-container">
-		<div class="total-block"><span class="bold">Total Auditionees:</span> {{stats.total}}</div>
-		<div class="stat-block">
-			<div class="stat-block-header">Instrument 1</div>
-			{{#each stats.firstChoice}}
-				<div>{{@key}}: {{this}}</div>
-			{{/each}}
-		</div>
-		<div class="stat-block">
-			<div class="stat-block-header">Instrument 2</div>
-			{{#each stats.secondChoice}}
-				<div>{{@key}}: {{this}}</div>
-			{{/each}}
-		</div>
-		<div class="stat-block">
-			<div class="stat-block-header">Instrument 3</div>
-			{{#each stats.thirdChoice}}
-				<div>{{@key}}: {{this}}</div>
-			{{/each}}
-		</div>
-	</div>
-
-	<table class="admin-table">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Birthdate</th>
-				<th>Phone</th>
-				<th>Email</th>
-				<th>Instrument 1</th>
-				<th>Instrument 2</th>
-				<th>Instrument 3</th>
-				<th class="delete">Delete</th>
-			</tr>
-		</thead>
-		<tbody>
-			{{#each auditionees}}
-				<tr onclick="showModal('{{_id}}')">
-					<td>{{firstName}} {{lastName}}</td>
-					<td>{{dob}}</td>
-					<td>{{phone}}</td>
-					<td>{{email}}</td>
-					<td>{{auditionInstrument1}}</td>
-					<td>{{auditionInstrument2}}</td>
-					<td>{{auditionInstrument3}}</td>
-					<td class="delete" onclick="deleteAuditionee('{{firstName}}', '{{lastName}}', '{{_id}}', event)"><i class="fa fa-times-circle"></i></td>
+	<div class="full-width">
+		<table class="admin-table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Birthdate</th>
+					<th>Phone</th>
+					<th>Email</th>
+					<th>Instrument 1</th>
+					<th>Instrument 2</th>
+					<th>Instrument 3</th>
+					<th class="delete">Delete</th>
 				</tr>
-			{{/each}}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				{{#each auditionees}}
+					<tr onclick="showModal('{{_id}}')">
+						<td>{{firstName}} {{lastName}}</td>
+						<td>{{dob}}</td>
+						<td>{{phone}}</td>
+						<td>{{email}}</td>
+						<td>{{auditionInstrument1}}</td>
+						<td>{{auditionInstrument2}}</td>
+						<td>{{auditionInstrument3}}</td>
+						<td class="delete" onclick="deleteAuditionee('{{firstName}}', '{{lastName}}', '{{_id}}', event)"><i class="fa fa-times-circle"></i></td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+
 	<div id="auditioneeModal" class="modal">
 		<span class="b-close"><i class="fa fa-times-circle"></i></span>
 
@@ -162,5 +107,6 @@
 			<div class="email-template"></div>
 		</div>
 	</div>
+
 	<script>var auditionees = {{{auditioneesString}}};</script>
 </div>

@@ -1,0 +1,1 @@
+db.auditionees.update({}, {'$set' : {'season' : 2016}}, {multi: true})

@@ -1,9 +1,6 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var ObjectId = Schema.ObjectId;
 
 module.exports = mongoose.model('FacebookPost', {
-	//id: ObjectId,
 	_id: String,
 	fromName: String,
 	name: String,

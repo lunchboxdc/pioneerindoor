@@ -37,7 +37,14 @@ module.exports = function(passport) {
 			page: 'audition'
 		}, req.flash());
 
-		//res.render('public/audition', payLoad);
+		res.render('public/audition', payLoad);
+	});
+
+	router.get('/audition-soon',function(req,res) {
+		var payLoad =_.merge({
+			page: 'audition-soon'
+		}, req.flash());
+
 		res.render('public/audition-soon', payLoad);
 	});
 
@@ -86,6 +93,8 @@ module.exports = function(passport) {
 		auditionee.conflicts = req.body.conflicts;
 		auditionee.goal = req.body.goal;
 		auditionee.submitDate = moment();
+		auditionee.deleted = false;
+		auditionee.season = req.body.season;
 
 		auditionee.save(function(err, auditionee) {
 			if (err) {

@@ -27,7 +27,7 @@ var hbs = exphbs.create({
     ],
     helpers: {
     	section: function(name, options) {
-    		if(!this._sections) {
+    		if (!this._sections) {
     			this._sections = {};
     		}
     		this._sections[name] = options.fn(this);
@@ -36,36 +36,39 @@ var hbs = exphbs.create({
         equals: function(a, b, options) {
             if (a === b) {
                 return options.fn(this);
-            }
-            else {
+            } else {
                 return options.inverse(this);
             }
         },
         facebookDate: function(val) {
-            if(val && val.length>0) {
+            if (val && val.length>0) {
                 return moment(val).format('MMM D');
             } else {
                 return;
             }
         },
         selectOption: function(selectedValue, option, value) {
-            if(typeof value !== 'string') {
+            if (typeof value !== 'string') {
                 value = option;
             }
             var html = '<option value="' + value +'"';
-            if(selectedValue && selectedValue[0] === value) {
+
+            if (Array.isArray(selectedValue)) {
+                selectedValue = selectedValue[0];
+            }
+            if (selectedValue === value) {
                 html += ' selected="selected"';
             }
             html += '>'+ option + '</option>';
             return html;
         },
         preselectCheckbox: function(val) {
-            if(val=="true") {
+            if (val=="true") {
                 return 'checked';
             }
         },
         preselectCheckboxFalse: function(val) {
-            if(val!="false") {
+            if (val!="false") {
                 return 'checked';
             }
         },
@@ -75,8 +78,7 @@ var hbs = exphbs.create({
         isProduction: function(options) {
             if (process.env.NODE_ENV === 'prod') {
                 return options.fn(this);
-            }
-            else {
+            } else {
                 return options.inverse(this);
             }
         }

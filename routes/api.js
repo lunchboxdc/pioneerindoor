@@ -162,7 +162,30 @@ module.exports = (function() {
 		console.info('Running facebook service...');
 		FacebookService.getPosts();
 		FacebookService.getProfilePicture();
-		res.send("Facebook service is running");
+		res.send('Facebook service is running');
+	});
+
+	router.get('/initNewAuditioneeAttributes', function(req, res) {
+		console.info('Updating auditionee attributes...');
+		FacebookPost.find({})
+			.sort({created_time: 'desc'})
+			.exec(function(err, facebookPosts) {
+				if (err) {
+					console.log(err);
+				} else {
+					async.each(facebookPosts, function(post) {
+						post.season = 2016;
+						post.save(function(err) {
+							if (err) {
+								console.log(err);
+							} else {
+								console.log('updated auditionee');
+							}
+						})
+					});
+				}
+			});
+		res.send('Updating auditionee attributes');
 	});
 
 	return router;

@@ -3,80 +3,7 @@
   <title>Pioneer Indoor | Register to audition</title>
   <link type="text/css" rel="stylesheet" href="/assets/css/master.css?v={{assetsVersion}}"/>
 
-  <script>
-    function pg1AddressToggle(e) {
-      if(e.checked) {
-        $('#pg1AddressFields').addClass('hidden');
-        $('#pg1AddressSameAsAuditionee').val('true');
-      } else {
-        $('#pg1AddressFields').removeClass('hidden');
-        $('#pg1AddressSameAsAuditionee').val('false');
-      }
-    }
-
-    function pg2AddressToggle(e) {
-      if(e.checked) {
-        $('#pg2AddressFields').addClass('hidden');
-        $('#pg2AddressSameAsAuditionee').val('true');
-      } else {
-        $('#pg2AddressFields').removeClass('hidden');
-        $('#pg2AddressSameAsAuditionee').val('false');
-      }
-    }
-
-    function referralChange(e) {
-      if(e.value.toLowerCase()==='other') {
-        $('#referralOtherRow').removeClass('hidden');
-      } else {
-        $('#referralOtherRow').addClass('hidden');
-      }
-    }
-
-    function togglePG(showPG) {
-      if(showPG) {
-        $('#hasPg2').val('true');
-        $('#altPG').removeClass('hidden');
-        $('#addPGbutton').addClass('hidden');
-      } else {
-        $('#hasPg2').val('false');
-        $('#altPG').addClass('hidden');
-        $('#addPGbutton').removeClass('hidden');
-      }
-    }
-
-    $(function() {
-      $('#dob').mask('00/00/0000');
-      $('#phone, #pg1Phone1, #pg1Phone2, #pg2Phone1, #pg2Phone2').mask('000-000-0000');
-      $('#zip, #pg1Zip, #pg2Zip').mask('00000');
-
-      window.Parsley.on('form:submit', function() {
-        $('.hidden, .hidden *').prop("disabled",true);
-        $('#submitButton').prop("disabled",true);
-        $('#submitButton').val("Please wait...");
-      });
-      $('.audition-form').parsley({
-          excluded: '.hidden *'
-      });
-
-      if(!$('#pg1AddressSameAsAuditioneeCheckbox')[0].checked) {
-        $('#pg1AddressFields').removeClass('hidden');
-      }
-
-      if(!$('#pg2AddressSameAsAuditioneeCheckbox')[0].checked) {
-        $('#pg2AddressFields').removeClass('hidden');
-      }
-
-      if($('#hasPg2').val()=='true') {
-        $('#hasPg2').val('true');
-        $('#altPG').removeClass('hidden');
-        $('#addPGbutton').addClass('hidden');
-      }
-
-      if($('#referral').val().toLowerCase()==='other') {
-        $('#referralOtherRow').removeClass('hidden');
-      }
-    });
-  </script>
+  <script src="/assets/script/auditionees.js?v={{assetsVersion}}"></script>
 {{/section}}
 
 {{> nav}}
@@ -95,7 +22,7 @@
   </div>
 
   <form class="audition-form form" action="/audition" method="post">
-    <input type="hidden" name="season" value="2017"/>
+    <input type="hidden" id="season" name="season" value="2017"/>
     <div class="tile">
       <div class="header">
         <h2>Your Information</h2>
@@ -111,7 +38,7 @@
         </div>
         <div class="input-row">
           <label for="dob">Birthdate (mm/dd/yyyy) <span class="required-indicator">*</span></label>
-          <input id="dob" name="dob" value="{{dob}}" placeholder="Birthdate" required data-parsley-minlength="10" data-parsley-minlength-message="Birthdate must match this format mm/dd/yyyy" />
+          <input id="dob" name="dob" value="{{dob}}" placeholder="Birthdate" required data-parsley-minlength="10" data-parsley-minlength-message="Birthdate must match this format mm/dd/yyyy" data-parsley-maxbirthdate />
         </div>
         <div class="input-row">
           <label for="phone">Phone <span class="required-indicator">*</span></label>

@@ -167,15 +167,16 @@ module.exports = (function() {
 
 	router.get('/initNewAuditioneeAttributes', function(req, res) {
 		console.info('Updating auditionee attributes...');
-		FacebookPost.find({})
-			.sort({created_time: 'desc'})
-			.exec(function(err, facebookPosts) {
+		Auditionee.find({})
+			.sort({submitDate:'asc'})
+			.exec(function(err, auditionees) {
 				if (err) {
 					console.log(err);
 				} else {
-					async.each(facebookPosts, function(post) {
-						post.season = 2016;
-						post.save(function(err) {
+					async.each(auditionees, function(auditionee) {
+						auditionee.season = 2016;
+						auditionee.deleted = false;
+						auditionee.save(function(err) {
 							if (err) {
 								console.log(err);
 							} else {

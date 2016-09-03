@@ -22,14 +22,14 @@ Handlebars.registerHelper('equals', function(a, b, options) {
 });
 Handlebars.registerHelper('formatDate', function(val) {
     if (val && val.length > 0) {
-        return moment(val).format('MMMM Do YYYY, h:mm a');
+        return moment(val, moment.ISO_8601).format('MMMM Do YYYY, h:mm a');
     } else {
         return;
     }
 });
 Handlebars.registerHelper('getAge', function(val) {
     if (val && val.length > 0) {
-        return moment().diff(moment(val), 'years');
+        return moment().diff(moment(val, 'MM/DD/YYYY'), 'years');
     } else {
         return;
     }

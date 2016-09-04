@@ -151,7 +151,7 @@ app.use(function(err, req, res, next) {
 var port = (appConfig.port || 3000);
 var ip = '0.0.0.0';
 app.listen(port, ip, function() {
-    console.info('Pioneer Indoor app running at http://%s:%s', ip, port);
+    console.info('Pioneer Indoor app running at http://%s:%s using node %s', ip, port, process.version);
 });
 
 process.on('SIGINT', function() {

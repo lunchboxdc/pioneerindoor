@@ -40,9 +40,23 @@ var hbs = exphbs.create({
                 return options.inverse(this);
             }
         },
-        facebookDate: function(val) {
-            if (val && val.length>0) {
-                return moment(val).format('MMM D');
+        formatIsoDate: function(date, format) {
+            if (format && date && format.length > 0) {
+                if (!(date instanceof moment)) {
+                    date = moment(date, moment.ISO_8601);
+                }
+                return date.format(format);
+            } else {
+                return;
+            }
+        },
+        season: function(auditionDate) {
+            if (auditionDate) {
+                if (!(auditionDate instanceof moment)) {
+                    auditionDate = moment(auditionDate, moment.ISO_8601);
+                }
+                var auditionYear = auditionDate.year();
+                return auditionYear + " - " + (auditionYear + 1);
             } else {
                 return;
             }

@@ -15,14 +15,16 @@
       {{#if auditionMessage}}
         <div class="error">{{{auditionMessage}}}</div>
       {{/if}}
-      <h2>2015 - 2016 Pioneer Indoor Audition Registration</h2>
+      <h2>{{season auditionDate}} Pioneer Indoor Audition Registration</h2>
       <h4>Please complete the following form to submit your registration. Upon submission you will receive this year's music and warmup packet.</h4>
-      <h4>Audition fee: $50 due upon arrival at auditions on Saturday, November 7.</h4>
+      <h4>Audition fee: $50 due upon arrival at auditions on <span class="bold">{{formatIsoDate auditionDate 'dddd, MMMM Do, YYYY'}}</span>.</h4>
     </div>
   </div>
 
   <form class="audition-form form" action="/audition" method="post">
-    <input type="hidden" id="season" name="season" value="2017"/>
+    <input type="hidden" id="season" name="season" />
+    <input type="hidden" id="auditionDate" value="{{auditionDate}}" />
+
     <div class="tile">
       <div class="header">
         <h2>Your Information</h2>
@@ -38,7 +40,7 @@
         </div>
         <div class="input-row">
           <label for="dob">Birthdate (mm/dd/yyyy) <span class="required-indicator">*</span></label>
-          <input id="dob" name="dob" value="{{dob}}" placeholder="Birthdate" required data-parsley-minlength="10" data-parsley-minlength-message="Birthdate must match this format mm/dd/yyyy" data-parsley-maxbirthdate />
+          <input id="dob" name="dob" value="{{dob}}" placeholder="Birthdate" required data-parsley-minlength="10" data-parsley-minlength-message="Birthdate must match this format mm/dd/yyyy" data-parsley-minbirthdate data-parsley-maxbirthdate />
         </div>
         <div class="input-row">
           <label for="phone">Phone <span class="required-indicator">*</span></label>
@@ -233,7 +235,8 @@
           <label for="referral">How did you hear about Pioneer Indoor? <span class="required-indicator">*</span></label>
           <select id="referral" name="referral" onchange="referralChange(this)" required >
             <option value="">Select One</option>
-            {{{selectOption referral 'Returning or former member'}}}
+            {{{selectOption referral 'I am a returning or former member'}}}
+            {{{selectOption referral 'A former member told me'}}}
             {{{selectOption referral 'Friend/Family member'}}}
             {{{selectOption referral 'Percussion Instructor'}}}
             {{{selectOption referral 'Band Director'}}}
@@ -335,7 +338,7 @@
 
       <section class="two-column">
         <div class="input-row">
-          <label class="wrap" for="conflicts">Please list any known scheduling conflicts with the Pioneer Indoor rehearsal and performance schedule</label>
+          <label class="wrap" for="conflicts">Please list any known scheduling conflicts with the Pioneer Indoor rehearsal and <a href="/schedule" target="_blank">performance schedule</a></label>
           <textarea id="conflicts" name="conflicts">{{conflicts}}</textarea>
         </div>
         <div class="input-row">
@@ -349,7 +352,7 @@
       <section>
         <div class="input-row">
           <input id="agreement" type="checkbox" name="agreement" value="true" class="checkbox" {{preselectCheckbox agreement}} required data-parsley-errors-container="#agreementError" data-parsley-error-message="Please accept the agreement before submitting"/>
-          <label for="agreement" class="checkbox-label agreement">I understand that by submitting my audition registration for the 2015 - 2016 season with the Pioneer Indoor Percussion Ensemble I am not guaranteed a spot in the ensemble and my $50 audition registration fee is non-refundable. <span class="required-indicator">*</span></label>
+          <label for="agreement" class="checkbox-label agreement">I understand that by submitting my audition registration for the {{season auditionDate}} season with the Pioneer Indoor Percussion Ensemble I am not guaranteed a spot in the ensemble and my $50 audition registration fee is non-refundable. <span class="required-indicator">*</span></label>
           <div id="agreementError" class="checkbox-error"></div>
         </div>
         <div class="input-row submit-row">

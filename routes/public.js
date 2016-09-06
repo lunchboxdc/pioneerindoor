@@ -15,7 +15,7 @@ var packetsPath = process.cwd() + '/assets/auditionMaterials/';
 var batteryPacket = 'BatteryPacket.pdf';
 var cymbalPacket = 'CymbalPacket.pdf';
 var frontEnsemblePacket = 'FrontEnsemblePacket.pdf';
-
+var auditionDate = moment("2016-11-05T14:00:00.000Z");
 
 module.exports = function(passport) {
 	var router = express.Router();
@@ -34,7 +34,8 @@ module.exports = function(passport) {
 
 	router.get('/audition',function(req,res) {
 		var payLoad =_.merge({
-			page: 'audition'
+			page: 'audition',
+			auditionDate: auditionDate
 		}, req.flash());
 
 		res.render('public/audition', payLoad);

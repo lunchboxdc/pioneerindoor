@@ -337,5 +337,9 @@ module.exports = (function() {
 		res.sendFile(process.cwd() + '/email/templates/'+req.params.template+'.html');
 	});
 
+	router.get('/blogtest', function(req, res) {
+		res.render('admin/blogTest');
+	});
+
 	return router;
 })();

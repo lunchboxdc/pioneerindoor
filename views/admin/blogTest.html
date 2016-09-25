@@ -1,0 +1,23 @@
+{{#section 'head'}}
+<script src="/assets/script/lib/tinymce-4.4.3/tinymce.min.js"></script>
+<link type="text/css" rel="stylesheet" href="/assets/css/admin-master.css?v={{assetsVersion}}"/>
+
+<script>
+    $(function() {
+        tinymce.init({
+            selector: '#blogEditor',
+            elementpath: false
+        });
+    });
+</script>
+{{/section}}
+
+{{> leftRail}}
+
+<div class="admin-body">
+    <h1>Home Blog</h1>
+
+    <div class="">
+        <textarea id="blogEditor"></textarea>
+    </div>
+</div>

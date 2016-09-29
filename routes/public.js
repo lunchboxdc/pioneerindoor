@@ -10,12 +10,13 @@ var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
 var FacebookPost = require('../persistence/models/facebookPost');
 var utils = require('../common/utils');
+var appConfig = require('../common/appConfig');
 
 var packetsPath = process.cwd() + '/assets/auditionMaterials/';
 var batteryPacket = 'BatteryPacket.pdf';
 var cymbalPacket = 'CymbalPacket.pdf';
 var frontEnsemblePacket = 'FrontEnsemblePacket.pdf';
-var auditionDate = moment("2016-11-05T14:00:00.000Z");
+var auditionDate = appConfig.auditionDate;
 
 module.exports = function(passport) {
 	var router = express.Router();
@@ -115,7 +116,10 @@ module.exports = function(passport) {
 	});
 
 	router.get('/audition/confirm',function(req,res) {
-		res.render('public/auditionConfirm');
+		var payLoad =_.merge({
+			auditionDate: auditionDate
+		}, req.flash());
+		res.render('public/auditionConfirm', payLoad);
 	});
 
 	router.get('/schedule',function(req,res) {

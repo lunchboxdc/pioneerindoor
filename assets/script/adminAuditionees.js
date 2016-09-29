@@ -8,33 +8,6 @@ $.get('/admin/email/auditionReminder', function(data) {
     reminderEmailTemplate = Handlebars.compile(data);
 });
 
-Handlebars.registerHelper('notEmpty', function(val, options) {
-    if (typeof val !== 'undefined' && val !== null && val.length > 0) {
-        return options.fn(this);
-    }
-    return options.inverse(this);
-});
-Handlebars.registerHelper('equals', function(a, b, options) {
-    if (a === b) {
-        return options.fn(this);
-    }
-    return options.inverse(this);
-});
-Handlebars.registerHelper('formatDate', function(val) {
-    if (val && val.length > 0) {
-        return moment(val, moment.ISO_8601).format('MMMM Do YYYY, h:mm a');
-    } else {
-        return;
-    }
-});
-Handlebars.registerHelper('getAge', function(val) {
-    if (val && val.length > 0) {
-        return moment().diff(moment(val, 'MM/DD/YYYY'), 'years');
-    } else {
-        return;
-    }
-});
-
 function deleteAuditionee(firstName, lastName, id, e) {
     e.stopPropagation();
     if(confirm('Are you sure you want to delete auditionee, ' + firstName + ' ' + lastName + '?')) {
@@ -55,21 +28,33 @@ function showModal(id) {
 }
 
 function openSendReminderModal() {
-    $('#reminderEmailModal .email-template').html(reminderEmailTemplate({firstName: '{First Name}'}));
+    $('#reminderEmailModal .email-template').html(reminderEmailTemplate({firstName: '{First Name}', auditionDate: auditionDate}));
     $('#sendReminderEmails').show();
     $('#actionsMessage').hide();
     $('#reminderEmailModal').bPopup();
 }
 
 function sendReminderEmails() {
-    $.post('/admin/email/sendAuditioneeReminder', function() {
-        $('#actionsMessage').html('Successfully queued reminder emails.');
-        $('#sendReminderEmails').hide();
-        $('#actionsMessage').show();
-    })
+    $.post(
+        '/admin/email/sendAuditioneeReminder',
+        {season: $('#season').val()},
+        function() {
+            $('#actionsMessage').html('Successfully queued reminder emails.');
+            $('#sendReminderEmails').hide();
+            $('#actionsMessage').show();
+        }
+    )
     .fail(function() {
         $('#actionsMessage').html('Error! Failed to queue reminder emails.');
         $('#sendReminderEmails').hide();
         $('#actionsMessage').show();
     });
 }
+
+$(function() {
+    for (var helper in handlebarsHelpers) {
+        if (handlebarsHelpers.hasOwnProperty(helper)) {
+            Handlebars.registerHelper(helper, handlebarsHelpers[helper]);
+        }
+    }
+});

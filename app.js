@@ -1,6 +1,6 @@
 require('./common/logger');
 var appConfig = require('./common/appConfig');
-var express = require("express");
+var express = require('express');
 var passport = require('passport');
 var ConnectionManager = require('./persistence/ConnectionManager');
 var expressSession = require('express-session');
@@ -25,78 +25,7 @@ var hbs = exphbs.create({
     	'./views/public/partials',
         './email/templates'
     ],
-    helpers: {
-    	section: function(name, options) {
-    		if (!this._sections) {
-    			this._sections = {};
-    		}
-    		this._sections[name] = options.fn(this);
-    		return;
-    	},
-        equals: function(a, b, options) {
-            if (a === b) {
-                return options.fn(this);
-            } else {
-                return options.inverse(this);
-            }
-        },
-        formatIsoDate: function(date, format) {
-            if (format && date && format.length > 0) {
-                if (!(date instanceof moment)) {
-                    date = moment(date, moment.ISO_8601);
-                }
-                return date.format(format);
-            } else {
-                return;
-            }
-        },
-        season: function(auditionDate) {
-            if (auditionDate) {
-                if (!(auditionDate instanceof moment)) {
-                    auditionDate = moment(auditionDate, moment.ISO_8601);
-                }
-                var auditionYear = auditionDate.year();
-                return auditionYear + " - " + (auditionYear + 1);
-            } else {
-                return;
-            }
-        },
-        selectOption: function(selectedValue, option, value) {
-            if (typeof value !== 'string') {
-                value = option;
-            }
-            var html = '<option value="' + value +'"';
-
-            if (Array.isArray(selectedValue)) {
-                selectedValue = selectedValue[0];
-            }
-            if (selectedValue === value) {
-                html += ' selected="selected"';
-            }
-            html += '>'+ option + '</option>';
-            return html;
-        },
-        preselectCheckbox: function(val) {
-            if (val=="true") {
-                return 'checked';
-            }
-        },
-        preselectCheckboxFalse: function(val) {
-            if (val!="false") {
-                return 'checked';
-            }
-        },
-        assetsVersion: function() {
-            return ConnectionManager.getAssetsVersion();
-        },
-        isProduction: function(options) {
-            if (process.env.NODE_ENV === 'prod') {
-                return options.fn(this);
-            } else {
-                return options.inverse(this);
-            }
-        }
-    }
+    helpers: require('./common/HandlebarsHelpers')
 });
 
 app.engine('html', hbs.engine);

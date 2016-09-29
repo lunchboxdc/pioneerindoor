@@ -15,7 +15,7 @@
       {{#if auditionMessage}}
         <div class="error">{{{auditionMessage}}}</div>
       {{/if}}
-      <h2>{{season auditionDate}} Pioneer Indoor Audition Registration</h2>
+      <h2>{{getYear auditionDate 1}} Pioneer Indoor Audition Registration</h2>
       <h4>Please complete the following form to submit your registration. Upon submission you will receive this year's music and warmup packet.</h4>
       <h4>Audition fee: $50 due upon arrival at auditions on <span class="bold">{{formatIsoDate auditionDate 'dddd, MMMM Do, YYYY'}}</span>.</h4>
     </div>
@@ -352,7 +352,7 @@
       <section>
         <div class="input-row">
           <input id="agreement" type="checkbox" name="agreement" value="true" class="checkbox" {{preselectCheckbox agreement}} required data-parsley-errors-container="#agreementError" data-parsley-error-message="Please accept the agreement before submitting"/>
-          <label for="agreement" class="checkbox-label agreement">I understand that by submitting my audition registration for the {{season auditionDate}} season with the Pioneer Indoor Percussion Ensemble I am not guaranteed a spot in the ensemble and my $50 audition registration fee is non-refundable. <span class="required-indicator">*</span></label>
+          <label for="agreement" class="checkbox-label agreement">I understand that by submitting my audition registration for the {{getYear auditionDate 1}} season with the Pioneer Indoor Percussion Ensemble I am not guaranteed a spot in the ensemble and my $50 audition registration fee is non-refundable. <span class="required-indicator">*</span></label>
           <div id="agreementError" class="checkbox-error"></div>
         </div>
         <div class="input-row submit-row">

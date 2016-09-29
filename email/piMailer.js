@@ -3,6 +3,13 @@ var ses = require('nodemailer-ses-transport');
 var handlebars  = require('handlebars');
 var fs = require('fs');
 var appConfig = require('../common/appConfig');
+var helpers = require('../common/HandlebarsHelpers');
+
+for (var helper in helpers) {
+    if (helpers.hasOwnProperty(helper)) {
+        handlebars.registerHelper(helper, helpers[helper]);
+    }
+}
 
 var adminRegistrationTemplate;
 fs.readFile(__dirname + '/templates/adminRegistration.html', 'utf8', function (err, html) {
@@ -50,26 +57,30 @@ var transport = nodemailer.createTransport(ses({
 module.exports = {
 
     sendAuditionConfirmation: function(firstName, email) {
-        if(auditionConfirmationTemplate) {
-            var emailHtml = auditionConfirmationTemplate({firstName: firstName});
-            var options = {
-                from: 'Pioneer Indoor <director@pioneerindoordrums.org>',
-                sender: 'director@pioneerindoordrums.org',
-                replyTo: 'pioneerindoordrums@gmail.com',
-                to: email,
-                subject: 'You\'re registered for Pioneer Indoor auditions!',
-                html: emailHtml
-            };
+        try {
+            if (auditionConfirmationTemplate) {
+                var emailHtml = auditionConfirmationTemplate({firstName: firstName, auditionDate: appConfig.auditionDate});
+                var options = {
+                    from: 'Pioneer Indoor <director@pioneerindoordrums.org>',
+                    sender: 'director@pioneerindoordrums.org',
+                    replyTo: 'pioneerindoordrums@gmail.com',
+                    to: email,
+                    subject: 'You\'re registered for Pioneer Indoor auditions!',
+                    html: emailHtml
+                };
 
-            this.sendMail(options, function(error, info){
-                if(error){
-                    console.error(error);
-                } else {
-                    console.info('Audition Confirmation email sent for: %s - %s', firstName, email);
-                }
-            });
-        } else {
-            console.error("piMailer: auditionConfirmationTemplate is undefined.");
+                this.sendMail(options, function (error, info) {
+                    if (error) {
+                        console.error(error);
+                    } else {
+                        console.info('Audition Confirmation email sent for: %s - %s', firstName, email);
+                    }
+                });
+            } else {
+                console.error("piMailer: auditionConfirmationTemplate is undefined.");
+            }
+        } catch (e) {
+            console.error("piMailer: error sending email", e);
         }
     },
 
@@ -77,7 +88,7 @@ module.exports = {
         if(auditionReminderTemplate) {
 
             auditionees.forEach(function(auditionee) {
-                var emailHtml = auditionReminderTemplate(auditionee);
+                var emailHtml = auditionReminderTemplate({firstName: auditionee.firstName, auditionDate: appConfig.auditionDate});
                 var options = {
                     to: auditionee.email,
                     from: 'Pioneer Indoor <director@pioneerindoordrums.org>',
@@ -87,8 +98,8 @@ module.exports = {
                     html: emailHtml
                 };
 
-                this.sendMail(options, function(error, info){
-                    if(error){
+                this.sendMail(options, function(error) {
+                    if(error) {
                         console.error(error);
                     } else {
                         console.info('Audition reminder email sent to: %s', auditionee.email);

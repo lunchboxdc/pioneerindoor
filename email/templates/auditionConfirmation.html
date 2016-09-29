@@ -4,7 +4,9 @@
     Hi {{firstName}},
 </div>
 <div style="margin-top:30px;">
-    Thank you for registering to audition for the 2016 season with Pioneer Indoor! We look forward to seeing you at 8:30am at Romeoville High School on November 7. Your $50 non-refundable audition fee will be due upon check-in. If you are invited to be a member of the 2016 ensemble, $20 of this will be applied to your WGI Finals fees.
+    Thank you for registering to audition for the {{getYear auditionDate 1}} season with Pioneer Indoor! We look forward
+    to seeing you at 8:30am at Romeoville High School on {{formatIsoDate auditionDate 'MMMM Do'}}. Your $50 non-refundable audition
+    fee will be due upon check-in.
 </div>
 <div style="margin-top:30px;">
     <span style="font-weight: bold;">Audition Materials</span>
@@ -15,27 +17,14 @@
 <div style="margin-top:30px;">
     <span style="font-weight: bold;">Please bring with you:</span>
     <ul style="padding-left: 20px;">
-        <li>
-            $50 non-refundable audition fee (cash or check payable to Pioneer Indoor)
-        </li>
-        <li>
-            Sticks/mallets
-        </li>
-        <li>
-            Practice pad (battery auditionees)
-        </li>
-        <li>
-            Audition music
-        </li>
-        <li>
-            Comfortable clothing
-        </li>
-        <li>
-            Water
-        </li>
-        <li>
-            Your friends!
-        </li>
+        <li>$50 non-refundable audition fee (cash or check payable to Pioneer Indoor)</li>
+        <li>Sticks/mallets</li>
+        <li>Practice pad (battery auditionees)</li>
+        <li>Audition music</li>
+        <li>Athletic/comfortable clothing for visual audition</li>
+        <li>Lunch</li>
+        <li>Water</li>
+        <li>Your friends!</li>
     </ul>
 </div>
 <div style="margin-top:30px;">
@@ -47,7 +36,7 @@
             <span>When:</span>
         </div>
         <div style="margin-left: 55px;">
-            <div><span>November 7, 2015</span></div>
+            <div><span>{{formatIsoDate auditionDate 'MMMM Do, YYYY'}}</span></div>
             <div><span>8:30am-6pm</span></div>
         </div>
     </div>
@@ -64,19 +53,20 @@
     </div>
 </div>
 <div style="margin-top:30px;">
-    <span style="font-weight: bold;">Audition Day Schedule - November 7</span>
+    <span style="font-weight: bold;">Audition Day Schedule - {{formatIsoDate auditionDate 'MMMM D'}}</span>
     <div style="margin-top: 10px;"><span>8:30am – Audition registration begins</span></div>
+    <div><span>9:00am – Group meeting - auditionee attendance required</span></div>
     <div><span>9:30am – Auditions begin after group meeting</span></div>
-    <div><span>9:45am – Parent meeting with ensemble director</span></div>
-    <div><span>1:00pm – Lunch will be provided</span></div>
+    <div><span>9:45am – Parent meeting with ensemble director - parent attendance is not mandatory but strongly encouraged.</span></div>
+    <div><span>1:00pm – Lunch on your own</span></div>
     <div><span>2:00pm – Auditions resume until 6pm</span></div>
 </div>
 
 <div style="margin-top:30px;">
-    <p>If you have any questions prior to auditions, please email <a href="mailto:pioneerindoordrums@gmail.com">pioneerindoordrums@gmail.com</a></p>
+    <p>If you have any questions prior to auditions, please contact Adam Hill, ensemble director at <a href="mailto:pioneerindoordrums@gmail.com">pioneerindoordrums@gmail.com</a></p>
 </div>
 
 <div style="margin-top:30px;">
-    <div>See you on November 7,</div>
+    <div>See you on {{formatIsoDate auditionDate 'MMMM Do'}},</div>
     <div>Pioneer Indoor Staff</div>
 </div>

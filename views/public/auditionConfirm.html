@@ -10,8 +10,8 @@
 
   <div class="tile">
     <div class="block">
-      <h2>Thank you for registering to audition for the 2016 season with Pioneer Indoor!</h2>
-      <p>We look forward to seeing you at <span class="bold">8:30am at Romeoville High School on November 7.</span></p>
+      <h2>Thank you for registering to audition for the {{getYear auditionDate 1}} season with Pioneer Indoor!</h2>
+      <p>We look forward to seeing you at <span class="bold">8:30am at Romeoville High School on {{formatIsoDate auditionDate 'dddd, MMMM Do, YYYY'}}</span>.</p>
     </div>
 
 
@@ -31,11 +31,12 @@
       	<span class="bold">Please bring with you:</span>
       </div>
       <ul>
-      	<li>$50 non-refundable audition fee ($20 of this will be applied to WGI Finals fees for 2016 contracted members)</li>
+      	<li>$50 non-refundable audition fee (cash or check payable to Pioneer Indoor)</li>
       	<li>Sticks/mallets</li>
       	<li>Practice pad (battery auditionees)</li>
       	<li>Audition music</li>
-      	<li>Comfortable clothing</li>
+      	<li>Athletic/comfortable clothing for visual audition</li>
+        <li>Lunch</li>
       	<li>Water</li>
       	<li>Your friends!</li>
       </ul>
@@ -50,7 +51,7 @@
           <span>When:</span>
         </div>
         <div class="content">
-          <div><span>November 7, 2015</span></div>
+          <div><span>{{formatIsoDate auditionDate 'MMMM Do, YYYY'}}</span></div>
           <div><span>8:30am-6pm</span></div>
         </div>
       </div>
@@ -70,13 +71,14 @@
 
     <div class="block">
       <div class="title">
-        <span class="bold">Audition Day Schedule - November 7</span>
+        <span class="bold">Audition Day Schedule - {{formatIsoDate auditionDate 'MMMM D'}}</span>
       </div>
       <div class="important-info">
         <div>8:30am – Audition registration begins</div>
+        <div>9:00am – Group meeting - auditionee attendance required</div>
         <div>9:30am – Auditions begin after group meeting</div>
-        <div>9:45am – Parent meeting with ensemble director</div>
-        <div>1:00pm – Lunch will be provided</div>
+        <div>9:45am – Parent meeting with ensemble director - parent attendance is not mandatory but strongly encouraged.</div>
+        <div>1:00pm – Lunch on your own</div>
         <div>2:00pm – Auditions resume until 6pm</div>
       </div>
     </div>

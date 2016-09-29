@@ -1,4 +1,5 @@
 var logger = require('./logger');
+var moment = require('moment');
 
 var configObject = {};
 if(process.env.NODE_ENV === 'prod') {
@@ -19,5 +20,7 @@ console.info('App properties:\n', configObject);
 if(configObject.logLevel) {
     logger.transports.console.level = configObject.logLevel;
 }
+
+configObject['auditionDate'] = moment("2016-11-05T14:00:00.000Z");
 
 module.exports = configObject;

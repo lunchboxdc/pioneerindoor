@@ -8,6 +8,9 @@ var Auditionee = require('../persistence/models/auditionee');
 var utils = require('../common/utils');
 var csv = require('express-csv');
 var fs = require('fs');
+var stringify = require('node-stringify');
+var appConfig = require('../common/appConfig');
+var handlebarsHelpers = require('../common/HandlebarsHelpers');
 
 module.exports = (function() {
 	var router = express.Router();
@@ -113,8 +116,10 @@ module.exports = (function() {
 						}
 
 						var payLoad = _.merge({
+							handlebarsHelpers: stringify(handlebarsHelpers),
 							auditionees: auditionees,
 							auditioneesString: JSON.stringify(auditionees),
+							auditionDate: appConfig.auditionDate.toISOString(),
 							stats: stats,
 							total: total,
 							seasons: seasons,
@@ -322,7 +327,7 @@ module.exports = (function() {
 	});
 
 	router.post('/email/sendAuditioneeReminder', function(req, res) {
-		Auditionee.find({})
+		Auditionee.find({season: req.body.season})
 		.exec(function(err, auditionees) {
 			if (err) {
 				console.error(err);

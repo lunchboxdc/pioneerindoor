@@ -11,24 +11,24 @@ var logger = new (winston.Logger)({
     ]
 });
 
-function formatArgs(args){
+function formatArgs(args) {
     return [util.format.apply(util.format, Array.prototype.slice.call(args))];
 }
 
-console.log = function(){
+console.log = function() {
     //there's no (Winston) logger.log, so direct this to logger.info as well.
     logger.info.apply(logger, formatArgs(arguments));
 };
-console.info = function(){
+console.info = function() {
     logger.info.apply(logger, formatArgs(arguments));
 };
-console.warn = function(){
+console.warn = function() {
     logger.warn.apply(logger, formatArgs(arguments));
 };
-console.error = function(){
+console.error = function() {
     logger.error.apply(logger, formatArgs(arguments));
 };
-console.debug = function(){
+console.debug = function() {
     logger.debug.apply(logger, formatArgs(arguments));
 };
 

@@ -134,6 +134,7 @@ module.exports = (function() {
 	router.post('/auditionees', auditioneesRoute);
 
 	router.get('/auditionees/export', function(req, res) {
+		//   {season: req.body.season}
 		Auditionee.find({})
 			.exec(function(err, auditionees) {
 				if (err) {

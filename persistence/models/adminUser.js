@@ -10,5 +10,8 @@ module.exports = mongoose.model('AdminUser', {
 	token: String,
 	tokenExpires: Date,
 	dateCreated: { type: Date, default: Date.now },
-	dateUpdated: { type: Date, default: Date.now }
+	dateUpdated: { type: Date, default: Date.now },
+	permissions: [{
+		type: String
+	}]
 });

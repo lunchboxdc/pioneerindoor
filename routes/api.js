@@ -87,6 +87,65 @@ module.exports = (function() {
 		});
 	});
 
+	router.put('/users/:user_id/permission', function(req, res) {
+		var rawBody = JSON.parse(req.rawBody);
+		var permission = rawBody[0].permission;
+
+		if (permission) {
+			AdminUser.findById(req.params.user_id, function (err, user) {
+				if (err) {
+					res.send(err);
+				} else {
+					user.permissions.push(permission);
+					user.save(function (err) {
+						if (err) {
+							res.send(err);
+						} else {
+							res.json({message: 'user permission added'});
+						}
+					});
+				}
+			});
+		} else {
+			res.send("permission is required!");
+		}
+	});
+
+	router.delete('/users/:user_id/permission', function(req, res) {
+		var rawBody = JSON.parse(req.rawBody);
+		var permission = rawBody[0].permission;
+
+		if (permission) {
+			AdminUser.findById(req.params.user_id, function (err, user) {
+				if (err) {
+					res.send(err);
+				} else {
+					var permissionFound = false;
+					for (var i = 0; i < user.permissions.length; i++) {
+						if (user.permissions[i] === permission) {
+							user.permissions.splice(i, 1);
+							permissionFound = true;
+						}
+					}
+
+					if (permissionFound) {
+						user.save(function (err) {
+							if (err) {
+								res.send(err);
+							} else {
+								res.json({message: 'user permission deleted'});
+							}
+						});
+					} else {
+						res.json({message: 'user permission not found!'});
+					}
+				}
+			});
+		} else {
+			res.send("permission is required!");
+		}
+	});
+
 	router.delete('/users/:user_id', function(req, res) {
 		AdminUser.remove({
 			_id: req.params.user_id
@@ -163,30 +222,6 @@ module.exports = (function() {
 		FacebookService.getPosts();
 		FacebookService.getProfilePicture();
 		res.send('Facebook service is running');
-	});
-
-	router.get('/initNewAuditioneeAttributes', function(req, res) {
-		console.info('Updating auditionee attributes...');
-		Auditionee.find({})
-			.sort({submitDate:'asc'})
-			.exec(function(err, auditionees) {
-				if (err) {
-					console.log(err);
-				} else {
-					async.each(auditionees, function(auditionee) {
-						auditionee.season = 2016;
-						auditionee.deleted = false;
-						auditionee.save(function(err) {
-							if (err) {
-								console.log(err);
-							} else {
-								console.log('updated auditionee');
-							}
-						})
-					});
-				}
-			});
-		res.send('Updating auditionee attributes');
 	});
 
 	return router;

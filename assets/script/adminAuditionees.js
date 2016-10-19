@@ -51,6 +51,10 @@ function sendReminderEmails() {
     });
 }
 
+function downloadCsvExport() {
+    window.location.href='/admin/auditionees/export?season=' + $('#season').val();
+}
+
 $(function() {
     for (var helper in handlebarsHelpers) {
         if (handlebarsHelpers.hasOwnProperty(helper)) {

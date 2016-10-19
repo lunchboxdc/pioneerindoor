@@ -163,8 +163,10 @@ module.exports = (function() {
 	});
 
 	router.get('/auditionees/export', function(req, res) {
-		//   {season: req.body.season}
-		Auditionee.find({})
+		var season = req.query.season;
+		Auditionee.find({
+			season: season
+		})
 			.exec(function(err, auditionees) {
 				if (err) {
 					console.error(err);

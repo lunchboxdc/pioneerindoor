@@ -131,7 +131,7 @@ module.exports = (function() {
 
 	router.get('/facebookPosts', function(req, res) {
 		FacebookPost.find({})
-			.sort({created_time: 'desc'})
+			.sort({created_time: 'asc'})
 			.exec(function(err, facebookPosts) {
 				if (err) {
 					res.send(err);

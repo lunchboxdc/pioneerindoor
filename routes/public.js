@@ -187,7 +187,8 @@ module.exports = function(passport) {
 	});
 
 	router.post('/forgotPassword', function(req, res) {
-		AdminUser.findOne({ 'email': req.body.email }, function (err, adminUser) {
+		var email = req.body.email.toLowerCase();
+		AdminUser.findOne({ 'email': email }, function (err, adminUser) {
 			if(adminUser) {
 				var token = require('crypto').randomBytes(32).toString('hex');
 				adminUser.token = token;

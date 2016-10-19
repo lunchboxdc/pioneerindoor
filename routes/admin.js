@@ -295,19 +295,19 @@ module.exports = (function() {
 	});
 
 	router.post('/users/new', function(req, res) {
-
-		AdminUser.findOne({ 'email': req.body.email }, function (err, user) {
+		var email = req.body.email.toLowerCase();
+		AdminUser.findOne({ 'email': email }, function (err, user) {
 			if(user) {
-				console.info("New User: user already exists with email, %s", req.body.email);
-				req.flash('errorMessage', 'User already exists with email, '+req.body.email);
+				console.info("New User: user already exists with email, %s", email);
+				req.flash('errorMessage', 'User already exists with email, ' + email);
 				res.redirect('/admin/users');
 			} else {
-				console.info("New User: no user found for email, %s ... adding user with token.", req.body.email);
+				console.info("New User: no user found for email, %s ... adding user with token.", email);
 				var token = require('crypto').randomBytes(32).toString('hex');
 				var adminUser = new AdminUser();
 				adminUser.firstName = req.body.firstName;
 				adminUser.lastName = req.body.lastName;
-				adminUser.email = req.body.email;
+				adminUser.email = email;
 				adminUser.token = utils.createHash(token);
 				adminUser.tokenExpires = moment().add(1, 'days');
 				adminUser.save(function(err, user) {

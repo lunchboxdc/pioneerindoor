@@ -119,7 +119,7 @@ module.exports = (function() {
 			}
 		}
 		Auditionee.find(queryParms)
-			.sort({submitDate: 'desc'})
+			.sort({submitDate: 'asc'})
 			.exec(function(err, auditionees) {
 				if (err) {
 					res.send(err);
@@ -131,7 +131,7 @@ module.exports = (function() {
 
 	router.get('/facebookPosts', function(req, res) {
 		FacebookPost.find({})
-			.sort({created_time: 'asc'})
+			.sort({created_time: 'desc'})
 			.exec(function(err, facebookPosts) {
 				if (err) {
 					res.send(err);

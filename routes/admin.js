@@ -142,13 +142,27 @@ module.exports = (function() {
 	});
 
 	router.post('/email/sendAuditioneeUpdate', function(req, res) {
-		var recipients = [
-			'lunchboxdc@gmail.com',
-			'andrew.hull@vividseats.com'
-		];
-
-		piMailer.sendAuditionUpdate(recipients);
-		res.send({});
+		var maxSubmitDate = moment("2016-10-04T02:00:00.000Z", moment.ISO_8601, true);
+		Auditionee.find({
+			season: '2017',
+			submitDate: {
+				$lte: maxSubmitDate
+			}
+		})
+			.sort({submitDate: 'asc'})
+			.exec(function(err, auditionees) {
+				if (err) {
+					res.send(err);
+				} else {
+					auditionees.forEach(function(auditionee) {
+						console.log('Auditionee: ' + auditionee.firstName + ' ' + auditionee.lastName);
+					});
+					// piMailer.sendAuditionUpdate(recipients);
+					res.json({
+						message: 'Successfully queued update emails'
+					});
+				}
+			});
 	});
 
 	router.get('/auditionees/export', function(req, res) {

@@ -6,6 +6,7 @@ var FacebookPost = require('../persistence/models/facebookPost');
 var Assets = require('../persistence/models/Assets');
 var FacebookService = require('../common/FacebookService');
 var async = require('async');
+var moment = require('moment');
 
 module.exports = (function() {
 	var router = express.Router();
@@ -100,12 +101,30 @@ module.exports = (function() {
 	});
 
 	router.get('/auditionees', function(req, res) {
-		Auditionee.find(function(err, auditionees) {
-			if (err) {
-				res.send(err);
+		var queryParms = {};
+		if (req.query.season) {
+			queryParms['season'] = req.query.season;
+		}
+		if (req.query.maxSubmitDate) {
+			var maxSubmitDate = moment(req.query.maxSubmitDate, moment.ISO_8601, true);
+			if (maxSubmitDate.isValid()) {
+				queryParms['submitDate'] = {
+					$lte: maxSubmitDate
+				}
 			} else {
-				res.json(auditionees);
+				res.json({
+					error: "Unable to parse maxSubmitDate"
+				});
+				return;
 			}
+		}
+		Auditionee.find(queryParms)
+			.exec(function(err, auditionees) {
+				if (err) {
+					res.send(err);
+				} else {
+					res.json(auditionees);
+				}
 		});
 	});
 

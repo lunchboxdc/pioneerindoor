@@ -1,0 +1,71 @@
+{{#section 'head'}}
+<link type="text/css" rel="stylesheet" href="/assets/css/admin-master.css?v={{assetsVersion}}"/>
+<script src="/assets/script/adminAuditionees.js?v={{assetsVersion}}"></script>
+<script>
+    var updateEmailTemplate;
+    $.get('/admin/email/auditionUpdate', function(data) {
+        updateEmailTemplate = Handlebars.compile(data);
+    });
+
+    function openSendUpdateModal() {
+        $('#updateEmailModal .email-template').html(updateEmailTemplate({firstName: '{First Name}', auditionDate: auditionDate}));
+        $('#sendUpdateEmails').show();
+        $('#actionsMessage').hide();
+        $('#updateEmailModal').bPopup();
+    }
+
+    function sendUpdateEmails() {
+        $.post(
+                '/admin/email/sendAuditioneeUpdate',
+                {season: 2017},
+                function() {
+                    $('#actionsMessage').html('Successfully queued update emails.');
+                    $('#sendUpdateEmails').hide();
+                    $('#actionsMessage').show();
+                }
+        )
+        .fail(function() {
+            $('#actionsMessage').html('Error! Failed to queue update emails.');
+            $('#sendReminderEmails').hide();
+            $('#actionsMessage').show();
+        });
+    }
+</script>
+{{/section}}
+
+{{> leftRail}}
+
+<div class="admin-body">
+    <div class="full-width">
+        <h1>Auditionee update</h1>
+    </div>
+
+    {{#if updateMessage}}
+    <div>{{updateMessage}}</div>
+    {{/if}}
+
+    <div class="full-width">
+        <div class="action-container">
+            <div class="action-row">
+                <button class="button" onclick="openSendUpdateModal();">Send Update Email</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="updateEmailModal" class="modal">
+        <span class="b-close"><i class="fa fa-times-circle"></i></span>
+
+        <div class="modal-content">
+            <div class="modal-actions">
+                <button id="sendUpdatehEmails" class="button" style="width: 100px;" onclick="sendUpdateEmails()">Send</button>
+                <span id="actionsMessage"></span>
+            </div>
+            <div class="email-template"></div>
+        </div>
+    </div>
+
+    <script>
+        var handlebarsHelpers = {{{handlebarsHelpers}}};
+        var auditionDate = '{{{auditionDate}}}';
+    </script>
+</div>

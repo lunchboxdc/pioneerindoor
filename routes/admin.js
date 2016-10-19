@@ -133,6 +133,24 @@ module.exports = (function() {
 	router.get('/auditionees', auditioneesRoute);
 	router.post('/auditionees', auditioneesRoute);
 
+	router.get('/auditioneeUpdate', function(req, res) {
+		var payLoad = _.merge({
+			handlebarsHelpers: stringify(handlebarsHelpers),
+			auditionDate: appConfig.auditionDate.toISOString()
+		}, req.flash());
+		res.render('admin/auditioneeUpdate', payLoad);
+	});
+
+	router.post('/email/sendAuditioneeUpdate', function(req, res) {
+		var recipients = [
+			'lunchboxdc@gmail.com',
+			'andrew.hull@vividseats.com'
+		];
+
+		piMailer.sendAuditionUpdate(recipients);
+		res.send({});
+	});
+
 	router.get('/auditionees/export', function(req, res) {
 		//   {season: req.body.season}
 		Auditionee.find({})

@@ -47,10 +47,6 @@ $(function() {
     var minDob = moment('03/31/' + minDobYear, 'MM/DD/YYYY');
     var maxDob = moment(auditionDate).set({'year': (auditionDate.year() - 15), 'date': (auditionDate.date() + 1), 'hour': 0});
 
-    console.log('auditionDate: ' + auditionDate.toString());
-    console.log('minDob:       ' + minDob.toString());
-    console.log('maxDob:       ' + maxDob.toString());
-
     window.Parsley.addValidator('minbirthdate', {
         validateString: function(value) {
             try {

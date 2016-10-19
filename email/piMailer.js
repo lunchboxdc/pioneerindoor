@@ -4,6 +4,7 @@ var handlebars  = require('handlebars');
 var fs = require('fs');
 var appConfig = require('../common/appConfig');
 var helpers = require('../common/HandlebarsHelpers');
+var appConfig = require('../common/appConfig');
 
 for (var helper in helpers) {
     if (helpers.hasOwnProperty(helper)) {
@@ -47,6 +48,15 @@ fs.readFile(__dirname + '/templates/auditionReminder.html', 'utf8', function (er
     }
 });
 
+var auditionUpdateTemplate;
+fs.readFile(__dirname + '/templates/auditionUpdate.html', 'utf8', function (err, html) {
+    if(err) {
+        console.error('piMailer: failed to load auditionUpdateTemplate template: '+err);
+    } else {
+        auditionUpdateTemplate = handlebars.compile(html);
+    }
+});
+
 var transport = nodemailer.createTransport(ses({
     region: 'us-west-2',
     accessKeyId: process.env.SES_ACCESS_KEY_ID,
@@ -69,7 +79,7 @@ module.exports = {
                     html: emailHtml
                 };
 
-                this.sendMail(options, function (error, info) {
+                this.sendMail(options, function (error) {
                     if (error) {
                         console.error(error);
                     } else {
@@ -86,6 +96,7 @@ module.exports = {
 
     sendAuditionReminder: function(auditionees) {
         if(auditionReminderTemplate) {
+            var auditionYear = appConfig.auditionDate.year() + 1;
 
             auditionees.forEach(function(auditionee) {
                 var emailHtml = auditionReminderTemplate({firstName: auditionee.firstName, auditionDate: appConfig.auditionDate});
@@ -94,7 +105,7 @@ module.exports = {
                     from: 'Pioneer Indoor <director@pioneerindoordrums.org>',
                     sender: 'director@pioneerindoordrums.org',
                     replyTo: 'pioneerindoordrums@gmail.com',
-                    subject: 'Pioneer Indoor 2016 Auditions - Important Information',
+                    subject: 'Pioneer Indoor ' + auditionYear + ' Auditions - Important Information',
                     html: emailHtml
                 };
 
@@ -108,6 +119,35 @@ module.exports = {
             },this);
         } else {
             console.error("piMailer: auditionReminderTemplate is undefined.");
+        }
+    },
+
+    sendAuditionUpdate: function(auditionees) {
+        if(auditionUpdateTemplate) {
+            var auditionYear = appConfig.auditionDate.year() + 1;
+
+            auditionees.forEach(function(auditionee) {
+                console.log('sending update to: ' + auditionee.email);
+                var emailHtml = auditionUpdateTemplate({firstName: auditionee.firstName, auditionDate: appConfig.auditionDate});
+                var options = {
+                    to: auditionee.email,
+                    from: 'Pioneer Indoor <director@pioneerindoordrums.org>',
+                    sender: 'director@pioneerindoordrums.org',
+                    replyTo: 'pioneerindoordrums@gmail.com',
+                    subject: 'UPDATED MATERIALS - Pioneer Indoor ' + auditionYear + ' Auditions',
+                    html: emailHtml
+                };
+
+                this.sendMail(options, function(error) {
+                    if(error) {
+                        console.error(error);
+                    } else {
+                        console.info('Audition update email sent to: %s', auditionee.email);
+                    }
+                });
+            },this);
+        } else {
+            console.error("piMailer: auditionUpdateTemplate is undefined.");
         }
     },
 

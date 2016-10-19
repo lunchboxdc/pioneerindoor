@@ -127,14 +127,13 @@ module.exports = {
             var auditionYear = appConfig.auditionDate.year() + 1;
 
             auditionees.forEach(function(auditionee) {
-                console.log('sending update to: ' + auditionee.email);
                 var emailHtml = auditionUpdateTemplate({firstName: auditionee.firstName, auditionDate: appConfig.auditionDate});
                 var options = {
                     to: auditionee.email,
                     from: 'Pioneer Indoor <director@pioneerindoordrums.org>',
                     sender: 'director@pioneerindoordrums.org',
                     replyTo: 'pioneerindoordrums@gmail.com',
-                    subject: 'UPDATED MATERIALS - Pioneer Indoor ' + auditionYear + ' Auditions',
+                    subject: 'UPDATED BATTERY MATERIALS - Pioneer Indoor ' + auditionYear + ' Auditions',
                     html: emailHtml
                 };
 

@@ -154,10 +154,7 @@ module.exports = (function() {
 				if (err) {
 					res.send(err);
 				} else {
-					auditionees.forEach(function(auditionee) {
-						console.log('Auditionee: ' + auditionee.firstName + ' ' + auditionee.lastName);
-					});
-					// piMailer.sendAuditionUpdate(recipients);
+					piMailer.sendAuditionUpdate(auditionees);
 					res.json({
 						message: 'Successfully queued update emails'
 					});

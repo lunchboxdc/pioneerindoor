@@ -119,6 +119,7 @@ module.exports = (function() {
 			}
 		}
 		Auditionee.find(queryParms)
+			.sort({submitDate: 'desc'})
 			.exec(function(err, auditionees) {
 				if (err) {
 					res.send(err);

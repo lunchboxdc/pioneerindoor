@@ -367,7 +367,7 @@ module.exports = (function() {
 	});
 
 	router.post('/email/sendAuditioneeReminder', function(req, res) {
-		Auditionee.find({season: req.body.season})
+		Auditionee.find({season: req.body.season, deleted: false})
 		.exec(function(err, auditionees) {
 			if (err) {
 				console.error(err);

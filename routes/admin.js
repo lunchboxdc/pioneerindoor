@@ -41,7 +41,7 @@ module.exports = (function() {
 					selectedSeason = parseInt(req.body.season);
 				}
 
-				Auditionee.find({season: selectedSeason})
+				Auditionee.find({season: selectedSeason, deleted: false})
 					.sort({submitDate:'asc'})
 					.exec(function(err, auditionees) {
 						if (err) {
@@ -165,7 +165,8 @@ module.exports = (function() {
 	router.get('/auditionees/export', function(req, res) {
 		var season = req.query.season;
 		Auditionee.find({
-			season: season
+			season: season,
+			deleted: false
 		})
 			.exec(function(err, auditionees) {
 				if (err) {
@@ -273,16 +274,23 @@ module.exports = (function() {
 	});
 
 	router.post('/auditionees/delete', function(req, res) {
-		Auditionee.remove({
-			_id: req.body.auditioneeId
-		}, function(err, auditionee) {
-			if (err) {
-				console.error('error deleting auditionee: ' + auditionee);
-				req.flash('auditioneesMessage', 'error deleting auditionee!');
-			} else {
-				req.flash('auditioneesMessage', 'Successfully deleted auditionee');
-			}
-			res.redirect('/admin/auditionees');
+		Auditionee.findById(req.body.auditioneeId, function(err, auditionee) {
+				if (err) {
+					console.error('error deleting auditionee: ' + auditionee);
+					req.flash('auditioneesMessage', 'error deleting auditionee!');
+					res.redirect('/admin/auditionees');
+				} else {
+					auditionee.deleted = true;
+					auditionee.save(function(err) {
+						if (err) {
+							console.error('error deleting auditionee: ' + auditionee);
+							req.flash('auditioneesMessage', 'error deleting auditionee!');
+						} else {
+							req.flash('auditioneesMessage', 'Successfully deleted auditionee');
+						}
+						res.redirect('/admin/auditionees');
+					});
+				}
 		});
 	});
 

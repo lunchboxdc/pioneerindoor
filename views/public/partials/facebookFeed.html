@@ -9,19 +9,25 @@
     		</div>
     	</div>
         {{#equals type 'photo'}}
-			<p>{{message}}</p>
-			<div class="fb-image"><img src="{{attachmentImage}}"></div>
+			<p>{{{message}}}</p>
+			<div class="fb-image">
+				<a href="{{link}}" target="_blank">
+					<img src="{{attachmentImage}}">
+				</a>
+			</div>
 		{{/equals}}
 		{{#equals type 'link'}}
-			<p><a href="{{message}}">{{message}}</a></p>
+			<p>{{{message}}}</p>
 			<div class="fb-link">
-				<span>{{name}}</span>
-				<span>{{description}}</span>
-				<span class="domain">{{caption}}</span>
+				<a href="{{link}}" target="_blank">
+					<span>{{name}}</span>
+					<span>{{description}}</span>
+					<span class="domain">{{caption}}</span>
+				</a>
 			</div>
 		{{/equals}}
 		{{#equals type 'video'}}
-			<p>{{message}}</p>
+			<p>{{{message}}}</p>
 			<a href="{{link}}" target="_blank"><div class="fb-video"><img src="{{attachmentImage}}"><i class="fa fa-play-circle video-play"></i></div></a>
 		{{/equals}}
 		<div class="fb-footer"><i class="fa fa-facebook-official"></i><span class="post-time">{{formatIsoDate created_time 'MMM D'}}</span></div>

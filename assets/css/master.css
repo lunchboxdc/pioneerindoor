@@ -414,6 +414,12 @@ section.two-column {
 	margin-top: 25px;
 }
 
+.tile.fb-post p {
+	line-height: 18px;
+	white-space: pre-line;
+	font-size: 15px;
+}
+
 .fb-post .fb-video {
 	position: relative;
 	background-color: #000000;
@@ -455,6 +461,9 @@ section.two-column {
 
 .fb-post .fb-link span {
 	font-weight: 300;
+	display: block;
+	font-size: 15px;
+	padding: 3px 0;
 }
 
 .fb-post .fb-header {

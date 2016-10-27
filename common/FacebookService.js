@@ -6,60 +6,82 @@ var FacebookPost = require('../persistence/models/facebookPost');
 module.exports = {
     getPosts: function() {
         try {
-            if(!process.env.FB_TOKEN) {
+            if (!process.env.FB_TOKEN) {
                 console.error("FB_TOKEN environment variable missing!");
             } else {
                 console.debug('FacebookService: getting posts.');
                 request({
                     url: 'https://graph.facebook.com/v2.3/PioneerIndoor/posts',
-                    qs: {limit: 10, fields: 'from,name,story,message,description,caption,picture,link,type,status_type,attachments'},
+                    qs: {limit: 10, fields: 'from,name,story,message,description,caption,picture,link,type,status_type,attachments,object_id'},
                     method: 'get',
                     headers: {
                         "Authorization": process.env.FB_TOKEN
                     }
                 }, function(error, response, body) {
-                    if(error) {
+                    if (error) {
                         console.error(error.stack);
                     } else {
                         var json = JSON.parse(body);
                         async.each(json.data, function(post) {
                             var story = post.story ? post.story.toLowerCase() : '';
-                            if(story.indexOf("profile picture") < 0 && story.indexOf("cover photo") < 0 && story.indexOf("shared") < 0) {
-                                var facebookPost = new FacebookPost();
-                                facebookPost._id = post.id;
-                                facebookPost.fromName = post.from.name;
-                                facebookPost.name = post.name;
-                                facebookPost.story = post.story;
-                                facebookPost.message = post.message;
-                                facebookPost.picture = post.picture;
-                                facebookPost.link = post.link;
-                                facebookPost.description = post.description;
-                                facebookPost.caption = post.caption;
-                                facebookPost.type = post.type;
-                                facebookPost.status_type = post.status_type;
-                                facebookPost.created_time = post.created_time;
+                            if (story.indexOf("profile picture") < 0 && story.indexOf("cover photo") < 0 && story.indexOf("shared") < 0) {
+                                var facebookPost = {
+                                    fromName: post.from.name,
+                                    name: post.name,
+                                    story: post.story,
+                                    picture: post.picture,
+                                    link: post.link,
+                                    description: post.description,
+                                    caption: post.caption,
+                                    type: post.type,
+                                    status_type: post.status_type,
+                                    created_time: post.created_time
+                                };
+
+                                if (post.message) {
+                                    var maxChars = 140;
+                                    var message;
+                                    if (/\s/.test(post.message.charAt(maxChars))) {
+                                        var lastCharIndex = maxChars;
+                                        for (var i = maxChars; i > -1; i--) {
+                                            if (!/\s/.test(post.message.charAt(i-1))) {
+                                                lastCharIndex = i;
+                                                break;
+                                            }
+                                        }
+                                        message = post.message.substr(0, lastCharIndex);
+                                    } else {
+                                        var nextSpaceIndex;
+                                        for (var i = maxChars; i < post.message.length; i++) {
+                                            var char = post.message.charAt(i);
+                                            if (/\s/.test(char)) {
+                                                nextSpaceIndex = i;
+                                                break;
+                                            }
+                                        }
+
+                                        message = post.message.substr(0, nextSpaceIndex);
+                                    }
+
+                                    if (!post.object_id) {
+                                        post.object_id = post.id.substring(post.id.indexOf('_') + 1, post.id.length);
+                                    }
+
+                                    facebookPost.message = message + '... <a href="https://www.facebook.com/PioneerIndoor/posts/' + post.object_id + '" target="_blank">See More</a>';
+                                }
 
                                 try {
                                     facebookPost.attachmentImage = post.attachments.data[0].media.image.src;
                                 } catch (e) {
                                 }
 
-                                facebookPost.save(function (err) {
+                                FacebookPost.findOneAndUpdate({
+                                    _id: post.id
+                                }, facebookPost, {upsert: true}, function(err, post) {
                                     if (err) {
-                                        if (err.code === 11000) {
-                                            facebookPost.isNew = false;
-                                            facebookPost.save(function(err) {
-                                                if (err) {
-                                                    console.error(err);
-                                                } else {
-                                                    console.info('FacebookService: updated post.');
-                                                }
-                                            });
-                                        } else {
-                                            console.error(err);
-                                        }
+                                        console.error(err);
                                     } else {
-                                        console.info('FacebookService: added post.');
+                                        console.debug('FacebookService: upserted post.');
                                     }
                                 });
                             }
@@ -77,14 +99,14 @@ module.exports = {
         } else {
             console.debug('FacebookService: getting profile picture.');
             var uri = 'https://graph.facebook.com/v2.3/PioneerIndoor/picture';
-            request.head(uri, function(err, res, body) {
+            request.head(uri, function() {
                 request(uri).pipe(fs.createWriteStream(__dirname+'/../assets/image/fbPicture.jpg')).on('close', function() {
-                    console.info('FacebookService: updated profile picture');
+                    console.debug('FacebookService: updated profile picture');
                 });
             });
         }
     }
-}
+};
 
 /*async.waterfall([
     function(next) {

@@ -38,9 +38,9 @@ module.exports = {
                                     if (!keepPost) {
                                         FacebookPost.remove({_id: facebookPosts[i]._id}, function(err) {
                                             if (err) {
-                                                res.send(err);
+                                                console.error(err);
                                             } else {
-                                                res.json({message: 'Deleted old facebook post'});
+                                                console.error('Deleted old facebook post');
                                             }
                                         });
                                     }

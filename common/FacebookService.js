@@ -40,7 +40,7 @@ module.exports = {
                                             if (err) {
                                                 console.error(err);
                                             } else {
-                                                console.error('Deleted old facebook post');
+                                                console.debug('Deleted old facebook post');
                                             }
                                         });
                                     }

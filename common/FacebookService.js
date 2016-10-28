@@ -65,33 +65,37 @@ module.exports = {
                                         if (post.message) {
                                             var maxChars = 140;
                                             var message;
-                                            if (/\s/.test(post.message.charAt(maxChars))) {
-                                                var lastCharIndex = maxChars;
-                                                for (var i = maxChars; i > -1; i--) {
-                                                    if (!/\s/.test(post.message.charAt(i-1))) {
-                                                        lastCharIndex = i;
-                                                        break;
+                                            if (post.message.length > maxChars) {
+                                                if (/\s/.test(post.message.charAt(maxChars))) {
+                                                    var lastCharIndex = maxChars;
+                                                    for (var i = maxChars; i > -1; i--) {
+                                                        if (!/\s/.test(post.message.charAt(i - 1))) {
+                                                            lastCharIndex = i;
+                                                            break;
+                                                        }
                                                     }
+                                                    message = post.message.substr(0, lastCharIndex);
+                                                } else {
+                                                    var nextSpaceIndex;
+                                                    for (var i = maxChars; i < post.message.length; i++) {
+                                                        var char = post.message.charAt(i);
+                                                        if (/\s/.test(char)) {
+                                                            nextSpaceIndex = i;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    message = post.message.substr(0, nextSpaceIndex);
                                                 }
-                                                message = post.message.substr(0, lastCharIndex);
+
+                                                if (!post.object_id) {
+                                                    post.object_id = post.id.substring(post.id.indexOf('_') + 1, post.id.length);
+                                                }
+
+                                                facebookPost.message = message + '... <a href="https://www.facebook.com/PioneerIndoor/posts/' + post.object_id + '" target="_blank">See More</a>';
                                             } else {
-                                                var nextSpaceIndex;
-                                                for (var i = maxChars; i < post.message.length; i++) {
-                                                    var char = post.message.charAt(i);
-                                                    if (/\s/.test(char)) {
-                                                        nextSpaceIndex = i;
-                                                        break;
-                                                    }
-                                                }
-
-                                                message = post.message.substr(0, nextSpaceIndex);
+                                                facebookPost.message = post.message;
                                             }
-
-                                            if (!post.object_id) {
-                                                post.object_id = post.id.substring(post.id.indexOf('_') + 1, post.id.length);
-                                            }
-
-                                            facebookPost.message = message + '... <a href="https://www.facebook.com/PioneerIndoor/posts/' + post.object_id + '" target="_blank">See More</a>';
                                         }
 
                                         try {

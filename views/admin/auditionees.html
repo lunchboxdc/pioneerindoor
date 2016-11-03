@@ -60,34 +60,63 @@
 	</div>
 
 	<div class="full-width">
-		<table class="admin-table">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Birthdate</th>
-					<th>Phone</th>
-					<th>Email</th>
-					<th>Instrument 1</th>
-					<th>Instrument 2</th>
-					<th>Instrument 3</th>
-					<th class="delete">Delete</th>
-				</tr>
-			</thead>
-			<tbody>
-				{{#each auditionees}}
-					<tr onclick="showModal('{{_id}}')">
-						<td>{{firstName}} {{lastName}}</td>
-						<td>{{dob}}</td>
-						<td>{{phone}}</td>
-						<td>{{email}}</td>
-						<td>{{auditionInstrument1}}</td>
-						<td>{{auditionInstrument2}}</td>
-						<td>{{auditionInstrument3}}</td>
-						<td class="delete" onclick="deleteAuditionee('{{firstName}}', '{{lastName}}', '{{_id}}', event)"><i class="fa fa-times-circle"></i></td>
-					</tr>
-				{{/each}}
-			</tbody>
-		</table>
+
+		<div class="scroll-table">
+			<div class="table-container">
+				<table class="admin-table">
+					<thead>
+						<tr>
+							<th>
+								Name
+								<div>Name</div>
+							</th>
+							<th>
+								Birthdate
+								<div>Birthdate</div>
+							</th>
+							<th>
+								Phone
+								<div>Phone</div>
+							</th>
+							<th>
+								Email
+								<div>Email</div>
+							</th>
+							<th>
+								Instrument 1
+								<div>Instrument 1</div>
+							</th>
+							<th>
+								Instrument 2
+								<div>Instrument 2</div>
+							</th>
+							<th>
+								Instrument 3
+								<div>Instrument 3</div>
+							</th>
+							<th class="delete">
+								Delete
+								<div>Delete</div>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each auditionees}}
+							<tr onclick="showModal('{{_id}}')">
+								<td>{{firstName}} {{lastName}}</td>
+								<td>{{dob}}</td>
+								<td>{{phone}}</td>
+								<td>{{email}}</td>
+								<td>{{auditionInstrument1}}</td>
+								<td>{{auditionInstrument2}}</td>
+								<td>{{auditionInstrument3}}</td>
+								<td class="delete" onclick="deleteAuditionee('{{firstName}}', '{{lastName}}', '{{_id}}', event)"><i class="fa fa-times-circle"></i></td>
+							</tr>
+						{{/each}}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 
 	<div id="auditioneeModal" class="modal">
@@ -112,5 +141,6 @@
 		var auditionees = {{{auditioneesString}}};
 		var handlebarsHelpers = {{{handlebarsHelpers}}};
 		var auditionDate = '{{{auditionDate}}}';
+		var assetsVersion = '{{{assetsVersion}}}';
 	</script>
 </div>

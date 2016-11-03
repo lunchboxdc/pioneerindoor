@@ -151,14 +151,57 @@ select.parsley-error:focus {
 .admin-body h1 {
 	margin: 0;
 }
+
+.scroll-table {
+	position: relative;
+	/*border: 1px solid #000;*/
+	padding-top: 25px;
+	/*background: #500;*/
+}
+
+.scroll-table .table-container {
+	overflow-y: auto;
+	height: 100px;
+}
+
+.scroll-table table {
+	border-spacing: 0;
+	width:100%;
+}
+
+.scroll-table th {
+	height: 0;
+	line-height: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+	color: transparent;
+	border: none;
+	white-space: nowrap;
+}
+
+.scroll-table th div {
+	position: absolute;
+	/*background: transparent;*/
+	/*color: #fff;*/
+	padding: 5px 25px;
+	top: 0;
+	margin-left: -25px;
+	line-height: normal;
+	/*border-left: 1px solid #800;*/
+}
+
+.scroll-table th:first-child div {
+	border: none;
+}
+
 .admin-table {
 	width: 100%;
 }
 .admin-table th {
 	text-align: left;
 	border-bottom: 2px solid #999999;
+	padding: 3px 5px;
 }
-.admin-table th,
 .admin-table td {
 	padding: 5px;
 }

@@ -11,6 +11,7 @@ var fs = require('fs');
 var stringify = require('node-stringify');
 var appConfig = require('../common/appConfig');
 var handlebarsHelpers = require('../common/HandlebarsHelpers');
+var ConnectionManager = require('../persistence/ConnectionManager');
 
 module.exports = (function() {
 	var router = express.Router();
@@ -123,7 +124,8 @@ module.exports = (function() {
 							stats: stats,
 							total: total,
 							seasons: seasons,
-							selectedSeason: selectedSeason
+							selectedSeason: selectedSeason,
+							assetsVersion: ConnectionManager.getAssetsVersion()
 						}, req.flash());
 						res.render('admin/auditionees', payLoad);
 					});
@@ -313,6 +315,10 @@ module.exports = (function() {
 
 	router.get('/users/new', function(req, res) {
 		res.render('admin/newUser');
+	});
+
+	router.get('/table', function(req, res) {
+		res.render('admin/table');
 	});
 
 	router.post('/users/new', function(req, res) {

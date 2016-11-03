@@ -1,12 +1,5 @@
 var auditioneeTemplate;
-$.get('/assets/template/auditioneeTemplate.html', function(data) {
-    auditioneeTemplate = Handlebars.compile(data);
-});
-
 var reminderEmailTemplate;
-$.get('/admin/email/auditionReminder', function(data) {
-    reminderEmailTemplate = Handlebars.compile(data);
-});
 
 function deleteAuditionee(firstName, lastName, id, e) {
     e.stopPropagation();
@@ -61,4 +54,13 @@ $(function() {
             Handlebars.registerHelper(helper, handlebarsHelpers[helper]);
         }
     }
+
+
+    $.get('/assets/template/auditioneeTemplate.html?v=' + assetsVersion, function(data) {
+        auditioneeTemplate = Handlebars.compile(data);
+    });
+
+    $.get('/admin/email/auditionReminder?v=' + assetsVersion, function(data) {
+        reminderEmailTemplate = Handlebars.compile(data);
+    });
 });

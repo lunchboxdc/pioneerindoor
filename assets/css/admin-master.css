@@ -161,7 +161,7 @@ select.parsley-error:focus {
 
 .scroll-table .table-container {
 	overflow-y: auto;
-	height: 100px;
+	/*height: 100px;*/
 }
 
 .scroll-table table {

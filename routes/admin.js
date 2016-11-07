@@ -59,7 +59,9 @@ module.exports = (function() {
 								'Tenor': 0,
 								'Bass': 0,
 								'Cymbals': 0,
-								'Character': 0
+								'Character': 0,
+								'Electric Guitar': 0,
+								'Drumset': 0
 							},
 							secondChoice: {
 								'Front ensemble (percussion)': 0,
@@ -68,7 +70,9 @@ module.exports = (function() {
 								'Tenor': 0,
 								'Bass': 0,
 								'Cymbals': 0,
-								'Character': 0
+								'Character': 0,
+								'Electric Guitar': 0,
+								'Drumset': 0
 							},
 							thirdChoice: {
 								'Front ensemble (percussion)': 0,
@@ -77,7 +81,9 @@ module.exports = (function() {
 								'Tenor': 0,
 								'Bass': 0,
 								'Cymbals': 0,
-								'Character': 0
+								'Character': 0,
+								'Electric Guitar': 0,
+								'Drumset': 0
 							}
 						};
 

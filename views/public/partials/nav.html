@@ -4,13 +4,13 @@
     </a>
     <nav class="site-nav">
     	<ul>
-            <li {{#equals page 'audition'}} class="current-page"{{/equals}}><a href="/audition">AUDITION</a></li>
-    		<li {{#equals page 'schedule'}} class="current-page"{{/equals}}><a href="/schedule">SCHEDULE</a></li>
-            <li {{#equals page 'faq'}} class="current-page"{{/equals}}><a href="/faq">FAQ</a></li>
-    		<li {{#equals page 'staff'}} class="current-page"{{/equals}}><a href="/staff">STAFF</a></li>
-            <!--<li {{#equals page 'media'}} class="current-page"{{/equals}}><a href="/media">MEDIA</a></li>-->
-            <li {{#equals page 'about'}} class="current-page"{{/equals}}><a href="/about">ABOUT</a></li>
-            <li {{#equals page 'support'}} class="current-page"{{/equals}}><a href="/support">SUPPORT</a></li>
+            <li class="audition-link {{#equals page 'audition'}}current-page{{/equals}}"><a href="/audition">AUDITION</a></li>
+    		<li class="schedule-link {{#equals page 'schedule'}}current-page{{/equals}}"><a href="/schedule">SCHEDULE</a></li>
+            <li class="faq-link {{#equals page 'faq'}}current-page{{/equals}}"><a href="/faq">FAQ</a></li>
+    		<li class="staff-link {{#equals page 'staff'}}current-page{{/equals}}"><a href="/staff">STAFF</a></li>
+            <!--<li class="media-link {{#equals page 'media'}}current-page{{/equals}}"><a href="/about">MEDIA</a></li>-->
+            <li class="about-link {{#equals page 'about'}}current-page{{/equals}}"><a href="/about">ABOUT</a></li>
+            <li class="support-link {{#equals page 'support'}}current-page{{/equals}}"><a href="/support">SUPPORT</a></li>
     	</ul>
     </nav>
 </header>

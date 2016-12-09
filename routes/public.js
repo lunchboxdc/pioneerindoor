@@ -10,7 +10,9 @@ var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
 var FacebookPost = require('../persistence/models/facebookPost');
 var utils = require('../common/utils');
+var xml2js = require('xml2js');
 var appConfig = require('../common/appConfig');
+var request = require('request');
 
 var packetsPath = process.cwd() + '/assets/auditionMaterials/';
 var batteryPacket = 'BatteryPacket.pdf';
@@ -31,6 +33,106 @@ module.exports = function(passport) {
 				}
 				res.render('public/home', {facebookPosts: facebookPosts});
 			});
+	});
+
+	router.get('/pay',function(req,res) {
+		var payLoad =_.merge({
+			page: 'pay'
+		}, req.flash());
+
+		res.render('public/pay-billing', payLoad);
+	});
+
+	router.post('/pay',function(req,res) {
+
+		// var postObject = {
+		// 	sale: {
+		// 		'api-key': '2F822Rw39fx762MaV7Yy86jXGTC7sCDy',
+		// 		'redirect-url': 'http://localhost:3000/pay-redirect',
+		// 		'amount': req.body.amount,
+		// 		'ip-address': req.connection.remoteAddress,
+		// 		'currency': 'USD',
+		// 		'order-description': 'tuition',
+		// 		'billing': {
+		// 			'first-name': req.body.firstName,
+		// 			'last-name': req.body.lastName,
+		// 			'address1': req.body.address1,
+		// 			'city': req.body.city,
+		// 			'state': req.body.state,
+		// 			'postal': req.body.zip,
+		// 			'country': 'US',
+		// 			'email': req.body.email,
+		// 			'phone': req.body.phone
+		// 		}
+		// 	}
+		// };
+
+		var postObject = {
+			sale: {
+				'api-key': '2F822Rw39fx762MaV7Yy86jXGTC7sCDy',
+				'redirect-url': 'http://localhost:3000/pay-redirect',
+				'amount': req.body.amount
+			}
+		};
+
+		var builder = new xml2js.Builder();
+		var xml = builder.buildObject(postObject);
+
+		console.log('\n\n' + xml + '\n\n');
+
+		request({
+			url: 'https://secure.paylinedatagateway.com/api/v2/three-step',
+			method: 'post',
+			headers: {
+				'Content-Type': 'text/xml'
+			},
+			body: xml
+		}, function(error, response, body) {
+			if (error) {
+				console.log('error!!!  ' + error);
+			} else {
+				xml2js.parseString(body, function(err, jsonBody) {
+					var response = jsonBody.response;
+					console.log('payline response: ' + body);
+
+					var payLoad =_.merge({
+						page: 'pay'
+					}, req.flash());
+
+					if (response.result && response.result.length === 1 && response.result[0] == 1) {
+						payLoad.transactionUrl = response['form-url'][0];
+						res.render('public/pay-card-info', payLoad);
+					} else {
+						payLoad.payMessage = 'Error!';
+						res.render('public/pay-billing', payLoad);
+					}
+				});
+			}
+		});
+	});
+
+	router.get('/pay-redirect',function(req, res) {
+		if (req.query['token-id']) {
+
+			var queryString = '';
+			for (var query in req.query) {
+				if (!req.query.hasOwnProperty(query)) continue;
+				queryString += query + '=' + req.query[query] + '  ';
+			}
+			console.log('success - query: ' + queryString);
+
+			res.redirect('/pay-confirm');
+		} else {
+			res.redirect('/pay-credit-card');
+		}
+	});
+
+	router.get('/pay-confirm',function(req, res) {
+		var payLoad =_.merge({
+			page: 'pay-confirm'
+		}, req.flash());
+
+		res.render('public/pay-confirm', payLoad);
 	});
 
 	router.get('/audition',function(req,res) {

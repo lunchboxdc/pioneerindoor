@@ -10,8 +10,16 @@
 		<h1>Auditionees</h1>
 	</div>
 
-	{{#if auditioneesMessage}}
-		<div>{{auditioneesMessage}}</div>
+	{{#if successMessage}}
+		<div class="success-message">
+			<span>{{successMessage}}</span>
+		</div>
+	{{/if}}
+
+	{{#if errorMessage}}
+		<div class="error-message">
+			<span>{{errorMessage}}</span>
+		</div>
 	{{/if}}
 
 	<div class="full-width">

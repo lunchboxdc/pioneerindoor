@@ -1,0 +1,121 @@
+{{#section 'head'}}
+    <meta property="og:title" content="Pioneer Indoor | Pay"/>
+    <title>Pioneer Indoor | Pay</title>
+    <link type="text/css" rel="stylesheet" href="/assets/css/master.css?v={{assetsVersion}}"/>
+
+    <script>
+        $(function() {
+            window.Parsley.on('form:submit', function() {
+                $('.hidden, .hidden *').prop("disabled",true);
+                $('#submitButton').prop("disabled",true);
+                $('#submitButton').val("Please wait...");
+            });
+
+            $('#creditCardForm').parsley({
+                excluded: '.hidden *'
+            });
+
+            $('#cardNumber').mask('0000000000000000');
+
+            $('#phone').mask('000-000-0000');
+            $('#zip').mask('00000');
+        });
+    </script>
+{{/section}}
+
+{{> nav}}
+
+<div class="site-body site-center">
+
+    <div class="tile">
+        <div class="header">
+            {{#if payMessage}}
+            <div class="error">{{{payMessage}}}</div>
+            {{/if}}
+            <h2>Pay Tuition</h2>
+            <h4>Pay us some money please.</h4>
+        </div>
+    </div>
+
+    <form id="creditCardForm" class="audition-form form" action="{{transactionUrl}}" method="post">
+        <div class="tile">
+            <div class="header">
+                <h2>Billing Information</h2>
+            </div>
+            <section class="two-column">
+                <div class="input-row">
+                    <label for="email">Email <span class="required-indicator">*</span></label>
+                    <input id="email" name="billing-email" value="{{email}}" placeholder="Email" data-parsley-trigger="change" data-parsley-required="true" />
+                </div>
+                <div class="input-row">
+                    <label for="firstName">First Name <span class="required-indicator">*</span></label>
+                    <input id="firstName" name="billing-first-name" value="{{firstName}}" placeholder="First Name" data-parsley-trigger="change" data-parsley-required="true" />
+                </div>
+                <div class="input-row">
+                    <label for="lastName">Last Name <span class="required-indicator">*</span></label>
+                    <input id="lastName" name="billing-last-name" value="{{lastName}}" placeholder="Last Name" data-parsley-required="true" />
+                </div>
+                <div class="input-row">
+                    <label for="phone">Phone <span class="required-indicator">*</span></label>
+                    <input id="phone" name="billing-phone" value="{{phone}}" placeholder="Phone" data-parsley-required="true" data-parsley-minlength="12" data-parsley-minlength-message="Phone number must be 10 digits"/>
+                </div>
+            </section>
+            <section class="two-column">
+                <div class="input-row">
+                    <label for="address1">Address 1 <span class="required-indicator">*</span></label>
+                    <input id="address1" name="billing-address1" value="{{address1}}" placeholder="Address 1" data-parsley-required="true" />
+                </div>
+                <div class="input-row">
+                    <label for="address2">Address 2</label>
+                    <input id="address2" name="billing-address2" value="{{address2}}" placeholder="Address 2"/>
+                </div>
+                <div class="input-row">
+                    <label for="city">City <span class="required-indicator">*</span></label>
+                    <input id="city" name="billing-city" value="{{city}}" placeholder="City" data-parsley-required="true" />
+                </div>
+                <div class="input-row large">
+                    <label for="state">State <span class="required-indicator">*</span></label>
+                    <select id="state" name="billing-state" data-parsley-required="true" >
+                        {{> stateOptions selectedState=state}}
+                    </select>
+                </div>
+                <div class="input-row small">
+                    <label for="zip">Zipcode <span class="required-indicator">*</span></label>
+                    <input id="zip" name="billing-postal" value="{{zip}}" placeholder="Zipcode" data-parsley-required="true" data-parsley-minlength="5" data-parsley-minlength-message="Zipcode must be 5 digits"/>
+                </div>
+            </section>
+        </div>
+
+        <div class="tile">
+            <div class="header">
+                <h2>Credit Card Information</h2>
+            </div>
+            <section class="two-column">
+                <div class="input-row">
+                    <label for="cardNumber">Credit Card Number <span class="required-indicator">*</span></label>
+                    <input id="cardNumber" name="billing-cc-number" value="{{cardNumber}}" placeholder="Credit Card Number" data-parsley-trigger="change" data-parsley-maxlength="16" data-parsley-minlength="16" data-parsley-type="digits" data-parsley-required="true" />
+                </div>
+                <div class="input-row">
+                    <label for="expDate">Expiration Date <span class="required-indicator">*</span></label>
+                    <input id="expDate" name="billing-cc-exp" value="{{expDate}}" placeholder="Expiration Date" data-parsley-required="true" />
+                </div>
+            </section>
+            <section class="two-column">
+                <div class="input-row">
+                    <label for="cvv">CVV <span class="required-indicator">*</span></label>
+                    <input id="cvv" name="billing-cvv" value="{{cvv}}" placeholder="CVV" data-parsley-trigger="change" data-parsley-required="true" />
+                </div>
+            </section>
+        </div>
+
+        <div class="tile">
+            <section>
+                <div class="input-row submit-row">
+                    <input id="submitButton" type="submit" class="button center" value="Submit"/>
+                </div>
+            </section>
+        </div>
+    </form>
+</div>
+
+{{> footer}}

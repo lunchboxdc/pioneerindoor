@@ -1,15 +1,34 @@
+var Promise = require('bluebird');
 var mongoose = require('mongoose');
 var mysql = require('promise-mysql');
 var Assets = require('./models/Assets');
-var Promise = require('bluebird');
+
 var mongooseConnected = false;
 var assetsVersion = 0;
-
-var connection;
 var mysqlConnected = false;
 var pool;
 
 mongoose.Promise = Promise;
+
+var mysqlOptions = {
+    host: '127.0.0.1',
+    user: process.env.PI_DB_USER,
+    password: process.env.PI_DB_PASS,
+    database: 'pi',
+    connectionLimit: 100,
+    dateStrings: ['DATE']
+};
+
+var openConnectionPool = function() {
+    return new Promise(function(resolve, reject) {
+        try {
+            pool = mysql.createPool(mysqlOptions);
+            resolve();
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
 
 module.exports = {
 
@@ -64,42 +83,58 @@ module.exports = {
              //        console.log('Error connecting to database', e);
 			// 	});
 
-            pool = mysql.createPool({
-                host: 'localhost',
-                user: process.env.PI_DB_USER,
-                password: process.env.PI_DB_PASS,
-                database: 'pi',
-                connectionLimit: 10
-            });
+            pool = mysql.createPool(mysqlOptions);
 
             console.log('Mysql pool opened');
 		}
 	},
 
-	close: function() {
-        mongoose.connection.close()
-			.then(function () {
-                mongooseConnected = false;
-                console.info('Mongo connection closed');
 
-                return pool.end();
-            })
+	openTest: function() {
+        var tasks = [];
+
+        if (!mongooseConnected) {
+            tasks.push(mongoose.connect('mongodb://localhost/pi'));
+        }
+        if (!pool) {
+            tasks.push(openConnectionPool());
+        }
+
+        return Promise.all(tasks)
 			.then(function() {
+                mongooseConnected = false;
+                mysqlConnected = false;
+                console.info('Database connections opened');
+			});
+	},
+
+
+	close: function() {
+		var tasks = [];
+
+		if (mongooseConnected) {
+			tasks.push(mongoose.connection.close());
+		}
+		if (pool) {
+			tasks.push(pool.end());
+		}
+
+		return Promise.all(tasks)
+			.then(function() {
+				mongooseConnected = false;
 				mysqlConnected = false;
-				console.info('Mysql pool closed');
-			})
-			.catch(function(e) {
-				console.error(e);
-			})
-			.finally(function() {
-				process.exit(0);
+				console.info('Database connections closed');
 			});
 	},
 
 	getConnection: function() {
         return pool.getConnection().disposer(function(connection) {
-            pool.releaseConnection(connection);
+        	pool.releaseConnection(connection);
         });
+	},
+
+	query: function(query, arguments) {
+		return pool.query(query, arguments);
 	},
 
 	isConnected: function() {

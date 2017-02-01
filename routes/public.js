@@ -203,7 +203,7 @@ module.exports = function(passport) {
 		auditionee.save(function(err, auditionee) {
 			if (err) {
 				console.log(err);
-				for(var field in req.body) {
+				for (var field in req.body) {
 					if (req.body.hasOwnProperty(field)) {
 						req.flash(field, req.body[field]);
 					}

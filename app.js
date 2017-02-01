@@ -31,7 +31,7 @@ var hbs = exphbs.create({
 app.engine('html', hbs.engine);
 
 //middleware and other components specific to either prod or non-prod
-if(process.env.NODE_ENV !== 'prod') {
+if (process.env.NODE_ENV !== 'prod') {
     //run facebook stuff once locally at startup
     //require('./common/script/runFacebookService');
     //not behind nginx locally so lets serve out assets through node
@@ -98,5 +98,9 @@ app.listen(port, ip, function() {
 });
 
 process.on('SIGINT', function() {
-    ConnectionManager.close();
+    ConnectionManager.close()
+        .finally(function() {
+            console.log('Pioneer Indoor app stopped');
+            process.exit();
+        });
 });

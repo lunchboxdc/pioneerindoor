@@ -91,11 +91,11 @@ $(function() {
     $('#phone, #pg1Phone1, #pg1Phone2, #pg2Phone1, #pg2Phone2').mask('000-000-0000');
     $('#zip, #pg1Zip, #pg2Zip').mask('00000');
 
-    if(!$('#pg1AddressSameAsAuditioneeCheckbox')[0].checked) {
+    if(!$('#pg1SameAddressCheckbox')[0].checked) {
         $('#pg1AddressFields').removeClass('hidden');
     }
 
-    if(!$('#pg2AddressSameAsAuditioneeCheckbox')[0].checked) {
+    if(!$('#pg2SameAddressCheckbox')[0].checked) {
         $('#pg2AddressFields').removeClass('hidden');
     }
 

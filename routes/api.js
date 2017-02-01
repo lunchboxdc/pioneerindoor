@@ -1,5 +1,6 @@
 var express = require('express');
 var bCrypt = require('bcrypt-nodejs');
+var _ = require('lodash');
 var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
 var FacebookPost = require('../persistence/models/facebookPost');
@@ -7,6 +8,8 @@ var Assets = require('../persistence/models/Assets');
 var FacebookService = require('../common/FacebookService');
 var async = require('async');
 var moment = require('moment');
+var PiDAO = require('../persistence/PiDAO');
+var Promise = require('bluebird');
 
 module.exports = (function() {
 	var router = express.Router();
@@ -105,6 +108,9 @@ module.exports = (function() {
 		if (req.query.season) {
 			queryParms['season'] = req.query.season;
 		}
+		if (req.query.email) {
+			queryParms['email'] = req.query.email;
+		}
 		if (req.query.maxSubmitDate) {
 			var maxSubmitDate = moment(req.query.maxSubmitDate, moment.ISO_8601, true);
 			if (maxSubmitDate.isValid()) {
@@ -128,6 +134,32 @@ module.exports = (function() {
 				}
 		});
 	});
+
+	var deleteAuditioneesRoute = function(req, res) {
+        var queryParms = {};
+        if (req.query.season) {
+            queryParms['season'] = req.query.season;
+        }
+        if (req.params._id) {
+        	queryParms['_id'] = req.params._id
+		}
+        Auditionee.remove(queryParms, function(err) {
+            if (err) {
+                res.json({
+                    message: 'Error deleting auditionees!',
+                    error: err
+                });
+            } else {
+                res.json({
+                    message: 'Successfully deleted auditionees',
+                    queryParms: queryParms
+                });
+            }
+        });
+	};
+
+    router.delete('/auditionees', deleteAuditioneesRoute);
+    router.delete('/auditionees/:_id', deleteAuditioneesRoute);
 
 	router.get('/facebookPosts', function(req, res) {
 		FacebookPost.find({})
@@ -208,6 +240,52 @@ module.exports = (function() {
 			});
 		res.send('Updating auditionee attributes');
 	});
+
+    router.get('/insertBogusFacebookPosts', function(req, res) {
+        var facebookPost = {};
+        facebookPost.facebookId = '4508311242_1327206';
+        facebookPost.attachmentImage = 'https://scontent.xx.fbcdn.net/v/t1.0-0/p180x540/15590560_1327578220627871_2409774284824299046_n.jpg?oh=fdf0d8b71f58ab200306ddedd5fa684e&oe=5919D6B7';
+        facebookPost.message = "Some message";
+        facebookPost.createdTime = moment().format("YYYY-MM-DD HH:mm:ss");
+        facebookPost.status_type = 'added_photos';
+        facebookPost.type = 'photo';
+        facebookPost.link = 'http://link';
+        facebookPost.picture = 'http://picture';
+        facebookPost.name = 'Timeline photos';
+        facebookPost.fromName = 'Pioneer Indoor Percussion Ensemble';
+
+        PiDAO.insertFacebookPost(facebookPost)
+            .then(function(result) {
+                console.log(result);
+            })
+            .catch(function(e) {
+                console.error(e);
+            })
+            .then(function() {
+                var facebookPost = {};
+                facebookPost.facebookId = '831111111242_1327206';
+                facebookPost.attachmentImage = 'https://scontent.xx.fbcdn.net/v/t1.0-0/p180x540/15590560_1327578220627871_2409774284824299046_n.jpg?oh=fdf0d8b71f58ab200306ddedd5fa684e&oe=5919D6B7';
+                facebookPost.message = "Some message";
+                facebookPost.created_time = moment().format("YYYY-MM-DD HH:mm:ss");
+                facebookPost.statusType = 'added_photos';
+                facebookPost.type = 'photo';
+                facebookPost.link = 'http://link';
+                facebookPost.picture = 'http://picture';
+                facebookPost.name = 'Timeline photos';
+                facebookPost.fromName = 'Pioneer Indoor Percussion Ensemble';
+
+                PiDAO.insertFacebookPost(facebookPost);
+            })
+            .then(function(result) {
+                console.log(result);
+            })
+            .catch(function(e) {
+                console.error(e);
+            })
+            .then(function() {
+                res.send('Finished inserting bogus facebook posts.');
+            });
+    });
 
 	return router;
 })();

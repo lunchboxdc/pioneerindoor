@@ -11,6 +11,10 @@ var mysqlOptions = {
     dateStrings: ['DATE']
 };
 
+if (process.env.PI_DB_HOST.includes('rds.amazonaws.com')) {
+	mysqlOptions['ssl'] = 'Amazon RDS';
+}
+
 module.exports = {
 
 	open: function() {

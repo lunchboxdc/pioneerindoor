@@ -9,7 +9,6 @@ module.exports = {
                 if (result[0]) {
                     assetsVersion = result[0].assetsVersion;
                     assetsVersion++;
-                    console.log('assetsVersion: ' + assetsVersion);
                     return PiDAO.setAssetsVersion(assetsVersion);
                 } else {
                     throw new Error('assetsVersion not found in assets table.');

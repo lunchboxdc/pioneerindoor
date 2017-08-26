@@ -3,15 +3,14 @@ var ConnectionManager = require('../persistence/ConnectionManager');
 var FacebookService = require('../common/FacebookService');
 
 
-ConnectionManager.openTest()
-    .then(function() {
-        return FacebookService.getPostsTest();
-    })
+ConnectionManager.open();
+
+FacebookService.getPosts()
     .then(function() {
         return ConnectionManager.close();
     })
     .then(function() {
-        console.log('\nDone!');
+        console.log('Done!');
     })
     .catch(function(e) {
         console.error(e.stack);

@@ -21,6 +21,6 @@ if(configObject.logLevel) {
     logger.transports.console.level = configObject.logLevel;
 }
 
-configObject['auditionDate'] = moment("2016-11-05T14:00:00.000Z");
+configObject['auditionDate'] = moment("2017-11-04 08:00");
 
 module.exports = configObject;

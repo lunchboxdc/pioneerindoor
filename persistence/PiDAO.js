@@ -3,6 +3,18 @@ var ConnectionManager = require('./ConnectionManager');
 
 module.exports = {
 
+    getAssetsVersion: function() {
+        return Promise.using(ConnectionManager.getConnection(), function(connection) {
+            return connection.query('select assetsVersion from assets where id = 1');
+        });
+    },
+
+    setAssetsVersion: function(assetsVersion) {
+        return Promise.using(ConnectionManager.getConnection(), function(connection) {
+            return connection.query('update assets set assetsVersion = ? where id = 1', assetsVersion);
+        });
+    },
+
     getStudents: function() {
         return Promise.using(ConnectionManager.getConnection(), function(connection) {
             return connection.query('select * from student');
@@ -71,9 +83,15 @@ module.exports = {
         });
     },
 
-    getStaff: function() {
+    getAllStaffUsers: function() {
         return Promise.using(ConnectionManager.getConnection(), function(connection) {
             return connection.query('select * from staff order by createDate asc');
+        });
+    },
+
+    getStaffUserById: function(id) {
+        return Promise.using(ConnectionManager.getConnection(), function(connection) {
+            return connection.query('select * from staff where id = ?', id);
         });
     },
 
@@ -109,13 +127,19 @@ module.exports = {
 
     getFacebookPosts: function() {
         return Promise.using(ConnectionManager.getConnection(), function(connection) {
-            return connection.query('select * from facebookpost order by createdTime asc');
+            return connection.query('select * from facebookpost order by createdTime desc');
         });
     },
 
     deleteFacebookPost: function(postId) {
         return Promise.using(ConnectionManager.getConnection(), function(connection) {
             return connection.query('delete from facebookpost where id = ?', postId);
+        });
+    },
+
+    deleteAllFacebookPosts: function() {
+        return Promise.using(ConnectionManager.getConnection(), function(connection) {
+            return connection.query('delete from facebookpost');
         });
     },
 

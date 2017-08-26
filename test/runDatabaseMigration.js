@@ -395,11 +395,11 @@ var compareAuditionees = function() {
 
 var compareStaff = function() {
     return Promise.all([
-        PiDAO.getStaff(),
+        PiDAO.getAllStaffUsers(),
         AdminUser.find({})
             .sort({dateCreated: 'asc'})
             .exec()
-    ])
+        ])
         .then(function(results) {
             var mysqlRows = results[0];
             var mongoRows = results[1];

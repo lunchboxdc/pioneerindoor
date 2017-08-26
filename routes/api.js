@@ -1,10 +1,6 @@
 var express = require('express');
 var bCrypt = require('bcrypt-nodejs');
 var _ = require('lodash');
-var AdminUser = require('../persistence/models/adminUser');
-var Auditionee = require('../persistence/models/auditionee');
-var FacebookPost = require('../persistence/models/facebookPost');
-var Assets = require('../persistence/models/Assets');
 var FacebookService = require('../common/FacebookService');
 var async = require('async');
 var moment = require('moment');
@@ -18,16 +14,21 @@ module.exports = (function() {
 		var apiToken = req.headers['x-api-token'];
 		var userId = req.headers['x-user-id'];
 
-		if(userId && apiToken) {
-			AdminUser.findById(userId, function(err, user) {
-				if(user && bCrypt.compareSync(apiToken, user.apiToken)) {
-					console.debug('Api: successful auth');
-					next();
-				} else {
-					console.debug('Api: user not found or bad token');
-					res.json('error');
-				}
-			});
+		if (userId && apiToken) {
+			PiDAO.getStaffUserById(userId)
+				.then(function(user) {
+                    if(user[0] && bCrypt.compareSync(apiToken, user[0].apiToken)) {
+                        console.debug('Api: successful auth');
+                        next();
+                    } else {
+                        console.debug('Api: user not found or bad token');
+                        res.json('error');
+                    }
+				})
+				.catch(function(e) {
+					console.error(e);
+                    res.json('error');
+				});
 		} else {
 			console.debug('Api: either userId or token was missing');
 			res.json('error');
@@ -35,158 +36,34 @@ module.exports = (function() {
 	});
 
 	router.get('/users', function(req, res) {
-		var query = AdminUser.find();
-		query.exec(function(err, adminUsers) {
-			if (err) {
-				res.send(err);
-			} else {
-				res.json(adminUsers);
-			}
-		});
-	});
-
-	router.post('/users', function(req, res) {
-		var adminUser = new AdminUser();
-		adminUser.firstName = req.body.firstName;
-		adminUser.lastName = req.body.lastName;
-		adminUser.email = req.body.email;
-		adminUser.password = utils.createHash(req.body.password);
-
-		adminUser.save(function(err) {
-			if (err) {
-				res.send(err);
-			} else {
-				res.json({message: 'User created!'});
-			}
-		});
-	});
-
-	router.get('/users/:user_id', function(req, res) {
-		AdminUser.findById(req.params.user_id, function(err, user) {
-			if (err) {
-				res.send(err);
-			} else {
-				res.json(user);
-			}
-		});
-	});
-
-	router.put('/users/:user_id', function(req, res) {
-		AdminUser.findById(req.params.user_id, function(err, user) {
-			if (err) {
-				res.send(err);
-			} else {
-				user.firstName = req.body.firstName;
-				user.lastName = req.body.lastName;
-				user.email = req.body.email;
-				user.password = utils.createHash(req.body.password);
-				user.save(function (err) {
-					if (err) {
-						res.send(err);
-					} else {
-						res.json({message: 'user updated!'});
-					}
-				});
-			}
-		});
-	});
-
-	router.delete('/users/:user_id', function(req, res) {
-		AdminUser.remove({
-			_id: req.params.user_id
-		}, function(err) {
-			if (err) {
-				res.send(err);
-			} else {
-				res.json({message: 'Successfully deleted user'});
-			}
-		});
-	});
-
-	router.get('/auditionees', function(req, res) {
-		var queryParms = {};
-		if (req.query.season) {
-			queryParms['season'] = req.query.season;
-		}
-		if (req.query.email) {
-			queryParms['email'] = req.query.email;
-		}
-		if (req.query.maxSubmitDate) {
-			var maxSubmitDate = moment(req.query.maxSubmitDate, moment.ISO_8601, true);
-			if (maxSubmitDate.isValid()) {
-				queryParms['submitDate'] = {
-					$lte: maxSubmitDate
-				}
-			} else {
-				res.json({
-					error: "Unable to parse maxSubmitDate"
-				});
-				return;
-			}
-		}
-		Auditionee.find(queryParms)
-			.sort({submitDate: 'asc'})
-			.exec(function(err, auditionees) {
-				if (err) {
-					res.send(err);
-				} else {
-					res.json(auditionees);
-				}
-		});
-	});
-
-	var deleteAuditioneesRoute = function(req, res) {
-        var queryParms = {};
-        if (req.query.season) {
-            queryParms['season'] = req.query.season;
-        }
-        if (req.params._id) {
-        	queryParms['_id'] = req.params._id
-		}
-        Auditionee.remove(queryParms, function(err) {
-            if (err) {
-                res.json({
-                    message: 'Error deleting auditionees!',
-                    error: err
-                });
-            } else {
-                res.json({
-                    message: 'Successfully deleted auditionees',
-                    queryParms: queryParms
-                });
-            }
-        });
-	};
-
-    router.delete('/auditionees', deleteAuditioneesRoute);
-    router.delete('/auditionees/:_id', deleteAuditioneesRoute);
-
-	router.get('/facebookPosts', function(req, res) {
-		FacebookPost.find({})
-			.sort({created_time: 'desc'})
-			.exec(function(err, facebookPosts) {
-				if (err) {
-					res.send(err);
-				} else {
-					res.json(facebookPosts);
-				}
+		PiDAO.getAllStaffUsers()
+			.then(function(users) {
+				// TODO remove password and apiToken from response
+				res.json(users);
+			})
+			.catch(function(e) {
+				res.send(e);
 			});
 	});
 
-	router.post('/facebookPosts', function(req, res) {
-		var posts = JSON.parse(req.rawBody);
-		console.log(posts);
-		res.send("done");
+	router.get('/facebookPosts', function(req, res) {
+		PiDAO.getFacebookPosts()
+			.then(function(posts) {
+				res.json(posts);
+			})
+			.catch(function(e) {
+				res.send(e);
+			});
 	});
 
 	router.delete('/facebookPosts/all', function(req, res) {
-		FacebookPost.remove({}, function(err) {
-			if (err) {
-				res.send(err);
-			} else {
-				res.json({message: 'Successfully deleted all facebook posts'});
-			}
-		});
+		PiDAO.deleteAllFacebookPosts()
+			.then(function() {
+                res.json({message: 'Successfully deleted all facebook posts'});
+			})
+			.catch(function(e) {
+				res.send(e);
+			});
 	});
 
 	router.get('/assetsVersion', function(req, res) {

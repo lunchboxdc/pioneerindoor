@@ -1,5 +1,4 @@
 var express = require('express');
-var path = require('path');
 var moment = require('moment');
 var _ = require('lodash');
 var piMailer = require('../email/piMailer');
@@ -7,11 +6,10 @@ var AdminUser = require('../persistence/models/adminUser');
 var Auditionee = require('../persistence/models/auditionee');
 var utils = require('../common/utils');
 var csv = require('express-csv');
-var fs = require('fs');
 var stringify = require('node-stringify');
 var appConfig = require('../common/appConfig');
 var handlebarsHelpers = require('../common/HandlebarsHelpers');
-var ConnectionManager = require('../persistence/ConnectionManager');
+var AssetsVersion = require('../persistence/AssetsVersion');
 var PiDAO = require('../persistence/PiDAO');
 
 module.exports = (function() {
@@ -25,7 +23,7 @@ module.exports = (function() {
 		var payLoad = _.merge({
 			handlebarsHelpers: stringify(handlebarsHelpers),
 			auditionDate: appConfig.auditionDate.toISOString(),
-			assetsVersion: ConnectionManager.getAssetsVersion()
+			assetsVersion: AssetsVersion.getAssetsVersion()
 		}, req.flash());
 
 		Auditionee.aggregate(

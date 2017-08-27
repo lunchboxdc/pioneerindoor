@@ -13,7 +13,8 @@ var mysqlOptions = {
 };
 
 if (process.env.PI_DB_SSL_CA) {
-	mysqlOptions['ssl']['ca'] = fs.readFileSync(process.env.PI_DB_SSL_CA);
+    mysqlOptions['ssl'] = {};
+	mysqlOptions.ssl['ca'] = fs.readFileSync(process.env.PI_DB_SSL_CA);
 }
 
 console.log(mysqlOptions);

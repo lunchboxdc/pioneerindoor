@@ -1,4 +1,5 @@
 var mysql = require('promise-mysql');
+var fs = require('fs');
 
 var pool;
 

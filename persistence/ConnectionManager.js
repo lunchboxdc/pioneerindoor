@@ -11,9 +11,11 @@ var mysqlOptions = {
     dateStrings: ['DATE']
 };
 
-// if (process.env.PI_DB_HOST.includes('rds.amazonaws.com')) {
-// 	mysqlOptions['ssl'] = 'Amazon RDS';
-// }
+if (process.env.PI_DB_SSL_CA) {
+	mysqlOptions['ssl']['ca'] = fs.readFileSync(process.env.PI_DB_SSL_CA);
+}
+
+console.log(mysqlOptions);
 
 module.exports = {
 

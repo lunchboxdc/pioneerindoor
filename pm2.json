@@ -1,0 +1,8 @@
+{
+  "apps": [{
+    "name": "PioneerIndoor",
+    "script": "./app.js",
+    "exec-mode": "cluster",
+    "instances": 4
+  }]
+}

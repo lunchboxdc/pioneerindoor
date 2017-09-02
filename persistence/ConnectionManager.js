@@ -27,7 +27,10 @@ module.exports = {
 	},
 
 	close: function() {
-        pool.end();
+		if (pool) {
+            pool.end();
+            console.log('Mysql pool closed');
+		}
 	},
 
 	getConnection: function() {

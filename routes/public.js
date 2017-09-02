@@ -19,6 +19,7 @@ var frontEnsemblePacket = 'FrontEnsemblePacket.pdf';
 var auditionDate = appConfig.auditionDate;
 
 var auditionActive = false;
+var scheduleActive = false;
 
 function returnAuditionSoonPage(req, res) {
     var payLoad =_.merge({
@@ -26,6 +27,14 @@ function returnAuditionSoonPage(req, res) {
         auditionDate: auditionDate
     }, req.flash());
     res.render('public/audition-soon', payLoad);
+}
+
+function returnScheduleSoonPage(req, res) {
+    var payLoad =_.merge({
+        page: 'schedule-soon',
+        auditionDate: auditionDate
+    }, req.flash());
+    res.render('public/schedule-soon', payLoad);
 }
 
 module.exports = function(passport) {
@@ -158,92 +167,97 @@ module.exports = function(passport) {
 		}
 	});
 
-	router.post('/audition',function(req, res) {
-        if (auditionActive) {
-            var auditionee = new Auditionee();
-            auditionee.firstName = req.body.firstName;
-            auditionee.lastName = req.body.lastName;
-            auditionee.dob = req.body.dob;
-            auditionee.phone = req.body.phone;
-            auditionee.email = req.body.email;
-            auditionee.address1 = req.body.address1;
-            auditionee.address2 = req.body.address2;
-            auditionee.city = req.body.city;
-            auditionee.state = req.body.state;
-            auditionee.zip = req.body.zip;
-            auditionee.school = req.body.school;
-            auditionee.schoolYear = req.body.schoolYear;
-            auditionee.pg1FirstName = req.body.pg1FirstName;
-            auditionee.pg1LastName = req.body.pg1LastName;
-            auditionee.pg1Phone1 = req.body.pg1Phone1;
-            auditionee.pg1Phone2 = req.body.pg1Phone2;
-            auditionee.pg1Email = req.body.pg1Email;
-            auditionee.pg1Address1 = req.body.pg1Address1;
-            auditionee.pg1Address2 = req.body.pg1Address2;
-            auditionee.pg1City = req.body.pg1City;
-            auditionee.pg1State = req.body.pg1State;
-            auditionee.pg1Zip = req.body.pg1Zip;
-            auditionee.pg2FirstName = req.body.pg2FirstName;
-            auditionee.pg2LastName = req.body.pg2LastName;
-            auditionee.pg2Phone1 = req.body.pg2Phone1;
-            auditionee.pg2Phone2 = req.body.pg2Phone2;
-            auditionee.pg2Email = req.body.pg2Email;
-            auditionee.pg2Address1 = req.body.pg2Address1;
-            auditionee.pg2Address2 = req.body.pg2Address2;
-            auditionee.pg2City = req.body.pg2City;
-            auditionee.pg2State = req.body.pg2State;
-            auditionee.pg2Zip = req.body.pg2Zip;
-            auditionee.referral = req.body.referral;
-            auditionee.referralOther = req.body.referralOther;
-            auditionee.yearsDrumming = req.body.yearsDrumming;
-            auditionee.experience = req.body.experience;
-            auditionee.auditionInstrument1 = req.body.auditionInstrument1;
-            auditionee.auditionInstrument2 = req.body.auditionInstrument2;
-            auditionee.auditionInstrument3 = req.body.auditionInstrument3;
-            auditionee.specialTalents = req.body.specialTalents;
-            auditionee.conflicts = req.body.conflicts;
-            auditionee.goal = req.body.goal;
-            auditionee.submitDate = moment();
-            auditionee.deleted = false;
-            auditionee.season = req.body.season;
+	// router.post('/audition',function(req, res) {
+     //    if (auditionActive) {
+     //        var auditionee = new Auditionee();
+     //        auditionee.firstName = req.body.firstName;
+     //        auditionee.lastName = req.body.lastName;
+     //        auditionee.dob = req.body.dob;
+     //        auditionee.phone = req.body.phone;
+     //        auditionee.email = req.body.email;
+     //        auditionee.address1 = req.body.address1;
+     //        auditionee.address2 = req.body.address2;
+     //        auditionee.city = req.body.city;
+     //        auditionee.state = req.body.state;
+     //        auditionee.zip = req.body.zip;
+     //        auditionee.school = req.body.school;
+     //        auditionee.schoolYear = req.body.schoolYear;
+     //        auditionee.pg1FirstName = req.body.pg1FirstName;
+     //        auditionee.pg1LastName = req.body.pg1LastName;
+     //        auditionee.pg1Phone1 = req.body.pg1Phone1;
+     //        auditionee.pg1Phone2 = req.body.pg1Phone2;
+     //        auditionee.pg1Email = req.body.pg1Email;
+     //        auditionee.pg1Address1 = req.body.pg1Address1;
+     //        auditionee.pg1Address2 = req.body.pg1Address2;
+     //        auditionee.pg1City = req.body.pg1City;
+     //        auditionee.pg1State = req.body.pg1State;
+     //        auditionee.pg1Zip = req.body.pg1Zip;
+     //        auditionee.pg2FirstName = req.body.pg2FirstName;
+     //        auditionee.pg2LastName = req.body.pg2LastName;
+     //        auditionee.pg2Phone1 = req.body.pg2Phone1;
+     //        auditionee.pg2Phone2 = req.body.pg2Phone2;
+     //        auditionee.pg2Email = req.body.pg2Email;
+     //        auditionee.pg2Address1 = req.body.pg2Address1;
+     //        auditionee.pg2Address2 = req.body.pg2Address2;
+     //        auditionee.pg2City = req.body.pg2City;
+     //        auditionee.pg2State = req.body.pg2State;
+     //        auditionee.pg2Zip = req.body.pg2Zip;
+     //        auditionee.referral = req.body.referral;
+     //        auditionee.referralOther = req.body.referralOther;
+     //        auditionee.yearsDrumming = req.body.yearsDrumming;
+     //        auditionee.experience = req.body.experience;
+     //        auditionee.auditionInstrument1 = req.body.auditionInstrument1;
+     //        auditionee.auditionInstrument2 = req.body.auditionInstrument2;
+     //        auditionee.auditionInstrument3 = req.body.auditionInstrument3;
+     //        auditionee.specialTalents = req.body.specialTalents;
+     //        auditionee.conflicts = req.body.conflicts;
+     //        auditionee.goal = req.body.goal;
+     //        auditionee.submitDate = moment();
+     //        auditionee.deleted = false;
+     //        auditionee.season = req.body.season;
+    //
+     //        auditionee.save(function (err, auditionee) {
+     //            if (err) {
+     //                console.log(err);
+     //                for (var field in req.body) {
+     //                    if (req.body.hasOwnProperty(field)) {
+     //                        req.flash(field, req.body[field]);
+     //                    }
+     //                }
+     //                req.flash('auditionMessage', 'We\'re sorry, something went wrong. Please try again. If the error continues, please email <a href="mailto:admin@pioneerindoordrums.org">admin@pioneerindoordrums.org</a>');
+     //                res.redirect('/audition');
+     //            } else {
+     //                piMailer.sendAuditionConfirmation(auditionee.firstName, auditionee.email);
+     //                res.redirect('/audition/confirm');
+     //            }
+     //        });
+     //    } else {
+     //        returnAuditionSoonPage(req, res);
+	// 	}
+	// });
 
-            auditionee.save(function (err, auditionee) {
-                if (err) {
-                    console.log(err);
-                    for (var field in req.body) {
-                        if (req.body.hasOwnProperty(field)) {
-                            req.flash(field, req.body[field]);
-                        }
-                    }
-                    req.flash('auditionMessage', 'We\'re sorry, something went wrong. Please try again. If the error continues, please email <a href="mailto:admin@pioneerindoordrums.org">admin@pioneerindoordrums.org</a>');
-                    res.redirect('/audition');
-                } else {
-                    piMailer.sendAuditionConfirmation(auditionee.firstName, auditionee.email);
-                    res.redirect('/audition/confirm');
-                }
-            });
-        } else {
-            returnAuditionSoonPage(req, res);
-		}
-	});
-
-	router.get('/audition/confirm',function(req, res) {
-		if (auditionActive) {
-            var payLoad =_.merge({
-                auditionDate: auditionDate
-            }, req.flash());
-            res.render('public/auditionConfirm', payLoad);
-		} else {
-            returnAuditionSoonPage(req, res);
-		}
-	});
+	// router.get('/audition/confirm',function(req, res) {
+	// 	if (auditionActive) {
+     //        var payLoad =_.merge({
+     //            auditionDate: auditionDate
+     //        }, req.flash());
+     //        res.render('public/auditionConfirm', payLoad);
+	// 	} else {
+     //        returnAuditionSoonPage(req, res);
+	// 	}
+	// });
 
 	router.get('/schedule',function(req, res) {
-		var payLoad =_.merge({
-			page: 'schedule'
-		}, req.flash());
+		if (scheduleActive) {
+            var payLoad =_.merge({
+                page: 'schedule',
+                auditionDate: auditionDate
+            }, req.flash());
 
-		res.render('public/schedule', payLoad);
+            res.render('public/schedule', payLoad);
+		} else {
+            returnScheduleSoonPage(req, res);
+		}
 	});
 
 	router.get('/faq',function(req, res) {
@@ -256,19 +270,20 @@ module.exports = function(passport) {
 
 	router.get('/staff',function(req, res) {
 		var payLoad =_.merge({
-			page: 'staff'
+			page: 'staff',
+            auditionDate: auditionDate
 		}, req.flash());
 
 		res.render('public/staff', payLoad);
 	});
 
-	router.get('/media',function(req, res) {
-		var payLoad =_.merge({
-			page: 'media'
-		}, req.flash());
-
-		res.render('public/construction', payLoad);
-	});
+	// router.get('/media',function(req, res) {
+	// 	var payLoad =_.merge({
+	// 		page: 'media'
+	// 	}, req.flash());
+    //
+	// 	res.render('public/construction', payLoad);
+	// });
 
 	router.get('/about',function(req, res) {
 		var payLoad =_.merge({
@@ -286,180 +301,180 @@ module.exports = function(passport) {
 		res.render('public/support', payLoad);
 	});
 
-	router.get('/login', function(req, res) {
-		var payLoad =_.merge({}, req.flash());
-		res.render('public/login', payLoad);
-	});
+	// router.get('/login', function(req, res) {
+	// 	var payLoad =_.merge({}, req.flash());
+	// 	res.render('public/login', payLoad);
+	// });
 
-	router.post('/login', passport.authenticate('login', {
-		successRedirect: '/admin',
-		failureRedirect: '/login',
-		failureFlash : true
-	}));
+	// router.post('/login', passport.authenticate('login', {
+	// 	successRedirect: '/admin',
+	// 	failureRedirect: '/login',
+	// 	failureFlash : true
+	// }));
 
-	router.get('/forgotPassword', function(req, res) {
-		var payLoad =_.merge({}, req.flash());
-		res.render('public/forgotPassword', payLoad);
-	});
+	// router.get('/forgotPassword', function(req, res) {
+	// 	var payLoad =_.merge({}, req.flash());
+	// 	res.render('public/forgotPassword', payLoad);
+	// });
 
-	router.post('/forgotPassword', function(req, res) {
-		var email = req.body.email.toLowerCase();
-		AdminUser.findOne({ 'email': email }, function (err, adminUser) {
-			if(adminUser) {
-				var token = require('crypto').randomBytes(32).toString('hex');
-				adminUser.token = token;
-				adminUser.token = utils.createHash(token);
-				adminUser.tokenExpires = moment().add(1, 'days');
-				adminUser.save(function (err) {
-					if (err) {
-						console.error("Error setting token and token expiration for forgot password for: "+adminUser.email, err);
-						req.flash('errorMessage', 'We\'re sorry, an error occurred. Please try again.');
-						res.redirect('/forgotPassword');
-					} else {
-						piMailer.sendForgotPasswordEmail(adminUser.firstName, adminUser.email, token, adminUser._id);
-						console.info("Successfully sent forgot password email to: "+adminUser.email);
-						res.render('public/forgotPasswordSuccess');
-					}
-				});
-			} else {
-				req.flash('errorMessage', 'We\'re sorry, we were unable to find an account with that email address. Please try again.');
-				res.redirect('/forgotPassword');
-			}
-		});
-	});
+	// router.post('/forgotPassword', function(req, res) {
+	// 	var email = req.body.email.toLowerCase();
+	// 	AdminUser.findOne({ 'email': email }, function (err, adminUser) {
+	// 		if(adminUser) {
+	// 			var token = require('crypto').randomBytes(32).toString('hex');
+	// 			adminUser.token = token;
+	// 			adminUser.token = utils.createHash(token);
+	// 			adminUser.tokenExpires = moment().add(1, 'days');
+	// 			adminUser.save(function (err) {
+	// 				if (err) {
+	// 					console.error("Error setting token and token expiration for forgot password for: "+adminUser.email, err);
+	// 					req.flash('errorMessage', 'We\'re sorry, an error occurred. Please try again.');
+	// 					res.redirect('/forgotPassword');
+	// 				} else {
+	// 					piMailer.sendForgotPasswordEmail(adminUser.firstName, adminUser.email, token, adminUser._id);
+	// 					console.info("Successfully sent forgot password email to: "+adminUser.email);
+	// 					res.render('public/forgotPasswordSuccess');
+	// 				}
+	// 			});
+	// 		} else {
+	// 			req.flash('errorMessage', 'We\'re sorry, we were unable to find an account with that email address. Please try again.');
+	// 			res.redirect('/forgotPassword');
+	// 		}
+	// 	});
+	// });
 
-	router.get('/resetPassword', function(req, res) {
-		if(req.query.a && req.query.z) {
-			AdminUser.findById(req.query.z, function (err, user) {
-				if(err) {
-					console.error("Error looking up resetPassword userId and token.",err);
-					res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-				}
-				if(user && user.token && bCrypt.compareSync(req.query.a, user.token)) {
-					if(moment(user.tokenExpires).diff(moment())>0) {
-						console.debug('Valid forgot password token.');
-						var payLoad = {
-							userId: user._id
-						};
-						res.render('public/resetPassword', payLoad);
-					} else {
-						console.debug('forgot password token expired');
-						res.render('public/resetPassword', {errorMessage: 'We\'re sorry, the forgot password link provided has expired. Please go back to the \'forgot password\' page and generate another email.'});
-					}
-				} else {
-					console.debug('Forgot password: No user found by token, %s', req.query.a);
-					res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-				}
-			});
-		} else {
-			console.debug('the token query string parameter was not provided.');
-			res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-		}
-	});
+	// router.get('/resetPassword', function(req, res) {
+	// 	if(req.query.a && req.query.z) {
+	// 		AdminUser.findById(req.query.z, function (err, user) {
+	// 			if(err) {
+	// 				console.error("Error looking up resetPassword userId and token.",err);
+	// 				res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+	// 			}
+	// 			if(user && user.token && bCrypt.compareSync(req.query.a, user.token)) {
+	// 				if(moment(user.tokenExpires).diff(moment())>0) {
+	// 					console.debug('Valid forgot password token.');
+	// 					var payLoad = {
+	// 						userId: user._id
+	// 					};
+	// 					res.render('public/resetPassword', payLoad);
+	// 				} else {
+	// 					console.debug('forgot password token expired');
+	// 					res.render('public/resetPassword', {errorMessage: 'We\'re sorry, the forgot password link provided has expired. Please go back to the \'forgot password\' page and generate another email.'});
+	// 				}
+	// 			} else {
+	// 				console.debug('Forgot password: No user found by token, %s', req.query.a);
+	// 				res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+	// 			}
+	// 		});
+	// 	} else {
+	// 		console.debug('the token query string parameter was not provided.');
+	// 		res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+	// 	}
+	// });
 
-	router.post('/resetPassword', function(req, res) {
-		AdminUser.findById(req.body.userId, function(err, user) {
-			if (err || !user) {
-				console.error("Error resetting password for userId: " + req.body.userId);
-				res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-			} else {
-				user.password = utils.createHash(req.body.password1);
-				user.tokenExpires = undefined;
-				user.token = undefined;
-				user.save(function (err, user) {
-					if (err) {
-						console.error("Error removing token and expiration from user: " + user.email);
-						res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-					} else {
-						console.info("Successfully reset password for: " + user.email);
-						req.flash('email', user.email);
-						res.redirect('/login');
-					}
-				});
-			}
-		});
-	});
+	// router.post('/resetPassword', function(req, res) {
+	// 	AdminUser.findById(req.body.userId, function(err, user) {
+	// 		if (err || !user) {
+	// 			console.error("Error resetting password for userId: " + req.body.userId);
+	// 			res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+	// 		} else {
+	// 			user.password = utils.createHash(req.body.password1);
+	// 			user.tokenExpires = undefined;
+	// 			user.token = undefined;
+	// 			user.save(function (err, user) {
+	// 				if (err) {
+	// 					console.error("Error removing token and expiration from user: " + user.email);
+	// 					res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+	// 				} else {
+	// 					console.info("Successfully reset password for: " + user.email);
+	// 					req.flash('email', user.email);
+	// 					res.redirect('/login');
+	// 				}
+	// 			});
+	// 		}
+	// 	});
+	// });
 
-	router.get('/register', function(req, res) {
-		if(req.query.a && req.query.z) {
-			AdminUser.findById(req.query.z, function (err, user) {
-				if(user && user.token && bCrypt.compareSync(req.query.a, user.token)) {
-					if(moment(user.tokenExpires).diff(moment())>0) {
-						console.debug('Valid registration token.');
-						var payLoad = {
-							userId: user._id,
-							firstName: user.firstName,
-							lastName: user.lastName,
-							email: user.email
-						};
-						res.render('public/register', payLoad);
-					} else {
-						console.debug('registration token expired');
-						res.render('public/register', {registerMessage: 'We\'re sorry, the registration link provided has expired. Please contact the system administrator for a new one.'});
-					}
-				} else {
-					console.debug('No user found by token, %s', req.query.a);
-					res.render('public/register', {registerMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-				}
-			});
-		} else {
-			console.debug('the token query string parameter was not provided.');
-			res.render('public/register', {registerMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-		}
-	});
+	// router.get('/register', function(req, res) {
+	// 	if(req.query.a && req.query.z) {
+	// 		AdminUser.findById(req.query.z, function (err, user) {
+	// 			if(user && user.token && bCrypt.compareSync(req.query.a, user.token)) {
+	// 				if(moment(user.tokenExpires).diff(moment())>0) {
+	// 					console.debug('Valid registration token.');
+	// 					var payLoad = {
+	// 						userId: user._id,
+	// 						firstName: user.firstName,
+	// 						lastName: user.lastName,
+	// 						email: user.email
+	// 					};
+	// 					res.render('public/register', payLoad);
+	// 				} else {
+	// 					console.debug('registration token expired');
+	// 					res.render('public/register', {registerMessage: 'We\'re sorry, the registration link provided has expired. Please contact the system administrator for a new one.'});
+	// 				}
+	// 			} else {
+	// 				console.debug('No user found by token, %s', req.query.a);
+	// 				res.render('public/register', {registerMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+	// 			}
+	// 		});
+	// 	} else {
+	// 		console.debug('the token query string parameter was not provided.');
+	// 		res.render('public/register', {registerMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+	// 	}
+	// });
 
-	router.post('/register', function(req, res) {
-		AdminUser.findById(req.body.userId, function(err, user) {
-			if (err || !user) {
-				res.render('public/register', {registerMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-			} else {
-				user.password = utils.createHash(req.body.password1);
-				user.tokenExpires = undefined;
-				user.token = undefined;
-				user.save(function (err, user) {
-					if (err) {
-						res.render('public/register', {registerMessage: 'We\'re sorry, an error occurred. Please contact the system administrator.'});
-					} else {
-						req.flash('email', user.email);
-						res.redirect('/login');
-					}
-				});
-			}
-		});
-	});
+	// router.post('/register', function(req, res) {
+	// 	AdminUser.findById(req.body.userId, function(err, user) {
+	// 		if (err || !user) {
+	// 			res.render('public/register', {registerMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+	// 		} else {
+	// 			user.password = utils.createHash(req.body.password1);
+	// 			user.tokenExpires = undefined;
+	// 			user.token = undefined;
+	// 			user.save(function (err, user) {
+	// 				if (err) {
+	// 					res.render('public/register', {registerMessage: 'We\'re sorry, an error occurred. Please contact the system administrator.'});
+	// 				} else {
+	// 					req.flash('email', user.email);
+	// 					res.redirect('/login');
+	// 				}
+	// 			});
+	// 		}
+	// 	});
+	// });
 
-	router.get('/packets/battery', function(req, res) {
-		var fileStats = fs.statSync(packetsPath+batteryPacket);
-		res.writeHeader(200,{
-			"Content-Length":fileStats.size,
-			"Content-Type":"application/octet-stream",
-			"Content-Disposition": "attachment; filename='"+batteryPacket+"'"
-		});
-		var fReadStream = fs.createReadStream(packetsPath+batteryPacket);
-		fReadStream.pipe(res);
-	});
+	// router.get('/packets/battery', function(req, res) {
+	// 	var fileStats = fs.statSync(packetsPath+batteryPacket);
+	// 	res.writeHeader(200,{
+	// 		"Content-Length":fileStats.size,
+	// 		"Content-Type":"application/octet-stream",
+	// 		"Content-Disposition": "attachment; filename='"+batteryPacket+"'"
+	// 	});
+	// 	var fReadStream = fs.createReadStream(packetsPath+batteryPacket);
+	// 	fReadStream.pipe(res);
+	// });
 
-	router.get('/packets/cymbal', function(req, res) {
-		var fileStats = fs.statSync(packetsPath+cymbalPacket);
-		res.writeHeader(200,{
-			"Content-Length":fileStats.size,
-			"Content-Type":"application/octet-stream",
-			"Content-Disposition": "attachment; filename='"+cymbalPacket+"'"
-		});
-		var fReadStream = fs.createReadStream(packetsPath+cymbalPacket);
-		fReadStream.pipe(res);
-	});
+	// router.get('/packets/cymbal', function(req, res) {
+	// 	var fileStats = fs.statSync(packetsPath+cymbalPacket);
+	// 	res.writeHeader(200,{
+	// 		"Content-Length":fileStats.size,
+	// 		"Content-Type":"application/octet-stream",
+	// 		"Content-Disposition": "attachment; filename='"+cymbalPacket+"'"
+	// 	});
+	// 	var fReadStream = fs.createReadStream(packetsPath+cymbalPacket);
+	// 	fReadStream.pipe(res);
+	// });
 
-	router.get('/packets/frontEnsemble', function(req, res) {
-		var fileStats = fs.statSync(packetsPath+frontEnsemblePacket);
-		res.writeHeader(200,{
-			"Content-Length":fileStats.size,
-			"Content-Type":"application/octet-stream",
-			"Content-Disposition": "attachment; filename='"+frontEnsemblePacket+"'"
-		});
-		var fReadStream = fs.createReadStream(packetsPath+frontEnsemblePacket);
-		fReadStream.pipe(res);
-	});
+	// router.get('/packets/frontEnsemble', function(req, res) {
+	// 	var fileStats = fs.statSync(packetsPath+frontEnsemblePacket);
+	// 	res.writeHeader(200,{
+	// 		"Content-Length":fileStats.size,
+	// 		"Content-Type":"application/octet-stream",
+	// 		"Content-Disposition": "attachment; filename='"+frontEnsemblePacket+"'"
+	// 	});
+	// 	var fReadStream = fs.createReadStream(packetsPath+frontEnsemblePacket);
+	// 	fReadStream.pipe(res);
+	// });
 
 	return router;
 };

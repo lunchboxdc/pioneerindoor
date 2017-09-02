@@ -12,11 +12,16 @@ var favicon = require('serve-favicon');
 
 
 function exitApp() {
-    ConnectionManager.close()
+    ConnectionManager.close();
     console.log('Pioneer Indoor app stopped');
     process.exit();
 }
 
+
+if (!process.env.PI_SESSION_SECRET) {
+    console.error('Missing PI_SESSION_SECRET environment variable');
+    exitApp();
+}
 
 
 ConnectionManager.open();
@@ -53,7 +58,7 @@ if (process.env.NODE_ENV !== 'prod') {
 app.use(expressSession({
     resave: false,
     saveUninitialized: false,
-    secret: 'secureTheBeatsIs'
+    secret: process.env.PI_SESSION_SECRET
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -79,15 +84,15 @@ app.use(flash());
 var publicRoutes = require('./routes/public')(passport);
 app.use('/', publicRoutes);
 
-var initPassport = require('./passport/init');
-initPassport(passport);
-var adminRoutes = require('./routes/admin');
-app.use('/admin', function(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/login');
-}, adminRoutes);
+// var initPassport = require('./passport/init');
+// initPassport(passport);
+// var adminRoutes = require('./routes/admin');
+// app.use('/admin', function(req, res, next) {
+//     if (req.isAuthenticated()) {
+//         return next();
+//     }
+//     res.redirect('/login');
+// }, adminRoutes);
 
 // var apiRoutes = require('./routes/api');
 // app.use('/api', apiRoutes);

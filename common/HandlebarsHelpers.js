@@ -1,4 +1,5 @@
 var ConnectionManager = require('../persistence/ConnectionManager');
+var AssetsVersion = require('../persistence/AssetsVersion');
 var moment = require('moment');
 
 module.exports = {
@@ -70,7 +71,7 @@ module.exports = {
         this._sections[name] = options.fn(this);
     },
     assetsVersion: function() {
-        return ConnectionManager.getAssetsVersion();
+        return AssetsVersion.getAssetsVersion();
     },
     isProduction: function(options) {
         if (process.env.NODE_ENV === 'prod') {

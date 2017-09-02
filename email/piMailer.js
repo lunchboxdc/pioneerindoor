@@ -2,9 +2,9 @@ var nodemailer = require('nodemailer');
 var ses = require('nodemailer-ses-transport');
 var handlebars  = require('handlebars');
 var fs = require('fs');
+var AdminUser = require('../persistence/models/adminUser');
 var appConfig = require('../common/appConfig');
 var helpers = require('../common/HandlebarsHelpers');
-var appConfig = require('../common/appConfig');
 
 for (var helper in helpers) {
     if (helpers.hasOwnProperty(helper)) {
@@ -151,7 +151,7 @@ module.exports = {
     },
 
     sendAdminRegistration: function(firstName, email, token, userId) {
-        if(adminRegistrationTemplate) {
+        if (adminRegistrationTemplate) {
             var emailHtml = adminRegistrationTemplate({host: appConfig.host, firstName: firstName, token: token, userId: userId});
             var options = {
                 from: 'admin@pioneerindoordrums.org',
@@ -160,8 +160,8 @@ module.exports = {
                 html: emailHtml
             };
 
-            this.sendMail(options, function(error, info){
-                if(error){
+            this.sendMail(options, function(error) {
+                if (error) {
                     console.error(error);
                 } else {
                     console.info('Registration email sent for: %s - %s', firstName, email);
@@ -173,7 +173,7 @@ module.exports = {
     },
 
     sendForgotPasswordEmail: function(firstName, email, token, userId) {
-        if(adminForgotPasswordTemplate) {
+        if (adminForgotPasswordTemplate) {
             var emailHtml = adminForgotPasswordTemplate({host: appConfig.host, firstName: firstName, token: token, userId: userId});
             var options = {
                 from: 'admin@pioneerindoordrums.org',
@@ -182,8 +182,8 @@ module.exports = {
                 html: emailHtml
             };
 
-            this.sendMail(options, function(error, info){
-                if(error){
+            this.sendMail(options, function(error) {
+                if (error) {
                     console.error(error);
                 } else {
                     console.info('Forgot password email sent for: %s - %s', firstName, email);
@@ -195,6 +195,24 @@ module.exports = {
     },
 
     sendMail: function(options, callback) {
-        transport.sendMail(options, callback);
+        if (process.env.NODE_ENV !== 'prod') {
+            AdminUser.find({
+                    email: options.to
+                })
+                .exec()
+                .then(function(users) {
+                    if (users[0] > 0 && users[0].email === options.to) {
+                        console.log('found user in admin user table, sending email to: ' + options.to);
+                        transport.sendMail(options, callback);
+                    } else {
+                        console.log('user not found in admin user table, not sending email to: ' + options.to);
+                    }
+                })
+                .catch(function(e) {
+                    console.log('Error sending email in dev environment.\n' + e.stack);
+                });
+        } else {
+            transport.sendMail(options, callback);
+        }
     }
 };

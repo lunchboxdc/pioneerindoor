@@ -13,9 +13,9 @@
       {{#if auditionMessage}}
         <div class="error">{{{auditionMessage}}}</div>
       {{/if}}
-      <h2>2016 - 2017 Pioneer Indoor Audition Registration</h2>
+      <h2>{{getYear auditionDate 0}} - {{getYear auditionDate 1}} Pioneer Indoor Audition Registration</h2>
       <h4>Coming Soon!</h4>
-      <h4>Auditions for the Pioneer Indoor 2017 season will be on <span class="bold">Saturday, November 5th, 2016</span>.</h4>
+      <h4>Auditions for the Pioneer Indoor {{getYear auditionDate 1}} season will be on <span class="bold">{{formatIsoDate auditionDate 'dddd, MMMM Do, YYYY'}}</span>.</h4>
     </div>
   </div>
 </div>

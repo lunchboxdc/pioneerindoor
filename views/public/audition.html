@@ -80,11 +80,11 @@
         </div>
         <div class="input-row">
           <label for="school">School Attending</label>
-          <input id="school" name="school" value="{{school}}" placeholder="School Attending"/>
+          <input id="school" name="school" value="{{school}}" placeholder="School Attending" maxlength="45" />
         </div>
         <div class="input-row">
           <label for="schoolYear">Current Year In School</label>
-          <input id="schoolYear" name="schoolYear" value="{{schoolYear}}" placeholder="Current Year In School"/>
+          <input id="schoolYear" name="schoolYear" value="{{schoolYear}}" placeholder="Current Year In School" maxlength="45" />
         </div>
       </section>
     </div>
@@ -127,8 +127,8 @@
         </div>
         <div class="input-row">
           <input type="hidden" id="pg1AddressSameAsAuditionee" name="pg1AddressSameAsAuditionee" />
-          <input id="pg1AddressSameAsAuditioneeCheckbox" type="checkbox" class="checkbox" {{preselectCheckboxFalse pg1AddressSameAsAuditionee}} onclick="pg1AddressToggle(this)" />
-          <label for="pg1AddressSameAsAuditioneeCheckbox" class="checkbox-label">Address same as your address</label>
+          <input id="pg1SameAddressCheckbox" type="checkbox" class="checkbox" {{preselectCheckboxFalse pg1AddressSameAsAuditionee}} onclick="pg1AddressToggle(this)" />
+          <label id="pg1SameAddressCheckboxLabel" for="pg1SameAddressCheckbox" class="checkbox-label">Address same as your address</label>
         </div>
       </section>
       <section class="two-column">
@@ -196,8 +196,8 @@
         </div>
         <div class="input-row">
           <input type="hidden" id="pg2AddressSameAsAuditionee" name="pg2AddressSameAsAuditionee" />
-          <input id="pg2AddressSameAsAuditioneeCheckbox" type="checkbox" class="checkbox" {{preselectCheckboxFalse pg2AddressSameAsAuditionee}} onclick="pg2AddressToggle(this)" />
-          <label for="pg2AddressSameAsAuditioneeCheckbox" class="checkbox-label">Address same as primary parent/guardian address</label>
+          <input id="pg2SameAddressCheckbox" type="checkbox" class="checkbox" {{preselectCheckboxFalse pg2AddressSameAsAuditionee}} onclick="pg2AddressToggle(this)" />
+          <label id="pg2SameAddressCheckboxLabel" for="pg2SameAddressCheckbox" class="checkbox-label">Address same as primary parent/guardian address</label>
         </div>
       </section>
       <section class="two-column">
@@ -248,7 +248,7 @@
 
         <div id="referralOtherRow" class="input-row hidden">
           <label for="referralOther">Other <span class="required-indicator">*</span></label>
-          <input id="referralOther" name="referralOther" value="{{referralOther}}" placeholder="Other" required />
+          <input id="referralOther" name="referralOther" value="{{referralOther}}" placeholder="Other" required maxlength="60"/>
         </div>
 
         <div class="input-row">

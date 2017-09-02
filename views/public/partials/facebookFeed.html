@@ -4,10 +4,13 @@
     		<a href="https://www.facebook.com/PioneerIndoor" target="_blank"><img src="/assets/image/fbPicture.jpg"></a>
     		<div>
     			<a href="https://www.facebook.com/PioneerIndoor" target="_blank">
-					{{fromName}}
+					{{from}}
     			</a>
     		</div>
     	</div>
+		{{#equals type 'status'}}
+			<p>{{{message}}}</p>
+		{{/equals}}
         {{#equals type 'photo'}}
 			<p>{{{message}}}</p>
 			<div class="fb-image">

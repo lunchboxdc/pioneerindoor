@@ -1,63 +1,45 @@
-var mongoose = require('mongoose');
-var Assets = require('./models/Assets');
-var mongooseConnected = false;
-var assetsVersion = 0;
+var mysql = require('promise-mysql');
+var fs = require('fs');
 
-mongoose.Promise = require('bluebird');
+var pool;
+
+var mysqlOptions = {
+    host: process.env.PI_DB_HOST,
+    user: process.env.PI_DB_USER,
+    password: process.env.PI_DB_PASS,
+    database: 'pi',
+    connectionLimit: 100,
+    dateStrings: ['DATE']
+};
+
+if (process.env.PI_DB_SSL_CA) {
+    mysqlOptions['ssl'] = {};
+	mysqlOptions.ssl['ca'] = fs.readFileSync(process.env.PI_DB_SSL_CA);
+}
 
 module.exports = {
-	open: function(callback) {
 
-
-		if(!mongooseConnected) {
-			try {
-				mongoose.connect('mongodb://localhost/pi');
-				var promise = mongoose.connection.on("open", function() {
-					console.info('Mongoose connection opened');
-					mongooseConnected = true;
-					Assets.findOne(function (err, assets) {
-						if (err) {
-							console.error('error getting assets version!' + err);
-						} else {
-							if (!assets) {
-								assets = new Assets();
-								assets.version = 0;
-							} else {
-								assets.version++;
-							}
-
-							assets.save(function (err, assets) {
-								if (err) {
-									console.log('error saving assets version: ' + err);
-								} else {
-									assetsVersion = assets.version;
-								}
-							});
-						}
-					});
-				});
-
-				mongoose.connection.on('error',function (e) {
-					console.error('failed to connect to database' + e);
-				});
-			} catch (e) {
-				console.error('failed to connect to database' + e);
-			}
-
-			return promise;
+	open: function() {
+		if (!pool) {
+            pool = mysql.createPool(mysqlOptions);
+            console.log('Mysql pool opened');
 		}
 	},
+
 	close: function() {
-		mongoose.connection.close(function () {
-			mongooseConnected = false;
-			console.info('Mongoose connection closed');
-			process.exit(0);
-		});
+		if (pool) {
+            pool.end();
+            console.log('Mysql pool closed');
+		}
 	},
-	isConnected: function() {
-		return mongooseConnected;
+
+	getConnection: function() {
+        return pool.getConnection().disposer(function(connection) {
+        	pool.releaseConnection(connection);
+        });
 	},
-	getAssetsVersion: function() {
-		return assetsVersion;
+
+	query: function(query, arguments) {
+		return pool.query(query, arguments);
 	}
 };

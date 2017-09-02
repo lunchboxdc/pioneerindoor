@@ -13,12 +13,14 @@ var favicon = require('serve-favicon');
 
 function exitApp() {
     ConnectionManager.close();
-    console.log('Pioneer Indoor app stopped');
+    console.info('Pioneer Indoor app stopped');
     process.exit();
 }
 
+console.info(process.env);
 
 if (!process.env.PI_SESSION_SECRET) {
+    console.info('PI_SESSION_SECRET -> ' + process.env.PI_SESSION_SECRET);
     console.error('Missing PI_SESSION_SECRET environment variable');
     exitApp();
 }

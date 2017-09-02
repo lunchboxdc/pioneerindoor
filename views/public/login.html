@@ -1,0 +1,32 @@
+{{#section 'head'}}
+	<meta property="og:title" content="Pioneer Indoor | Login"/>
+	<title>Pioneer Indoor | Login</title>
+	<link type="text/css" rel="stylesheet" href="/assets/css/admin-master.css?v={{assetsVersion}}"/>
+{{/section}}
+
+<div class="auth-container">
+	<img class="login-logo" src="/assets/image/logo-black.svg">
+
+	{{#if errorMessage}}
+		<div class="error-message">
+			<span>{{errorMessage}}</span>
+		</div>
+	{{/if}}
+
+	<form action="/login" method="post">
+		<div class="input-row">
+			<label for="email">Email</label>
+			<input type="text" id="email" class="credentials email" name="username" placeholder="Email" autofocus value="{{email}}"/>
+		</div>
+
+		<div class="input-row">
+			<label for="password">Password</label>
+			<input type="password" id="password" class="credentials pass" name="password" placeholder="Password"/>
+		</div>
+
+		<div class="input-row button-row">
+			<button type="submit" class="credentials button">Sign In</button>
+		</div>
+	</form>
+	<div class="forgot-password"><a href="/forgotPassword">Forgot Password</a></div>
+</div>

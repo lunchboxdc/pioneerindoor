@@ -1,15 +1,30 @@
-<header>
+<header class="site-center">
     <a class="logo" href="/">
-      <img src="image/logo-white.svg">
+      <img width="300" height="90" alt="pioneerindoordrums.org" src="/assets/image/logo-white.svg" >
     </a>
     <nav class="site-nav">
     	<ul>
-    		<li onclick="window.location.href='/audition';">AUDITION</li>
-    		<li>SCHEDULE</li>
-    		<li>STAFF</li>
-            <li>MEDIA</li>
-            <li>ABOUT</li>
-            <li>CONTACT</li>
+            <li {{#equals page 'audition'}} class="current-page"{{/equals}}>
+                <a id="menuAuditionLink" href="/audition">AUDITION</a>
+            </li>
+    		<li {{#equals page 'schedule'}} class="current-page"{{/equals}}>
+                <a id="menuScheduleLink" href="/schedule">SCHEDULE</a>
+            </li>
+            <li {{#equals page 'faq'}} class="current-page"{{/equals}}>
+                <a id="menuFaqLink" href="/faq">FAQ</a>
+            </li>
+    		<li {{#equals page 'staff'}} class="current-page"{{/equals}}>
+                <a id="menuStaffLink" href="/staff">STAFF</a>
+            </li>
+            <!--<li {{#equals page 'media'}} class="current-page"{{/equals}}>
+                <a id="menuMediaLink" href="/media">MEDIA</a>
+            </li>-->
+            <li {{#equals page 'about'}} class="current-page"{{/equals}}>
+                <a id="menuAboutLink" href="/about">ABOUT</a>
+            </li>
+            <li {{#equals page 'support'}} class="current-page"{{/equals}}>
+                <a id="menuSupportLink" href="/support">SUPPORT</a>
+            </li>
     	</ul>
     </nav>
 </header>

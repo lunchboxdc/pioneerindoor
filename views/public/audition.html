@@ -1,35 +1,372 @@
-{{#section 'head'}}  
-  <link type="text/css" rel="stylesheet" href="/css/master.css"/>
+{{#section 'head'}}
+  <meta property="og:title" content="Pioneer Indoor | Register to audition"/>
+  <title>Pioneer Indoor | Register to audition</title>
+  <link type="text/css" rel="stylesheet" href="/assets/css/master.css?v={{assetsVersion}}"/>
+
+  <script src="/assets/script/auditionees.js?v={{assetsVersion}}"></script>
 {{/section}}
 
-<div class="site-container">
-  {{> nav}}
+{{> nav}}
 
-  <h1>Audition</h1>
+<div class="site-body site-center">
 
-  <form class="audition-form" action="/audition" method="post">
-    <div class="basic-info">
-    	<input name="firstName" placeholder="First Name"/>
-    	<input name="lastName" placeholder="Last Name"/>
-    	<input name="address1" placeholder="Address1"/>	
-    	<input name="address2" placeholder="Address2"/>	
-    	<input name="city" placeholder="City"/>	
-    	<select name="state" placeholder="State">
-    		{{> stateOptions}}
-    	</select>
-    	<input name="zip" placeholder="Zipcode"/>
-      <input name="phone" placeholder="Phone"/>
-      <input name="email" placeholder="Email"/>      
-      <select name="instrument" placeholder="Instrument">
-        <option value="">Instrument</option>
-        <option value="snare">Snare</option>
-        <option value="tenors">Tenors</option>
-        <option value="bassDrum">Bass Drum</option>
-        <option value="pitKeyboard">Pit - Keyboard</option>
-        <option value="pitAux">Pit - Auxilliary</option>
-      </select>
-      <textarea name="comments" placeholder="Comments"></textarea>
-      <button type="submit">Sign Up</button>
-    </div>  
+  <div class="tile">
+    <div class="header">
+      {{#if auditionMessage}}
+        <div class="error">{{{auditionMessage}}}</div>
+      {{/if}}
+      <h2>{{getYear auditionDate 1}} Pioneer Indoor Audition Registration</h2>
+      <h4>Please complete the following form to submit your registration. Upon submission you will receive this year's music and warmup packet.</h4>
+      <h4>Audition fee: $50 due upon arrival at auditions on <span class="bold">{{formatIsoDate auditionDate 'dddd, MMMM Do, YYYY'}}</span>.</h4>
+    </div>
+  </div>
+
+  <form class="audition-form form" action="/audition" method="post">
+    <input type="hidden" id="season" name="season" />
+    <input type="hidden" id="auditionDate" value="{{auditionDate}}" />
+
+    <div class="tile">
+      <div class="header">
+        <h2>Your Information</h2>
+      </div>
+      <section class="two-column">
+        <div class="input-row">
+          <label for="firstName">First Name <span class="required-indicator">*</span></label>
+          <input id="firstName" name="firstName" value="{{firstName}}" placeholder="First Name" data-parsley-trigger="change" required />
+        </div>
+        <div class="input-row">
+          <label for="lastName">Last Name <span class="required-indicator">*</span></label>
+          <input id="lastName" name="lastName" value="{{lastName}}" placeholder="Last Name" required />
+        </div>
+        <div class="input-row">
+          <label for="dob">Birthdate (mm/dd/yyyy) <span class="required-indicator">*</span></label>
+          <input id="dob" name="dob" value="{{dob}}" placeholder="Birthdate" required data-parsley-minlength="10" data-parsley-minlength-message="Birthdate must match this format mm/dd/yyyy" data-parsley-minbirthdate data-parsley-maxbirthdate />
+        </div>
+        <div class="input-row">
+          <label for="phone">Phone <span class="required-indicator">*</span></label>
+          <input id="phone" name="phone" value="{{phone}}" placeholder="Phone" required data-parsley-minlength="12" data-parsley-minlength-message="Phone number must be 10 digits"/>
+        </div>
+        <div class="input-row">
+          <label for="email">Email <span class="required-indicator">*</span></label>
+          <input id="email" name="email" value="{{email}}" placeholder="Email" required data-parsley-type="email" />
+        </div>
+        <div class="input-row">
+          <label for="email2">Re-enter Email <span class="required-indicator">*</span></label>
+          <input id="email2" name="email2" value="{{email2}}" placeholder="Re-enter Email" required data-parsley-equalto="#email" data-parsley-type="email" data-parsley-equalto-message="Email addresses should match" />
+        </div>
+      </section>
+      <section class="two-column">
+        <div class="input-row">
+          <label for="address1">Address 1 <span class="required-indicator">*</span></label>
+          <input id="address1" name="address1" value="{{address1}}" placeholder="Address 1" required />
+        </div>
+        <div class="input-row">
+          <label for="address2">Address 2</label>
+          <input id="address2" name="address2" value="{{address2}}" placeholder="Address 2"/>
+        </div>
+        <div class="input-row">
+          <label for="city">City <span class="required-indicator">*</span></label>
+          <input id="city" name="city" value="{{city}}" placeholder="City" required />
+        </div>
+        <div class="input-row large">
+          <label for="state">State <span class="required-indicator">*</span></label>
+          <select id="state" name="state" required >
+            {{> stateOptions selectedState=state}}
+          </select>
+        </div>
+        <div class="input-row small">
+          <label for="zip">Zipcode <span class="required-indicator">*</span></label>
+          <input id="zip" name="zip" value="{{zip}}" placeholder="Zipcode" required data-parsley-minlength="5" data-parsley-minlength-message="Zipcode must be 5 digits"/>
+        </div>
+        <div class="input-row">
+          <label for="school">School Attending</label>
+          <input id="school" name="school" value="{{school}}" placeholder="School Attending" maxlength="45" />
+        </div>
+        <div class="input-row">
+          <label for="schoolYear">Current Year In School</label>
+          <input id="schoolYear" name="schoolYear" value="{{schoolYear}}" placeholder="Current Year In School" maxlength="45" />
+        </div>
+      </section>
+    </div>
+    <div class="tile">
+      <div class="header">
+        <h2>Parent/Guardian Information</h2>
+      </div>
+      <section class="two-column">
+        <div class="input-row">
+          <label for="pg1FirstName">First Name <span class="required-indicator">*</span></label>
+          <input id="pg1FirstName" name="pg1FirstName" value="{{pg1FirstName}}" placeholder="First Name" required />
+        </div>
+        <div class="input-row">
+          <label for="pg1LastName">Last Name <span class="required-indicator">*</span></label>
+          <input id="pg1LastName" name="pg1LastName" value="{{pg1LastName}}" placeholder="Last Name" required />
+        </div>
+        <div id="pg1AddressFields" class="hidden">
+          <div class="input-row">
+            <label for="pg1Address1">Address 1 <span class="required-indicator">*</span></label>
+            <input id="pg1Address1" name="pg1Address1" value="{{pg1Address1}}" placeholder="Address 1" required />
+          </div>
+          <div class="input-row">
+            <label for="pg1Address2">Address 2</label>
+            <input id="pg1Address2" name="pg1Address2" value="{{pg1Address2}}" placeholder="Address 2"/>
+          </div>
+          <div class="input-row">
+            <label for="pg1City">City <span class="required-indicator">*</span></label>
+            <input id="pg1City" name="pg1City" value="{{pg1City}}" placeholder="City" required />
+          </div>
+          <div class="input-row large">
+            <label for="pg1State">State <span class="required-indicator">*</span></label>
+            <select id="pg1State" name="pg1State" required >
+              {{> stateOptions selectedState=pg1State}}
+            </select>
+          </div>
+          <div class="input-row small">
+            <label for="pg1Zip">Zipcode <span class="required-indicator">*</span></label>
+            <input id="pg1Zip" name="pg1Zip" value="{{pg1Zip}}" placeholder="Zipcode" required />
+          </div>
+        </div>
+        <div class="input-row">
+          <input type="hidden" id="pg1AddressSameAsAuditionee" name="pg1AddressSameAsAuditionee" />
+          <input id="pg1SameAddressCheckbox" type="checkbox" class="checkbox" {{preselectCheckboxFalse pg1AddressSameAsAuditionee}} onclick="pg1AddressToggle(this)" />
+          <label id="pg1SameAddressCheckboxLabel" for="pg1SameAddressCheckbox" class="checkbox-label">Address same as your address</label>
+        </div>
+      </section>
+      <section class="two-column">
+        <div class="input-row">
+          <label for="pg1Phone1">Phone 1 <span class="required-indicator">*</span></label>
+          <input id="pg1Phone1" name="pg1Phone1" value="{{pg1Phone1}}" placeholder="Phone 1" required data-parsley-minlength="12" data-parsley-minlength-message="Phone number must be 10 digits" />
+        </div>
+        <div class="input-row">
+          <label for="pg1Phone2">Phone 2</label>
+          <input id="pg1Phone2" name="pg1Phone2" value="{{pg1Phone2}}" placeholder="Phone 2" data-parsley-minlength="12" data-parsley-minlength-message="Phone number must be 10 digits" />
+        </div>
+        <div class="input-row">
+          <label for="pg1Email">Email <span class="required-indicator">*</span></label>
+          <input id="pg1Email" name="pg1Email" value="{{pg1Email}}" placeholder="Email" required data-parsley-type="email" />
+        </div>
+        <div class="input-row">
+          <label for="pg1Email2">Re-enter Email <span class="required-indicator">*</span></label>
+          <input id="pg1Email2" name="pg1Email2" value="{{pg1Email2}}" placeholder="Re-enter Email" required data-parsley-equalto="#pg1Email" data-parsley-type="email" data-parsley-equalto-message="Email addresses should match" />
+        </div>
+      </section>
+      <div id="addPGbutton" class="pg-button add-pg" onclick="togglePG(true)">
+        <i class="fa fa-plus-square"></i>
+        <span>Add Parent/Guardian</span>
+      </div>
+    </div>
+
+
+    <div id="altPG" class="tile hidden">
+      <input type="hidden" id="hasPg2" name="hasPg2" value="{{hasPg2}}"/>
+      <div class="header">
+        <h2>Alternate Parent/Guardian Information</h2>
+      </div>
+      <section class="two-column">
+        <div class="input-row">
+          <label for="pg2FirstName">First Name <span class="required-indicator">*</span></label>
+          <input id="pg2FirstName" name="pg2FirstName" value="{{pg2FirstName}}" placeholder="First Name" required />
+        </div>
+        <div class="input-row">
+          <label for="pg2LastName">Last Name <span class="required-indicator">*</span></label>
+          <input id="pg2LastName" name="pg2LastName" value="{{pg2LastName}}" placeholder="Last Name" required />
+        </div>
+        <div id="pg2AddressFields" class="hidden">
+          <div class="input-row">
+            <label for="pg2Address1">Address 1 <span class="required-indicator">*</span></label>
+            <input id="pg2Address1" name="pg2Address1" value="{{pg2Address1}}" placeholder="Address 1" required />
+          </div>
+          <div class="input-row">
+            <label for="pg2Address2">Address 2</label>
+            <input id="pg2Address2" name="pg2Address2" value="{{pg2Address2}}" placeholder="Address 2"/>
+          </div>
+          <div class="input-row">
+            <label for="pg2City">City <span class="required-indicator">*</span></label>
+            <input id="pg2City" name="pg2City" value="{{pg2City}}" placeholder="City" required />
+          </div>
+          <div class="input-row large">
+            <label for="pg2State">State <span class="required-indicator">*</span></label>
+            <select id="pg2State" name="pg2State" required >
+              {{> stateOptions selectedState=pg2State}}
+            </select>
+          </div>
+          <div class="input-row small">
+            <label for="pg2Zip">Zipcode <span class="required-indicator">*</span></label>
+            <input id="pg2Zip" name="pg2Zip" value="{{pg2Zip}}" placeholder="Zipcode" required />
+          </div>
+        </div>
+        <div class="input-row">
+          <input type="hidden" id="pg2AddressSameAsAuditionee" name="pg2AddressSameAsAuditionee" />
+          <input id="pg2SameAddressCheckbox" type="checkbox" class="checkbox" {{preselectCheckboxFalse pg2AddressSameAsAuditionee}} onclick="pg2AddressToggle(this)" />
+          <label id="pg2SameAddressCheckboxLabel" for="pg2SameAddressCheckbox" class="checkbox-label">Address same as primary parent/guardian address</label>
+        </div>
+      </section>
+      <section class="two-column">
+        <div class="input-row">
+          <label for="pg2Phone1">Phone 1 <span class="required-indicator">*</span></label>
+          <input id="pg2Phone1" name="pg2Phone1" value="{{pg2Phone1}}" placeholder="Phone 1" required data-parsley-minlength="12" data-parsley-minlength-message="Phone number must be 10 digits" />
+        </div>
+        <div class="input-row">
+          <label for="pg2Phone2">Phone 2</label>
+          <input id="pg2Phone2" name="pg2Phone2" value="{{pg2Phone2}}" placeholder="Phone 2" data-parsley-minlength="12" data-parsley-minlength-message="Phone number must be 10 digits" />
+        </div>
+        <div class="input-row">
+          <label for="pg2Email">Email <span class="required-indicator">*</span></label>
+          <input id="pg2Email" name="pg2Email" value="{{pg2Email}}" placeholder="Email" required data-parsley-type="email" />
+        </div>
+        <div class="input-row">
+          <label for="pg2Email2">Re-enter Email <span class="required-indicator">*</span></label>
+          <input id="pg2Email2" name="pg2Email2" value="{{pg2Email2}}" placeholder="Re-enter Email" required data-parsley-equalto="#pg2Email" data-parsley-type="email" data-parsley-equalto-message="Email addresses should match" />
+        </div>
+      </section>
+      <div id="removePGbutton" class="pg-button remove-pg" onclick="togglePG(false)">
+        <i class="fa fa-minus-square"></i>
+        <span>Remove Parent/Guardian</span>
+      </div>
+    </div>
+
+
+
+    <div class="tile">
+      <div class="header">
+        <h2>Audition Information</h2>
+      </div>
+      <section class="two-column">
+        <div class="input-row">
+          <label for="referral">How did you hear about Pioneer Indoor? <span class="required-indicator">*</span></label>
+          <select id="referral" name="referral" onchange="referralChange(this)" required >
+            <option value="">Select One</option>
+            {{{selectOption referral 'I am a returning or former member'}}}
+            {{{selectOption referral 'A former member told me'}}}
+            {{{selectOption referral 'Friend/Family member'}}}
+            {{{selectOption referral 'Percussion Instructor'}}}
+            {{{selectOption referral 'Band Director'}}}
+            {{{selectOption referral 'I saw Pioneer Indoor perform at a WGI event'}}}
+            {{{selectOption referral 'I saw Pioneer Indoor perform at a Chicagoland event'}}}
+            {{{selectOption referral 'Other'}}}
+          </select>
+        </div>
+
+        <div id="referralOtherRow" class="input-row hidden">
+          <label for="referralOther">Other <span class="required-indicator">*</span></label>
+          <input id="referralOther" name="referralOther" value="{{referralOther}}" placeholder="Other" required maxlength="60"/>
+        </div>
+
+        <div class="input-row">
+          <label for="yearsDrumming">Number of years drumming <span class="required-indicator">*</span></label>
+          <select id="yearsDrumming" name="yearsDrumming" required >
+            <option value="">Select One</option>
+            {{{selectOption yearsDrumming 'Less than one year'}}}
+            {{{selectOption yearsDrumming '1'}}}
+            {{{selectOption yearsDrumming '2'}}}
+            {{{selectOption yearsDrumming '3'}}}
+            {{{selectOption yearsDrumming '4'}}}
+            {{{selectOption yearsDrumming '5'}}}
+            {{{selectOption yearsDrumming '6'}}}
+            {{{selectOption yearsDrumming '7'}}}
+            {{{selectOption yearsDrumming '8'}}}
+            {{{selectOption yearsDrumming '9'}}}
+            {{{selectOption yearsDrumming '10'}}}
+            {{{selectOption yearsDrumming '11'}}}
+            {{{selectOption yearsDrumming '12'}}}
+            {{{selectOption yearsDrumming '13'}}}
+            {{{selectOption yearsDrumming '14'}}}
+            {{{selectOption yearsDrumming '15'}}}
+            {{{selectOption yearsDrumming '16'}}}
+            {{{selectOption yearsDrumming '17'}}}
+            {{{selectOption yearsDrumming '18'}}}
+            {{{selectOption yearsDrumming '19'}}}
+            {{{selectOption yearsDrumming '20'}}}
+          </select>
+        </div>
+      </section>
+      <section class="two-column">
+        <!-- instrument 1 -->
+        <div class="input-row">
+          <label for="auditionInstrument1">My first choice is to audition for <span class="required-indicator">*</span></label>
+          <select id="auditionInstrument1" name="auditionInstrument1" required >
+            <option value="">Select One</option>
+            {{{selectOption auditionInstrument1 'Front ensemble (percussion)'}}}
+            {{{selectOption auditionInstrument1 'Front ensemble (electronics)'}}}
+            {{{selectOption auditionInstrument1 'Snare'}}}
+            {{{selectOption auditionInstrument1 'Tenor'}}}
+            {{{selectOption auditionInstrument1 'Bass'}}}
+            {{{selectOption auditionInstrument1 'Cymbals'}}}
+            {{{selectOption auditionInstrument1 'Character'}}}
+            {{{selectOption auditionInstrument1 'Electric Guitar'}}}
+            {{{selectOption auditionInstrument1 'Drumset'}}}
+          </select>
+        </div>
+        <!-- instrument 2 -->
+        <div id="auditionInstrumentRow2" class="input-row">
+          <label for="auditionInstrument2">My second choice is to audition for</label>
+          <select id="auditionInstrument2" name="auditionInstrument2">
+            <option value="">Select One</option>
+            {{{selectOption auditionInstrument2 'Front ensemble (percussion)'}}}
+            {{{selectOption auditionInstrument2 'Front ensemble (electronics)'}}}
+            {{{selectOption auditionInstrument2 'Snare'}}}
+            {{{selectOption auditionInstrument2 'Tenor'}}}
+            {{{selectOption auditionInstrument2 'Bass'}}}
+            {{{selectOption auditionInstrument2 'Cymbals'}}}
+            {{{selectOption auditionInstrument2 'Character'}}}
+            {{{selectOption auditionInstrument1 'Electric Guitar'}}}
+            {{{selectOption auditionInstrument1 'Drumset'}}}
+          </select>
+        </div>
+        <!-- instrument 3 -->
+        <div id="auditionInstrumentRow3" class="input-row">
+          <label for="auditionInstrument3">My third choice is to audition for</label>
+          <select id="auditionInstrument3" name="auditionInstrument3">
+            <option value="">Select One</option>
+            {{{selectOption auditionInstrument3 'Front ensemble (percussion)'}}}
+            {{{selectOption auditionInstrument3 'Front ensemble (electronics)'}}}
+            {{{selectOption auditionInstrument3 'Snare'}}}
+            {{{selectOption auditionInstrument3 'Tenor'}}}
+            {{{selectOption auditionInstrument3 'Bass'}}}
+            {{{selectOption auditionInstrument3 'Cymbals'}}}
+            {{{selectOption auditionInstrument3 'Character'}}}
+            {{{selectOption auditionInstrument1 'Electric Guitar'}}}
+            {{{selectOption auditionInstrument1 'Drumset'}}}
+          </select>
+        </div>
+      </section>
+
+      <section class="two-column">
+        <div class="input-row">
+          <label class="wrap" for="experience">Please list any DCI or WGI experience (organization, instrument, and years marched)</label>
+          <textarea id="experience" name="experience">{{experience}}</textarea>
+        </div>
+        <div class="input-row">
+          <label class="wrap" for="specialTalents">Do you have any special talents you would like to share with the Pioneer Indoor staff?</label>
+          <textarea id="specialTalents" name="specialTalents">{{specialTalents}}</textarea>
+        </div>
+      </section>
+
+
+      <section class="two-column">
+        <div class="input-row">
+          <label class="wrap" for="conflicts">Please list any known scheduling conflicts with the Pioneer Indoor rehearsal and <a href="/schedule" target="_blank">performance schedule</a></label>
+          <textarea id="conflicts" name="conflicts">{{conflicts}}</textarea>
+        </div>
+        <div class="input-row">
+          <label class="wrap" for="goal">What is your goal if you are chosen to be a part of the Pioneer Indoor Percussion Ensemble? <span class="required-indicator">*</span></label>
+          <textarea id="goal" name="goal" required >{{goal}}</textarea>
+        </div>
+      </section>
+    </div>
+
+    <div class="tile">
+      <section>
+        <div class="input-row">
+          <input id="agreement" type="checkbox" name="agreement" value="true" class="checkbox" {{preselectCheckbox agreement}} required data-parsley-errors-container="#agreementError" data-parsley-error-message="Please accept the agreement before submitting"/>
+          <label for="agreement" class="checkbox-label agreement">I understand that by submitting my audition registration for the {{getYear auditionDate 1}} season with the Pioneer Indoor Percussion Ensemble I am not guaranteed a spot in the ensemble and my $50 audition registration fee is non-refundable. <span class="required-indicator">*</span></label>
+          <div id="agreementError" class="checkbox-error"></div>
+        </div>
+        <div class="input-row submit-row">
+          <input id="submitButton" type="submit" class="button center" value="Submit"/>
+        </div>
+      </section>
+    </div>
   </form>
-</div>  
+</div>
+
+{{> footer}}

@@ -1,0 +1,38 @@
+{{#each facebookPosts}}
+    <div class="tile fb-post">
+    	<div class="fb-header">
+    		<a href="https://www.facebook.com/PioneerIndoor" target="_blank"><img src="/assets/image/fbPicture.jpg"></a>
+    		<div>
+    			<a href="https://www.facebook.com/PioneerIndoor" target="_blank">
+					{{from}}
+    			</a>
+    		</div>
+    	</div>
+		{{#equals type 'status'}}
+			<p>{{{message}}}</p>
+		{{/equals}}
+        {{#equals type 'photo'}}
+			<p>{{{message}}}</p>
+			<div class="fb-image">
+				<a href="{{link}}" target="_blank">
+					<img src="{{attachmentImage}}">
+				</a>
+			</div>
+		{{/equals}}
+		{{#equals type 'link'}}
+			<p>{{{message}}}</p>
+			<div class="fb-link">
+				<a href="{{link}}" target="_blank">
+					<span>{{name}}</span>
+					<span>{{description}}</span>
+					<span class="domain">{{caption}}</span>
+				</a>
+			</div>
+		{{/equals}}
+		{{#equals type 'video'}}
+			<p>{{{message}}}</p>
+			<a href="{{link}}" target="_blank"><div class="fb-video"><img src="{{attachmentImage}}"><i class="fa fa-play-circle video-play"></i></div></a>
+		{{/equals}}
+		<div class="fb-footer"><i class="fa fa-facebook-official"></i><span class="post-time">{{formatIsoDate created_time 'MMM D'}}</span></div>
+    </div>
+{{/each}}

@@ -1,0 +1,58 @@
+{{#section 'head'}}
+	<link type="text/css" rel="stylesheet" href="/assets/css/admin-master.css?v={{assetsVersion}}"/>
+	<script>
+		function deleteUser(email, id, e) {
+			e.stopPropagation();
+			if(confirm('Are you sure you want to delete user with email, \''+email+'\'?')) {
+				var form = $("<form></form>")
+						.attr({method: 'post', action: '/admin/users/delete', style: "display:none;"})
+						.append($('<input>').attr({type: 'hidden', name: 'userId', value: id}));
+				$('body').append(form);
+				form.submit();
+			}
+		}
+	</script>
+{{/section}}
+
+{{> leftRail}}
+
+<div class="admin-body">
+	<h1>Admin Users</h1>
+
+	{{#if successMessage}}
+		<div class="success-message">
+			<span>{{successMessage}}</span>
+		</div>
+	{{/if}}
+
+	{{#if errorMessage}}
+		<div class="error-message">
+			<span>{{errorMessage}}</span>
+		</div>
+	{{/if}}
+
+	<div class="action-container">
+		<button class="button new-user" onclick="window.location.href='/admin/users/new';">New User</button>
+	</div>
+
+	<table class="admin-table">
+		<thead>
+			<tr>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Email</th>
+				<th class="delete">Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each adminusers}}
+				<tr>
+					<td>{{firstName}}</td>
+					<td>{{lastName}}</td>
+					<td>{{email}}</td>
+					<td class="delete" onclick="deleteUser('{{email}}', '{{_id}}', event)"><i class="fa fa-times-circle"></i></td>
+				</tr>
+			{{/each}}
+		</tbody>
+	</table>
+</div>

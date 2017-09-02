@@ -1,0 +1,59 @@
+{{#section 'head'}}
+    <meta property="og:title" content="Pioneer Indoor | Pay"/>
+    <title>Pioneer Indoor | Pay</title>
+    <link type="text/css" rel="stylesheet" href="/assets/css/master.css?v={{assetsVersion}}"/>
+
+    <script>
+        $(function() {
+            window.Parsley.on('form:submit', function() {
+                $('.hidden, .hidden *').prop("disabled",true);
+                $('#submitButton').prop("disabled",true);
+                $('#submitButton').val("Please wait...");
+            });
+
+            $('#billingForm').parsley({
+                excluded: '.hidden *'
+            });
+        });
+    </script>
+{{/section}}
+
+{{> nav}}
+
+<div class="site-body site-center">
+
+    <div class="tile">
+        <div class="header">
+            {{#if payMessage}}
+            <div class="error">{{{payMessage}}}</div>
+            {{/if}}
+            <h2>Pay Tuition</h2>
+            <h4>Pay us some money please.</h4>
+        </div>
+    </div>
+
+    <form id="billingForm" class="audition-form form" action="/pay" method="post">
+
+        <div class="tile">
+            <div class="header">
+                <h2>Payment Information</h2>
+            </div>
+            <section>
+                <div class="input-row">
+                    <label for="amount">Amount <span class="required-indicator">*</span></label>
+                    <input id="amount" name="amount" value="{{amount}}" placeholder="Amount" data-parsley-required="true" />
+                </div>
+            </section>
+        </div>
+
+        <div class="tile">
+            <section>
+                <div class="input-row submit-row">
+                    <input id="submitButton" type="submit" class="button center" value="Submit"/>
+                </div>
+            </section>
+        </div>
+    </form>
+</div>
+
+{{> footer}}

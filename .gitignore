@@ -3,3 +3,8 @@ node_modules/
 npm-debug.log
 .idea/
 *.iml
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

@@ -2,12 +2,44 @@
 <html>
 <head lang="en">
     <meta charset="utf-8" />
-    <title>Pioneer Indoor</title>
+	<meta property="og:site_name" content="Pioneer Indoor Percussion Ensemble"/>
+	<meta property="og:description" content="Pioneer Indoor is a two-time silver medalist WGI Independent Open indoor percussion ensemble."/>
+	<meta property="og:image" content="https://www.pioneerindoordrums.org/assets/image/logo-white.jpg">
+	<link rel="image_src" href="https://www.pioneerindoordrums.org/assets/image/logo-white.jpg" />
 
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+	<script src="/assets/script/lib/jquery-1.11.3.min.js"></script>
+	<script src="/assets/script/lib/jquery.mask-1.13.4.min.js"></script>
+	<script src="/assets/script/lib/parsley-2.4.4.min.js"></script>
+	<script src="/assets/script/lib/handlebars-3.0.3.min.js"></script>
+	<script src="/assets/script/lib/jquery.flexslider-2.5.0.min.js"></script>
+	<script src="/assets/script/lib/jquery.bpopup-0.11.0.min.js"></script>
+	<script src="/assets/script/lib/moment-2.14.1.min.js"></script>
 
-	<link type="text/css" rel="stylesheet" href="/css/normalize.css"/>
+	<link type="text/css" rel="stylesheet" href="/assets/css/normalize.css?v={{assetsVersion}}"/>
+	<link type="text/css" rel="stylesheet" href="/assets/css/common.css?v={{assetsVersion}}"/>
+	<link type="text/css" rel="stylesheet" href="/assets/css/flexslider.css?v={{assetsVersion}}"/>
+	<link type="text/css" rel="stylesheet" href="/assets/css/font-awesome.min.css?v={{assetsVersion}}">
+
+	<link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+	<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+	<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+	<link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+	<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+	<link rel="manifest" href="/manifest.json">
+	<meta name="apple-mobile-web-app-title" content="Pioneer Indoor">
+	<meta name="application-name" content="Pioneer Indoor">
+	<meta name="msapplication-TileColor" content="#00a300">
+	<meta name="msapplication-TileImage" content="/mstile-144x144.png">
+	<meta name="theme-color" content="#ffffff">
 
 	{{{_sections.head}}}
 </head>
@@ -15,5 +47,17 @@
 
     {{{body}}}
 
+    {{#isProduction}}
+	    <script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		  ga('create', 'UA-67866912-1', 'auto');
+		  ga('send', 'pageview');
+
+		</script>
+	{{/isProduction}}
 </body>
 </html>

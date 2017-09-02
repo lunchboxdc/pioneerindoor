@@ -1,0 +1,23 @@
+{{#section 'head'}}
+    <meta property="og:title" content="Pioneer Indoor | Pay"/>
+    <title>Pioneer Indoor | Pay</title>
+    <link type="text/css" rel="stylesheet" href="/assets/css/master.css?v={{assetsVersion}}"/>
+{{/section}}
+
+{{> nav}}
+
+<div class="site-body site-center">
+
+    <div class="tile">
+        <div class="header">
+            {{#if payMessage}}
+            <div class="error">{{{payMessage}}}</div>
+            {{/if}}
+            <h2>Thank you!</h2>
+            <h4>We've successfully received your payment.</h4>
+        </div>
+    </div>
+
+</div>
+
+{{> footer}}

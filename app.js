@@ -50,10 +50,8 @@ if (process.env.NODE_ENV !== 'prod') {
     //require('./common/script/runFacebookService');
     //not behind nginx locally so lets serve out assets through node
     app.use('/assets', express.static('assets'));
-} else {
-    //run scheduler in prod
-    require('./common/scheduler');
 }
+
 
 app.use(expressSession({
     resave: false,

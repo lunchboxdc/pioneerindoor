@@ -19,10 +19,15 @@ module.exports = function(passport) {
 
 
                     staffUser = result[0];
+                    
 
                     if (!staffUser) {
                         console.info('could not find staff user');
+                    } else {
+                        console.info('staff user was found');
                     }
+
+
                     if (!staffUser || !isValidPassword(password, staffUser)) {
                         console.info('either staff user not found or password is invalid');
 

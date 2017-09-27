@@ -27,8 +27,29 @@ if (!process.env.PI_SESSION_SECRET) {
 ConnectionManager.open();
 
 
+var expressSessionConfig = {
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.PI_SESSION_SECRET
+};
+
+if (process.env.NODE_ENV === 'prod') {
+    var redis = require("redis");
+    var redisStore = require('connect-redis')(expressSession);
+    var client = redis.createClient();
+
+    expressSessionConfig['store'] = new redisStore({ host: 'localhost', port: 6379, client: client, ttl: 260});
+}
+
+
 var app = express();
 app.set('view engine', 'html');
+
+app.use(expressSession());
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 var hbs = exphbs.create({
 	extname: '.html',
@@ -52,16 +73,6 @@ if (process.env.NODE_ENV !== 'prod') {
     //not behind nginx locally so lets serve out assets through node
     app.use('/assets', express.static('assets'));
 }
-
-
-app.use(expressSession({
-    resave: false,
-    saveUninitialized: false,
-    secret: process.env.PI_SESSION_SECRET
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 
 //temporary middleware to parse raw body on post requests

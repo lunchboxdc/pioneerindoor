@@ -18,8 +18,8 @@ var cymbalPacket = 'CymbalPacket.pdf';
 var frontEnsemblePacket = 'FrontEnsemblePacket.pdf';
 var auditionDate = appConfig.auditionDate;
 
-var auditionActive = false;
-var scheduleActive = false;
+var auditionActive = true;
+var scheduleActive = true;
 
 function returnAuditionSoonPage(req, res) {
     var payLoad = _.merge({

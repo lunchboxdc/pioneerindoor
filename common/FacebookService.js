@@ -1,11 +1,8 @@
-var mongoose = require('mongoose');
 var request = require('request-promise');
 var Promise = require('bluebird');
 var fs = require('fs');
 var moment = require('moment');
 var PiDAO = require('../persistence/PiDAO');
-
-mongoose.Promise = Promise;
 
 module.exports = {
     getPosts: function() {

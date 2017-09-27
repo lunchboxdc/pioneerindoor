@@ -7,11 +7,13 @@ module.exports = function(passport) {
             passReqToCallback : true
         },
         function(req, email, password, done) {
+	        console.info('begin login');
             email = email.toLowerCase();
             var staffUser;
 
             PiDAO.getStaffUserByEmail(email)
                 .then(function(result) {
+                    console.log('finished getstaffuserbyemail query');
                     staffUser = result[0];
                     if (!staffUser || !isValidPassword(password, staffUser)) {
                         done(null, false, req.flash('errorMessage', 'Incorrect email or password'));

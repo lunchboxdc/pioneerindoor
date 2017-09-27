@@ -26,6 +26,7 @@ if (!process.env.PI_SESSION_SECRET) {
 
 ConnectionManager.open();
 
+
 var app = express();
 app.set('view engine', 'html');
 

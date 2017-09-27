@@ -3,7 +3,7 @@
     "name": "PioneerIndoor-App",
     "script": "./app.js",
     "exec-mode": "cluster",
-    "instances": 4
+    "instances": 1
   },{
     "name": "PioneerIndoor-Scheduler",
     "script": "./common/scheduler.js",

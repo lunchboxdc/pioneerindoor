@@ -4,13 +4,15 @@ var fs = require('fs');
 var moment = require('moment');
 var PiDAO = require('../persistence/PiDAO');
 
+const facebookApiUrl = 'https://graph.facebook.com/v2.10/PioneerIndoor';
+
 module.exports = {
     getPosts: function() {
         var fbPosts;
         var mysqlPosts;
 
         return request({
-                url: 'https://graph.facebook.com/v2.10/PioneerIndoor/posts',
+                url: facebookApiUrl + '/posts',
                 qs: {limit: 10, fields: 'created_time,from,name,story,message,description,caption,picture,link,type,status_type,attachments,object_id'},
                 method: 'get',
                 headers: {
@@ -151,7 +153,7 @@ module.exports = {
             console.error("FB_TOKEN environment variable missing!");
         } else {
             console.debug('FacebookService: getting profile picture.');
-            var uri = 'https://graph.facebook.com/v2.3/PioneerIndoor/picture';
+            var uri = facebookApiUrl + '/picture';
             request.head(uri, function() {
                 request(uri).pipe(fs.createWriteStream(__dirname+'/../assets/image/fbPicture.jpg')).on('close', function() {
                     console.debug('FacebookService: updated profile picture');

@@ -18,14 +18,15 @@ module.exports = function(passport) {
                     } else {
                         staffUser.resetToken = undefined;
                         staffUser.resetTokenExpiration = undefined;
-                        return PiDAO.updateStaffUser(staffUser);
+                        return PiDAO.updateStaffUser(staffUser)
+                            .then(function() {
+                                done(null, staffUser);
+                            });
                     }
                 })
-                .then(function() {
-                    done(null, staffUser);
-                })
                 .catch(function(e) {
-                    done(e);
+                    console.error('Error on login.', e);
+                    done(null, false, req.flash('errorMessage', 'An unexpected error has occurred. Please contact the system admin.'));
                 });
         })
     );

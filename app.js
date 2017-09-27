@@ -45,7 +45,7 @@ if (process.env.NODE_ENV === 'prod') {
 var app = express();
 app.set('view engine', 'html');
 
-app.use(expressSession());
+app.use(expressSession(expressSessionConfig));
 
 app.use(passport.initialize());
 app.use(passport.session());

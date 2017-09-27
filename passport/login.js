@@ -7,39 +7,20 @@ module.exports = function(passport) {
             passReqToCallback : true
         },
         function(req, email, password, done) {
-	        console.info('begin login');
-
-
             email = email.toLowerCase();
             var staffUser;
 
             PiDAO.getStaffUserByEmail(email)
                 .then(function(result) {
-                    console.info('finished getstaffuserbyemail query');
-
-
                     staffUser = result[0];
-                    
-
-                    if (!staffUser) {
-                        console.info('could not find staff user');
-                    } else {
-                        console.info('staff user was found');
-                    }
-
 
                     if (!staffUser || !isValidPassword(password, staffUser)) {
-                        console.info('either staff user not found or password is invalid');
-
                         done(null, false, req.flash('errorMessage', 'Incorrect email or password'));
                     } else {
-                        console.info('found staff user and password is valid');
-
                         staffUser.resetToken = undefined;
                         staffUser.resetTokenExpiration = undefined;
                         return PiDAO.updateStaffUser(staffUser)
                             .then(function() {
-                                console.info('successfully updated staff user');
                                 done(null, staffUser);
                             });
                     }

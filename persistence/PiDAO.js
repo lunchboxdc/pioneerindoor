@@ -21,25 +21,29 @@ module.exports = {
         });
     },
 
-    getAuditionees: function() {
+    getAuditioneesForSeason: function(season) {
         return Promise.using(ConnectionManager.getConnection(), function(connection) {
             return connection.query(
                 'select ' +
+                    's.id as studentId,' +
                     's.firstName,' +
                     's.lastName,' +
                     's.email,' +
                     's.birthDate,' +
                     's.phone,' +
+                    's.addressId,' +
                     's.guardianFirstName,' +
                     's.guardianLastName,' +
                     's.guardianEmail,' +
                     's.guardianPhone,' +
                     's.guardianPhone2,' +
+                    's.guardianAddressId,' +
                     's.guardian2FirstName,' +
                     's.guardian2LastName,' +
                     's.guardian2Email,' +
                     's.guardian2Phone,' +
                     's.guardian2Phone2,' +
+                    's.guardian2AddressId,' +
                     's.createDate as studentCreateDate,' +
                     'a.address1,' +
                     'a.address2,' +
@@ -47,18 +51,18 @@ module.exports = {
                     'a.state,' +
                     'a.zip,' +
                     'a.createDate as addressCreateDate,' +
-                    'ga.address1 as gaAddress1,' +
-                    'ga.address2 as gaAddress2,' +
-                    'ga.city as gaCity,' +
-                    'ga.state as gaState,' +
-                    'ga.zip as gaZip,' +
-                    'ga.createDate as gaCreateDate,' +
-                    'ga2.address1 as ga2Address1,' +
-                    'ga2.address2 as ga2Address2,' +
-                    'ga2.city as ga2City,' +
-                    'ga2.state as ga2State,' +
-                    'ga2.zip as ga2Zip,' +
-                    'ga2.createDate as ga2CreateDate,' +
+                    'ga.address1 as guardianAddress1,' +
+                    'ga.address2 as guardianAddress2,' +
+                    'ga.city as guardianCity,' +
+                    'ga.state as guardianState,' +
+                    'ga.zip as guardianZip,' +
+                    'ga.createDate as guardianCreateDate,' +
+                    'ga2.address1 as guardian2Address1,' +
+                    'ga2.address2 as guardian2Address2,' +
+                    'ga2.city as guardian2City,' +
+                    'ga2.state as guardian2State,' +
+                    'ga2.zip as guardian2Zip,' +
+                    'ga2.createDate as guardian2CreateDate,' +
                     'ai.school,' +
                     'ai.schoolYear,' +
                     'ai.instrument1,' +
@@ -74,12 +78,27 @@ module.exports = {
                     'ai.season,' +
                     'ai.createDate as auditionInfoCreateDate ' +
                 'from student s ' +
-                'left join address a on a.id = s.addressId ' +
-                'left join address ga on ga.id = s.guardianAddressId ' +
+                'join address a on a.id = s.addressId ' +
+                'join address ga on ga.id = s.guardianAddressId ' +
                 'left join address ga2 on ga2.id = s.guardian2AddressId ' +
-                'left join auditioninfo ai on ai.studentId = s.id ' +
-                'order by ai.createDate asc'
+                'join auditioninfo ai on ai.studentId = s.id ' +
+                'where ai.season = ? ' +
+                'and s.deleted <> 1 ' +
+                'order by ai.createDate asc',
+                season
             );
+        });
+    },
+
+    getStudentById: function(studentId) {
+        return Promise.using(ConnectionManager.getConnection(), function(connection) {
+            return connection.query('select * from student where id = ?', studentId);
+        });
+    },
+
+    updateStudent: function(student) {
+        return Promise.using(ConnectionManager.getConnection(), function(connection) {
+            return connection.query('update student set ? where id = ?', [student, student.id]);
         });
     },
 
@@ -95,9 +114,21 @@ module.exports = {
         });
     },
 
-    insertStaff: function(staff) {
+    getStaffUserByEmail: function(email) {
         return Promise.using(ConnectionManager.getConnection(), function(connection) {
-            return connection.query('insert into staff set ?', staff);
+            return connection.query('select * from staff where email = ?', email);
+        });
+    },
+
+    insertStaffUser: function(staffUser) {
+        return Promise.using(ConnectionManager.getConnection(), function(connection) {
+            return connection.query('insert into staff set ?', staffUser);
+        });
+    },
+
+    updateStaffUser: function(staffUser) {
+        return Promise.using(ConnectionManager.getConnection(), function(connection) {
+            return connection.query('update staff set ? where id = ?', [staffUser, staffUser.id]);
         });
     },
 

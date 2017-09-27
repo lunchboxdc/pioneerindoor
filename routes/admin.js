@@ -26,127 +26,112 @@ module.exports = (function() {
 			assetsVersion: AssetsVersion.getAssetsVersion()
 		}, req.flash());
 
-		Auditionee.aggregate(
-			[
-				{'$group': {_id: '$season'}},
-				{'$sort': {_id: -1}}
-			])
-			.exec()
-			.then(function(seasonsResult) {
-				var seasons = [];
 
-				for (var i = 0; i < seasonsResult.length; i++) {
-					seasons.push(seasonsResult[i]._id);
-				}
+		PiDAO.getAuditionSeasons()
+			.then(function(result) {
+                var seasons = [];
 
-				var selectedSeason = seasons[0];
-				if (req.body.season) {
-					selectedSeason = parseInt(req.body.season);
-				}
+                for (var i = 0; i < result.length; i++) {
+                    seasons.push(result[i].season);
+                }
 
-				payLoad.seasons = seasons;
-				payLoad.selectedSeason = selectedSeason;
+                var selectedSeason = seasons[0];
+                if (req.body.season) {
+                    selectedSeason = parseInt(req.body.season);
+                }
 
-				return Auditionee.find({season: selectedSeason, deleted: false})
-					.sort({submitDate:'asc'})
-					.exec();
+                payLoad.seasons = seasons;
+                payLoad.selectedSeason = selectedSeason;
+
+                return PiDAO.getAuditioneesForSeason(selectedSeason);
 			})
-			.then(function(auditionees) {
-				payLoad.auditionees = auditionees;
-				payLoad.auditioneesString = JSON.stringify(auditionees);
-				var total = 0;
+			.then(function(result) {
+				var auditionees = result;
+                payLoad.auditionees = auditionees;
+                payLoad.auditioneesString = JSON.stringify(auditionees);
+                var total = 0;
 
-				var stats = {
-					firstChoice: {
-						'Front ensemble (percussion)': 0,
-						'Front ensemble (electronics)': 0,
-						'Snare': 0,
-						'Tenor': 0,
-						'Bass': 0,
-						'Cymbals': 0,
-						'Character': 0,
-						'Electric Guitar': 0,
-						'Drumset': 0
-					},
-					secondChoice: {
-						'Front ensemble (percussion)': 0,
-						'Front ensemble (electronics)': 0,
-						'Snare': 0,
-						'Tenor': 0,
-						'Bass': 0,
-						'Cymbals': 0,
-						'Character': 0,
-						'Electric Guitar': 0,
-						'Drumset': 0
-					},
-					thirdChoice: {
-						'Front ensemble (percussion)': 0,
-						'Front ensemble (electronics)': 0,
-						'Snare': 0,
-						'Tenor': 0,
-						'Bass': 0,
-						'Cymbals': 0,
-						'Character': 0,
-						'Electric Guitar': 0,
-						'Drumset': 0
-					}
-				};
+                var stats = {
+                    firstChoice: {
+                        'Front ensemble (percussion)': 0,
+                        'Front ensemble (electronics)': 0,
+                        'Snare': 0,
+                        'Tenor': 0,
+                        'Bass': 0,
+                        'Cymbals': 0,
+                        'Character': 0,
+                        'Electric Guitar': 0,
+                        'Drumset': 0
+                    },
+                    secondChoice: {
+                        'Front ensemble (percussion)': 0,
+                        'Front ensemble (electronics)': 0,
+                        'Snare': 0,
+                        'Tenor': 0,
+                        'Bass': 0,
+                        'Cymbals': 0,
+                        'Character': 0,
+                        'Electric Guitar': 0,
+                        'Drumset': 0
+                    },
+                    thirdChoice: {
+                        'Front ensemble (percussion)': 0,
+                        'Front ensemble (electronics)': 0,
+                        'Snare': 0,
+                        'Tenor': 0,
+                        'Bass': 0,
+                        'Cymbals': 0,
+                        'Character': 0,
+                        'Electric Guitar': 0,
+                        'Drumset': 0
+                    }
+                };
 
-				for (var i = 0; i < auditionees.length; i++) {
-					total++;
+                for (var i = 0; i < auditionees.length; i++) {
+                    total++;
 
-					var firstChoice = auditionees[i].auditionInstrument1;
-					if (firstChoice.length > 0) {
-						stats.firstChoice[firstChoice]++;
-					}
-					var secondChoice = auditionees[i].auditionInstrument2;
-					if (secondChoice.length > 0) {
-						stats.secondChoice[secondChoice]++;
-					}
-					var thirdChoice = auditionees[i].auditionInstrument3;
-					if (thirdChoice.length > 0) {
-						stats.thirdChoice[thirdChoice]++;
-					}
-				}
+                    var firstChoice = auditionees[i].instrument1;
+                    if (firstChoice.length > 0) {
+                        stats.firstChoice[firstChoice]++;
+                    }
+                    var secondChoice = auditionees[i].instrument2;
+                    if (secondChoice && secondChoice.length > 0) {
+                        stats.secondChoice[secondChoice]++;
+                    }
+                    var thirdChoice = auditionees[i].instrument3;
+                    if (thirdChoice && thirdChoice.length > 0) {
+                        stats.thirdChoice[thirdChoice]++;
+                    }
+                }
 
-				for (var choice in stats) {
-					if (!stats.hasOwnProperty(choice)) continue;
+                for (var choice in stats) {
+                    if (!stats.hasOwnProperty(choice)) continue;
 
-					var instruments = stats[choice];
-					for (var instrument in instruments) {
-						if (!instruments.hasOwnProperty(instrument)) continue;
+                    var instruments = stats[choice];
+                    for (var instrument in instruments) {
+                        if (!instruments.hasOwnProperty(instrument)) continue;
 
-						var count = instruments[instrument];
-						if (count < 1) {
-							delete instruments[instrument];
-						}
-					}
+                        var count = instruments[instrument];
+                        if (count < 1) {
+                            delete instruments[instrument];
+                        }
+                    }
 
-					if (_.isEmpty(instruments)) {
-						delete stats[choice];
-					}
-				}
+                    if (_.isEmpty(instruments)) {
+                        delete stats[choice];
+                    }
+                }
 
-				payLoad.stats = stats;
-				payLoad.total = total;
-
-				return PiDAO.getStudents();
+                payLoad.stats = stats;
+                payLoad.total = total;
 			})
-			.then(function(rows) {
-				console.log('Rows: ' + rows);
-
-				return PiDAO.getAuditionSeasons();
-			})
-			.then(function(seasons) {
-				console.log(seasons);
-			})
-			.catch(function(err) {
-				console.error('error getting auditionees: ' + err + err.stack);
-				payLoad.errorMessage = 'Error getting auditionees from database!';
-			})
-			.finally(function() {
-				res.render('admin/auditionees', payLoad);
-			});
+            .catch(function(err) {
+                console.error('error getting auditionees: ' + err + err.stack);
+                payLoad.errorMessage = 'Error getting auditionees from database!';
+            })
+            .finally(function() {
+                res.render('admin/auditionees', payLoad);
+            });
 	};
 
 	router.get('/auditionees', auditioneesRoute);
@@ -293,24 +278,26 @@ module.exports = (function() {
 	});
 
 	router.post('/auditionees/delete', function(req, res) {
-		Auditionee.findById(req.body.auditioneeId, function(err, auditionee) {
-				if (err) {
-					console.error('error deleting auditionee: ' + auditionee);
-					req.flash('errorMessage', 'error deleting auditionee!');
-					res.redirect('/admin/auditionees');
+		PiDAO.getStudentById(req.body.studentId)
+			.then(function(result) {
+				if (result[0]) {
+					var student = result[0];
+					student.deleted = true;
+					return PiDAO.updateStudent(student);
 				} else {
-					auditionee.deleted = true;
-					auditionee.save(function(err) {
-						if (err) {
-							console.error('error deleting auditionee: ' + auditionee);
-							req.flash('errorMessage', 'error deleting auditionee!');
-						} else {
-							req.flash('successMessage', 'Successfully deleted auditionee');
-						}
-						res.redirect('/admin/auditionees');
-					});
+                    throw new Error('Student not found in database.');
 				}
-		});
+			})
+			.then(function() {
+                req.flash('successMessage', 'Successfully deleted auditionee');
+			})
+			.catch(function(e) {
+                console.error('error deleting student by id: ' + req.body.studentId, e);
+                req.flash('errorMessage', 'error deleting auditionee!');
+			})
+			.then(function() {
+                res.redirect('/admin/auditionees');
+			});
 	});
 
 	router.get('/signout', function(req, res) {
@@ -319,15 +306,20 @@ module.exports = (function() {
 	});
 
 	router.get('/users', function(req, res) {
-		AdminUser.find(function(err, adminusers) {
-			if (err) {
-				console.error(err);
-			}
-			var payLoad = _.merge({
-				adminusers: adminusers
-			}, req.flash());
-			res.render('admin/users', payLoad);
-		});
+		var payLoad;
+		PiDAO.getAllStaffUsers()
+			.then(function(result) {
+                payLoad = _.merge({
+                    staffUsers: result
+                }, req.flash());
+			})
+			.catch(function(e) {
+                console.error(e);
+                req.flash('errorMessage', 'Error getting staff users');
+			})
+			.then(function() {
+                res.render('admin/users', payLoad);
+			});
 	});
 
 	router.get('/users/new', function(req, res) {

@@ -17,8 +17,6 @@ function exitApp() {
     process.exit();
 }
 
-console.info(process.env);
-
 if (!process.env.PI_SESSION_SECRET) {
     console.info('PI_SESSION_SECRET -> ' + process.env.PI_SESSION_SECRET);
     console.error('Missing PI_SESSION_SECRET environment variable');
@@ -86,15 +84,15 @@ app.use(flash());
 var publicRoutes = require('./routes/public')(passport);
 app.use('/', publicRoutes);
 
-// var initPassport = require('./passport/init');
-// initPassport(passport);
-// var adminRoutes = require('./routes/admin');
-// app.use('/admin', function(req, res, next) {
-//     if (req.isAuthenticated()) {
-//         return next();
-//     }
-//     res.redirect('/login');
-// }, adminRoutes);
+var initPassport = require('./passport/init');
+initPassport(passport);
+var adminRoutes = require('./routes/admin');
+app.use('/admin', function(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/login');
+}, adminRoutes);
 
 // var apiRoutes = require('./routes/api');
 // app.use('/api', apiRoutes);

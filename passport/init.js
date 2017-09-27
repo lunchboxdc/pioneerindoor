@@ -1,18 +1,22 @@
 var login = require('./login');
-var AdminUser = require('../persistence/models/adminUser');
+var PiDAO = require('../persistence/PiDAO');
 
-module.exports = function(passport){
+module.exports = function(passport) {
 
 	// Passport needs to be able to serialize and deserialize users to support persistent login sessions
     passport.serializeUser(function(user, done) {
-        done(null, user._id);
+        done(null, user.id);
     });
 
     passport.deserializeUser(function(id, done) {
-        AdminUser.findById(id, function(err, user) {
-            done(err, user);
-        });
+        PiDAO.getStaffUserById(id)
+            .then(function(staffUser) {
+                done(null, staffUser[0]);
+            })
+            .catch(function(e) {
+                done(e);
+            });
     });
 
     login(passport);
-}
+};

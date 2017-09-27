@@ -83,15 +83,15 @@
 			</thead>
 			<tbody>
 				{{#each auditionees}}
-					<tr onclick="showModal('{{_id}}')">
+					<tr onclick="showModal('{{studentId}}')">
 						<td>{{firstName}} {{lastName}}</td>
-						<td>{{dob}}</td>
+						<td>{{birthDate}}</td>
 						<td>{{phone}}</td>
 						<td>{{email}}</td>
-						<td>{{auditionInstrument1}}</td>
-						<td>{{auditionInstrument2}}</td>
-						<td>{{auditionInstrument3}}</td>
-						<td class="delete" onclick="deleteAuditionee('{{firstName}}', '{{lastName}}', '{{_id}}', event)"><i class="fa fa-times-circle"></i></td>
+						<td>{{instrument1}}</td>
+						<td>{{instrument2}}</td>
+						<td>{{instrument3}}</td>
+						<td class="delete" onclick="deleteAuditionee('{{firstName}}', '{{lastName}}', '{{studentId}}', event)"><i class="fa fa-times-circle"></i></td>
 					</tr>
 				{{/each}}
 			</tbody>

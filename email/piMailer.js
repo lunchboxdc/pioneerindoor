@@ -2,9 +2,9 @@ var nodemailer = require('nodemailer');
 var ses = require('nodemailer-ses-transport');
 var handlebars  = require('handlebars');
 var fs = require('fs');
-var AdminUser = require('../persistence/models/adminUser');
 var appConfig = require('../common/appConfig');
 var helpers = require('../common/HandlebarsHelpers');
+var PiDAO = require('../persistence/PiDAO');
 
 for (var helper in helpers) {
     if (helpers.hasOwnProperty(helper)) {
@@ -59,14 +59,14 @@ fs.readFile(__dirname + '/templates/auditionUpdate.html', 'utf8', function (err,
 
 var transport = nodemailer.createTransport(ses({
     region: 'us-west-2',
-    accessKeyId: process.env.SES_ACCESS_KEY_ID,
-    secretAccessKey: process.env.SES_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.PI_ACCESS_KEY_ID,
+    secretAccessKey: process.env.PI_SECRET_ACCESS_KEY,
     rateLimit: 5
 }));
 
 module.exports = {
 
-    sendAuditionConfirmation: function(firstName, email) {
+    sendAuditionConfirmation: function(firstName, email, studentId) {
         try {
             if (auditionConfirmationTemplate) {
                 var emailHtml = auditionConfirmationTemplate({firstName: firstName, auditionDate: appConfig.auditionDate});
@@ -83,7 +83,7 @@ module.exports = {
                     if (error) {
                         console.error(error);
                     } else {
-                        console.info('Audition Confirmation email sent for: %s - %s', firstName, email);
+                        console.info('Audition Confirmation email sent for studentId: %s', studentId);
                     }
                 });
             } else {
@@ -196,12 +196,9 @@ module.exports = {
 
     sendMail: function(options, callback) {
         if (process.env.NODE_ENV !== 'prod') {
-            AdminUser.find({
-                    email: options.to
-                })
-                .exec()
-                .then(function(users) {
-                    if (users[0] > 0 && users[0].email === options.to) {
+            PiDAO.getStaffUserByEmail(options.to)
+                .then(function(staffUser) {
+                    if (staffUser[0] && staffUser[0].email === options.to) {
                         console.log('found user in admin user table, sending email to: ' + options.to);
                         transport.sendMail(options, callback);
                     } else {

@@ -50,18 +50,18 @@ module.exports = {
         return html;
     },
     preselectCheckbox: function(val) {
-        if (val=="true") {
+        if (val === "true") {
             return 'checked';
         }
     },
     preselectCheckboxFalse: function(val) {
-        if (val!="false") {
+        if (val !== "false") {
             return 'checked';
         }
     },
     getAge: function(val) {
         if (val && val.length > 0) {
-            return moment().diff(moment(val, 'MM/DD/YYYY'), 'years');
+            return moment().diff(moment(val, 'YYYY-MM-DD'), 'years');
         }
     },
     section: function(name, options) {

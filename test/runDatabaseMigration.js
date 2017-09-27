@@ -146,7 +146,7 @@ ConnectionManager.openTest()
             if (updateDate) staff['updateDate'] = updateDate;
 
             var insertPromise = (function(_staff) {
-                return PiDAO.insertStaff(_staff);
+                return PiDAO.insertStaffUser(_staff);
             })(staff);
 
             tasks.push(insertPromise);

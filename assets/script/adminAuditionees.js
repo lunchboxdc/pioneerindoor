@@ -1,20 +1,20 @@
 var auditioneeTemplate;
 var reminderEmailTemplate;
 
-function deleteAuditionee(firstName, lastName, id, e) {
+function deleteAuditionee(firstName, lastName, studentId, e) {
     e.stopPropagation();
-    if(confirm('Are you sure you want to delete auditionee, ' + firstName + ' ' + lastName + '?')) {
+    if (confirm('Are you sure you want to delete auditionee, ' + firstName + ' ' + lastName + '?')) {
         var form = $("<form></form>")
             .attr({method: 'post', action: '/admin/auditionees/delete', style: 'display:none;'})
-            .append($('<input>').attr({type: 'hidden', name: 'auditioneeId', value: id}));
+            .append($('<input>').attr({type: 'hidden', name: 'studentId', value: studentId}));
         $('body').append(form);
         form.submit();
     }
 }
 
-function showModal(id) {
+function showModal(studentId) {
     var auditionee = auditionees.filter(function(obj) {
-        return obj._id == id;
+        return obj.studentId == studentId;
     });
     $('#auditioneeModal .modal-content').html(auditioneeTemplate(auditionee[0]));
     $('#auditioneeModal').bPopup();
@@ -54,7 +54,6 @@ $(function() {
             Handlebars.registerHelper(helper, handlebarsHelpers[helper]);
         }
     }
-
 
     $.get('/assets/template/auditioneeTemplate.html?v=' + assetsVersion, function(data) {
         auditioneeTemplate = Handlebars.compile(data);

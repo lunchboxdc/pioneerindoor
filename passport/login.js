@@ -1,6 +1,6 @@
 var LocalStrategy = require('passport-local').Strategy;
-var AdminUser = require('../persistence/models/adminUser');
 var bCrypt = require('bcrypt-nodejs');
+var PiDAO = require('../persistence/PiDAO');
 
 module.exports = function(passport) {
 	passport.use('login', new LocalStrategy({
@@ -8,26 +8,25 @@ module.exports = function(passport) {
         },
         function(req, email, password, done) {
             email = email.toLowerCase();
-            AdminUser.findOne({'email':  email}, function(err, user) {
-                    if (err) {
-                        return done(err);
+            var staffUser;
+
+            PiDAO.getStaffUserByEmail(email)
+                .then(function(result) {
+                    staffUser = result[0];
+                    if (!staffUser || !isValidPassword(password, staffUser)) {
+                        done(null, false, req.flash('errorMessage', 'Incorrect email or password'));
+                    } else {
+                        staffUser.resetToken = undefined;
+                        staffUser.resetTokenExpiration = undefined;
+                        return PiDAO.updateStaffUser(staffUser);
                     }
-
-                    if (!user || !isValidPassword(password, user)) {
-                        return done(null, false, req.flash('errorMessage', 'Incorrect email or password'));
-                    }
-
-                    user.tokenExpires = undefined;
-                    user.token = undefined;
-                    user.save(function (err, user) {
-                        if (err) {
-                            console.error("Error clearing token properties from user object on login: "+user.email);
-                        }
-                        return done(null, user);
-                    });
-                }
-            );
-
+                })
+                .then(function() {
+                    done(null, staffUser);
+                })
+                .catch(function(e) {
+                    done(e);
+                });
         })
     );
 

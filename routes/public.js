@@ -18,11 +18,11 @@ var cymbalPacket = 'CymbalPacket.pdf';
 var frontEnsemblePacket = 'FrontEnsemblePacket.pdf';
 var auditionDate = appConfig.auditionDate;
 
-var auditionActive = false;
-var scheduleActive = false;
+var auditionActive = true;
+var scheduleActive = true;
 
 function returnAuditionSoonPage(req, res) {
-    var payLoad =_.merge({
+    var payLoad = _.merge({
         page: 'audition-soon',
         auditionDate: auditionDate
     }, req.flash());
@@ -167,85 +167,162 @@ module.exports = function(passport) {
 		}
 	});
 
-	// router.post('/audition',function(req, res) {
-     //    if (auditionActive) {
-     //        var auditionee = new Auditionee();
-     //        auditionee.firstName = req.body.firstName;
-     //        auditionee.lastName = req.body.lastName;
-     //        auditionee.dob = req.body.dob;
-     //        auditionee.phone = req.body.phone;
-     //        auditionee.email = req.body.email;
-     //        auditionee.address1 = req.body.address1;
-     //        auditionee.address2 = req.body.address2;
-     //        auditionee.city = req.body.city;
-     //        auditionee.state = req.body.state;
-     //        auditionee.zip = req.body.zip;
-     //        auditionee.school = req.body.school;
-     //        auditionee.schoolYear = req.body.schoolYear;
-     //        auditionee.pg1FirstName = req.body.pg1FirstName;
-     //        auditionee.pg1LastName = req.body.pg1LastName;
-     //        auditionee.pg1Phone1 = req.body.pg1Phone1;
-     //        auditionee.pg1Phone2 = req.body.pg1Phone2;
-     //        auditionee.pg1Email = req.body.pg1Email;
-     //        auditionee.pg1Address1 = req.body.pg1Address1;
-     //        auditionee.pg1Address2 = req.body.pg1Address2;
-     //        auditionee.pg1City = req.body.pg1City;
-     //        auditionee.pg1State = req.body.pg1State;
-     //        auditionee.pg1Zip = req.body.pg1Zip;
-     //        auditionee.pg2FirstName = req.body.pg2FirstName;
-     //        auditionee.pg2LastName = req.body.pg2LastName;
-     //        auditionee.pg2Phone1 = req.body.pg2Phone1;
-     //        auditionee.pg2Phone2 = req.body.pg2Phone2;
-     //        auditionee.pg2Email = req.body.pg2Email;
-     //        auditionee.pg2Address1 = req.body.pg2Address1;
-     //        auditionee.pg2Address2 = req.body.pg2Address2;
-     //        auditionee.pg2City = req.body.pg2City;
-     //        auditionee.pg2State = req.body.pg2State;
-     //        auditionee.pg2Zip = req.body.pg2Zip;
-     //        auditionee.referral = req.body.referral;
-     //        auditionee.referralOther = req.body.referralOther;
-     //        auditionee.yearsDrumming = req.body.yearsDrumming;
-     //        auditionee.experience = req.body.experience;
-     //        auditionee.auditionInstrument1 = req.body.auditionInstrument1;
-     //        auditionee.auditionInstrument2 = req.body.auditionInstrument2;
-     //        auditionee.auditionInstrument3 = req.body.auditionInstrument3;
-     //        auditionee.specialTalents = req.body.specialTalents;
-     //        auditionee.conflicts = req.body.conflicts;
-     //        auditionee.goal = req.body.goal;
-     //        auditionee.submitDate = moment();
-     //        auditionee.deleted = false;
-     //        auditionee.season = req.body.season;
-    //
-     //        auditionee.save(function (err, auditionee) {
-     //            if (err) {
-     //                console.log(err);
-     //                for (var field in req.body) {
-     //                    if (req.body.hasOwnProperty(field)) {
-     //                        req.flash(field, req.body[field]);
-     //                    }
-     //                }
-     //                req.flash('auditionMessage', 'We\'re sorry, something went wrong. Please try again. If the error continues, please email <a href="mailto:admin@pioneerindoordrums.org">admin@pioneerindoordrums.org</a>');
-     //                res.redirect('/audition');
-     //            } else {
-     //                piMailer.sendAuditionConfirmation(auditionee.firstName, auditionee.email);
-     //                res.redirect('/audition/confirm');
-     //            }
-     //        });
-     //    } else {
-     //        returnAuditionSoonPage(req, res);
-	// 	}
-	// });
+	router.post('/audition', function(req, res) {
+        if (auditionActive) {
+            var studentId;
+            var studentAddressId;
+            var guardianAddressId;
+            var guardian2AddressId;
 
-	// router.get('/audition/confirm',function(req, res) {
-	// 	if (auditionActive) {
-     //        var payLoad =_.merge({
-     //            auditionDate: auditionDate
-     //        }, req.flash());
-     //        res.render('public/auditionConfirm', payLoad);
-	// 	} else {
-     //        returnAuditionSoonPage(req, res);
-	// 	}
-	// });
+            var studentAddress = {
+                address1: req.body.address1,
+                city: req.body.city,
+                state: req.body.state,
+                zip: req.body.zip
+            };
+
+            if (req.body.address2) {
+                studentAddress['address2'] = req.body.address2;
+            }
+
+            PiDAO.insertAddress(studentAddress)
+                .then(function(result) {
+                    studentAddressId = result.insertId;
+                    if (req.body.pg1Address1) {
+                        var guardianAddress = {
+                            address1: req.body.pg1Address1,
+                            city: req.body.pg1City,
+                            state: req.body.pg1State,
+                            zip: req.body.pg1Zip
+                        };
+
+                        if (req.body.pg1Address2) {
+                            studentAddress['address2'] = req.body.pg1Address2;
+                        }
+
+                        return PiDAO.insertAddress(guardianAddress);
+                    }
+                })
+                .then(function(result) {
+                    guardianAddressId = result ? result.insertId : studentAddressId;
+
+                    if (req.body.pg2Address1) {
+                        var guardian2Address = {
+                            address1: req.body.pg2Address1,
+                            city: req.body.pg2City,
+                            state: req.body.pg2State,
+                            zip: req.body.pg2Zip
+                        };
+
+                        if (req.body.pg2Address2) {
+                            studentAddress['address2'] = req.body.pg2Address2;
+                        }
+
+                        return PiDAO.insertAddress(guardian2Address);
+                    }
+                })
+                .then(function(result) {
+                    if (req.body.pg2FirstName) {
+                        guardian2AddressId = result ? result.insertId : guardianAddressId;
+                    }
+
+                    var student = {
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
+                        email: req.body.email,
+                        birthDate: moment(req.body.dob, 'MM/DD/YYYY').format('YYYY-MM-DD'),
+                        phone: req.body.phone,
+                        addressId: studentAddressId,
+                        guardianFirstName: req.body.pg1FirstName,
+                        guardianLastName: req.body.pg1LastName,
+                        guardianPhone: req.body.pg1Phone1,
+                        guardianEmail: req.body.pg1Email,
+                        guardianAddressId: guardianAddressId,
+                        guardian2FirstName: req.body.pg2FirstName,
+                        guardian2LastName: req.body.pg2LastName,
+                        guardian2Phone: req.body.pg2Phone1,
+                        guardian2Phone2: req.body.pg2Phone2,
+                        guardian2Email: req.body.pg2Email,
+                        guardian2AddressId: guardian2AddressId
+                    };
+
+                    if (req.body.pg1Phone2) {
+                        student['guardianPhone2'] = req.body.pg1Phone2;
+                    }
+
+                    return PiDAO.insertStudent(student);
+                })
+                .then(function(result) {
+                    studentId = result.insertId;
+                    var auditionInfo = {
+                        instrument1: req.body.auditionInstrument1,
+                        referral: req.body.referral,
+                        referralOther: req.body.referralOther,
+                        yearsDrumming: req.body.yearsDrumming,
+                        goal: req.body.goal,
+                        season: req.body.season,
+                        studentId: studentId
+                    };
+
+                    if (req.body.school) {
+                        auditionInfo['school'] = req.body.school;
+                    }
+
+                    if (req.body.schoolYear) {
+                        auditionInfo['schoolYear'] = req.body.schoolYear;
+                    }
+
+                    if (req.body.auditionInstrument2) {
+                        auditionInfo['instrument2'] = req.body.auditionInstrument2;
+                    }
+
+                    if (req.body.auditionInstrument3) {
+                        auditionInfo['instrument3'] = req.body.auditionInstrument3;
+                    }
+
+                    if (req.body.experience) {
+                        auditionInfo['experience'] = req.body.experience;
+                    }
+
+                    if (req.body.conflicts) {
+                        auditionInfo['conflicts'] = req.body.conflicts;
+                    }
+
+                    if (req.body.specialTalents) {
+                        auditionInfo['specialTalents'] = req.body.specialTalents;
+                    }
+
+                    return PiDAO.insertAuditionInfo(auditionInfo);
+                })
+                .then(function() {
+                    piMailer.sendAuditionConfirmation(req.body.firstName, req.body.email, studentId);
+                    res.redirect('/audition/confirm');
+                })
+                .catch(function(e) {
+                    console.error('error inserting auditionee.', e);
+
+                    _.each(req.body, function(value, key) {
+                        req.flash(key, value);
+                    });
+
+                    req.flash('auditionMessage', 'We\'re sorry, something went wrong. Please try again. If the error continues, please email <a href="mailto:admin@pioneerindoordrums.org">admin@pioneerindoordrums.org</a>');
+                    res.redirect('/audition');
+                });
+        } else {
+            returnAuditionSoonPage(req, res);
+		}
+	});
+
+	router.get('/audition/confirm',function(req, res) {
+		if (auditionActive) {
+            var payLoad = _.merge({
+                auditionDate: auditionDate
+            }, req.flash());
+            res.render('public/auditionConfirm', payLoad);
+		} else {
+            returnAuditionSoonPage(req, res);
+		}
+	});
 
 	router.get('/schedule',function(req, res) {
 		if (scheduleActive) {
@@ -301,47 +378,52 @@ module.exports = function(passport) {
 		res.render('public/support', payLoad);
 	});
 
-	// router.get('/login', function(req, res) {
-	// 	var payLoad =_.merge({}, req.flash());
-	// 	res.render('public/login', payLoad);
-	// });
+	router.get('/login', function(req, res) {
+		var payLoad =_.merge({}, req.flash());
+		res.render('public/login', payLoad);
+	});
 
-	// router.post('/login', passport.authenticate('login', {
-	// 	successRedirect: '/admin',
-	// 	failureRedirect: '/login',
-	// 	failureFlash : true
-	// }));
+	router.post('/login', passport.authenticate('login', {
+		successRedirect: '/admin',
+		failureRedirect: '/login',
+		failureFlash : true
+	}));
 
-	// router.get('/forgotPassword', function(req, res) {
-	// 	var payLoad =_.merge({}, req.flash());
-	// 	res.render('public/forgotPassword', payLoad);
-	// });
+	router.get('/forgotPassword', function(req, res) {
+		var payLoad = _.merge({}, req.flash());
+		res.render('public/forgotPassword', payLoad);
+	});
 
-	// router.post('/forgotPassword', function(req, res) {
-	// 	var email = req.body.email.toLowerCase();
-	// 	AdminUser.findOne({ 'email': email }, function (err, adminUser) {
-	// 		if(adminUser) {
-	// 			var token = require('crypto').randomBytes(32).toString('hex');
-	// 			adminUser.token = token;
-	// 			adminUser.token = utils.createHash(token);
-	// 			adminUser.tokenExpires = moment().add(1, 'days');
-	// 			adminUser.save(function (err) {
-	// 				if (err) {
-	// 					console.error("Error setting token and token expiration for forgot password for: "+adminUser.email, err);
-	// 					req.flash('errorMessage', 'We\'re sorry, an error occurred. Please try again.');
-	// 					res.redirect('/forgotPassword');
-	// 				} else {
-	// 					piMailer.sendForgotPasswordEmail(adminUser.firstName, adminUser.email, token, adminUser._id);
-	// 					console.info("Successfully sent forgot password email to: "+adminUser.email);
-	// 					res.render('public/forgotPasswordSuccess');
-	// 				}
-	// 			});
-	// 		} else {
-	// 			req.flash('errorMessage', 'We\'re sorry, we were unable to find an account with that email address. Please try again.');
-	// 			res.redirect('/forgotPassword');
-	// 		}
-	// 	});
-	// });
+	router.post('/forgotPassword', function(req, res) {
+		var email = req.body.email.toLowerCase();
+		var staffUser;
+		var resetToken;
+
+		PiDAO.getStaffUserByEmail(email)
+            .then(function(result) {
+                staffUser = result[0];
+                if (staffUser) {
+                    resetToken = require('crypto').randomBytes(32).toString('hex');
+                    staffUser.resetToken = utils.createHash(resetToken);
+                    staffUser.resetTokenExpiration = moment().add(1, 'days').format("YYYY-MM-DD HH:mm:ss");
+
+                    return PiDAO.updateStaffUser(staffUser);
+                } else {
+                    req.flash('errorMessage', 'We\'re sorry, an error occurred. Please try again.');
+                    res.redirect('/forgotPassword');
+                }
+            })
+            .then(function() {
+                piMailer.sendForgotPasswordEmail(staffUser.firstName, staffUser.email, resetToken, staffUser.id);
+                console.info("Successfully sent forgot password email to staffUser: " + staffUser.id);
+                res.render('public/forgotPasswordSuccess');
+            })
+            .catch(function(e) {
+                console.error("Error handling forgot password: ", e);
+                req.flash('errorMessage', 'We\'re sorry, an error occurred. Please try again.');
+                res.redirect('/forgotPassword');
+            });
+	});
 
 	// router.get('/resetPassword', function(req, res) {
 	// 	if(req.query.a && req.query.z) {
@@ -443,38 +525,38 @@ module.exports = function(passport) {
 	// 	});
 	// });
 
-	// router.get('/packets/battery', function(req, res) {
-	// 	var fileStats = fs.statSync(packetsPath+batteryPacket);
-	// 	res.writeHeader(200,{
-	// 		"Content-Length":fileStats.size,
-	// 		"Content-Type":"application/octet-stream",
-	// 		"Content-Disposition": "attachment; filename='"+batteryPacket+"'"
-	// 	});
-	// 	var fReadStream = fs.createReadStream(packetsPath+batteryPacket);
-	// 	fReadStream.pipe(res);
-	// });
+	router.get('/packets/battery', function(req, res) {
+		var fileStats = fs.statSync(packetsPath+batteryPacket);
+		res.writeHeader(200,{
+			"Content-Length":fileStats.size,
+			"Content-Type":"application/octet-stream",
+			"Content-Disposition": "attachment; filename='"+batteryPacket+"'"
+		});
+		var fReadStream = fs.createReadStream(packetsPath+batteryPacket);
+		fReadStream.pipe(res);
+	});
 
-	// router.get('/packets/cymbal', function(req, res) {
-	// 	var fileStats = fs.statSync(packetsPath+cymbalPacket);
-	// 	res.writeHeader(200,{
-	// 		"Content-Length":fileStats.size,
-	// 		"Content-Type":"application/octet-stream",
-	// 		"Content-Disposition": "attachment; filename='"+cymbalPacket+"'"
-	// 	});
-	// 	var fReadStream = fs.createReadStream(packetsPath+cymbalPacket);
-	// 	fReadStream.pipe(res);
-	// });
+	router.get('/packets/cymbal', function(req, res) {
+		var fileStats = fs.statSync(packetsPath+cymbalPacket);
+		res.writeHeader(200,{
+			"Content-Length":fileStats.size,
+			"Content-Type":"application/octet-stream",
+			"Content-Disposition": "attachment; filename='"+cymbalPacket+"'"
+		});
+		var fReadStream = fs.createReadStream(packetsPath+cymbalPacket);
+		fReadStream.pipe(res);
+	});
 
-	// router.get('/packets/frontEnsemble', function(req, res) {
-	// 	var fileStats = fs.statSync(packetsPath+frontEnsemblePacket);
-	// 	res.writeHeader(200,{
-	// 		"Content-Length":fileStats.size,
-	// 		"Content-Type":"application/octet-stream",
-	// 		"Content-Disposition": "attachment; filename='"+frontEnsemblePacket+"'"
-	// 	});
-	// 	var fReadStream = fs.createReadStream(packetsPath+frontEnsemblePacket);
-	// 	fReadStream.pipe(res);
-	// });
+	router.get('/packets/frontEnsemble', function(req, res) {
+		var fileStats = fs.statSync(packetsPath+frontEnsemblePacket);
+		res.writeHeader(200,{
+			"Content-Length":fileStats.size,
+			"Content-Type":"application/octet-stream",
+			"Content-Disposition": "attachment; filename='"+frontEnsemblePacket+"'"
+		});
+		var fReadStream = fs.createReadStream(packetsPath+frontEnsemblePacket);
+		fReadStream.pipe(res);
+	});
 
 	return router;
 };

@@ -2,7 +2,7 @@ var logger = require('./logger');
 var moment = require('moment');
 
 var configObject = {};
-if(process.env.NODE_ENV === 'prod') {
+if (process.env.NODE_ENV === 'prod') {
 	console.info('App running in prod mode');
 	if(process.env.PORT) {
 		configObject["port"] = process.env.PORT;
@@ -17,7 +17,7 @@ if(process.env.NODE_ENV === 'prod') {
 
 console.info('App properties:\n', configObject);
 
-if(configObject.logLevel) {
+if (configObject.logLevel) {
     logger.transports.console.level = configObject.logLevel;
 }
 

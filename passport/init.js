@@ -11,7 +11,9 @@ module.exports = function(passport) {
     passport.deserializeUser(function(id, done) {
         PiDAO.getStaffUserById(id)
             .then(function(staffUser) {
-                done(null, staffUser[0]);
+                if (staffUser[0]) {
+                    done(null, staffUser[0]);
+                }
             })
             .catch(function(e) {
                 done(e);

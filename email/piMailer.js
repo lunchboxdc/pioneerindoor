@@ -164,7 +164,7 @@ module.exports = {
                 if (error) {
                     console.error(error);
                 } else {
-                    console.info('Registration email sent for: %s - %s', firstName, email);
+                    console.info('Registration email sent for userid: %s', userId);
                 }
             });
         } else {
@@ -186,7 +186,7 @@ module.exports = {
                 if (error) {
                     console.error(error);
                 } else {
-                    console.info('Forgot password email sent for: %s - %s', firstName, email);
+                    console.info('Forgot password email sent for userId: %s', userId);
                 }
             });
         } else {
@@ -195,21 +195,21 @@ module.exports = {
     },
 
     sendMail: function(options, callback) {
-        if (process.env.NODE_ENV !== 'prod') {
-            PiDAO.getStaffUserByEmail(options.to)
-                .then(function(staffUser) {
-                    if (staffUser[0] && staffUser[0].email === options.to) {
-                        console.log('found user in admin user table, sending email to: ' + options.to);
-                        transport.sendMail(options, callback);
-                    } else {
-                        console.log('user not found in admin user table, not sending email to: ' + options.to);
-                    }
-                })
-                .catch(function(e) {
-                    console.log('Error sending email in dev environment.\n' + e.stack);
-                });
-        } else {
+        // if (process.env.NODE_ENV !== 'prod') {
+        //     PiDAO.getStaffUserByEmail(options.to)
+        //         .then(function(staffUser) {
+        //             if (staffUser[0] && staffUser[0].email === options.to) {
+        //                 console.log('found user in admin user table, sending email to: ' + options.to);
+        //                 transport.sendMail(options, callback);
+        //             } else {
+        //                 console.log('user not found in admin user table, not sending email to: ' + options.to);
+        //             }
+        //         })
+        //         .catch(function(e) {
+        //             console.log('Error sending email in dev environment.\n' + e.stack);
+        //         });
+        // } else {
             transport.sendMail(options, callback);
-        }
+        // }
     }
 };

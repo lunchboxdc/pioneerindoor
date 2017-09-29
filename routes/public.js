@@ -384,7 +384,7 @@ module.exports = function(passport) {
 	});
 
 	router.post('/login', passport.authenticate('login', {
-		successRedirect: '/admin',
+		successRedirect: '/admin/auditionees',
 		failureRedirect: '/login',
 		failureFlash : true
 	}));
@@ -477,53 +477,68 @@ module.exports = function(passport) {
 	// 	});
 	// });
 
-	// router.get('/register', function(req, res) {
-	// 	if(req.query.a && req.query.z) {
-	// 		AdminUser.findById(req.query.z, function (err, user) {
-	// 			if(user && user.token && bCrypt.compareSync(req.query.a, user.token)) {
-	// 				if(moment(user.tokenExpires).diff(moment())>0) {
-	// 					console.debug('Valid registration token.');
-	// 					var payLoad = {
-	// 						userId: user._id,
-	// 						firstName: user.firstName,
-	// 						lastName: user.lastName,
-	// 						email: user.email
-	// 					};
-	// 					res.render('public/register', payLoad);
-	// 				} else {
-	// 					console.debug('registration token expired');
-	// 					res.render('public/register', {registerMessage: 'We\'re sorry, the registration link provided has expired. Please contact the system administrator for a new one.'});
-	// 				}
-	// 			} else {
-	// 				console.debug('No user found by token, %s', req.query.a);
-	// 				res.render('public/register', {registerMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-	// 			}
-	// 		});
-	// 	} else {
-	// 		console.debug('the token query string parameter was not provided.');
-	// 		res.render('public/register', {registerMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-	// 	}
-	// });
+	router.get('/register', function(req, res) {
+	    var payLoad = {};
 
-	// router.post('/register', function(req, res) {
-	// 	AdminUser.findById(req.body.userId, function(err, user) {
-	// 		if (err || !user) {
-	// 			res.render('public/register', {registerMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-	// 		} else {
-	// 			user.password = utils.createHash(req.body.password1);
-	// 			user.tokenExpires = undefined;
-	// 			user.token = undefined;
-	// 			user.save(function (err, user) {
-	// 				if (err) {
-	// 					res.render('public/register', {registerMessage: 'We\'re sorry, an error occurred. Please contact the system administrator.'});
-	// 				} else {
-	// 					req.flash('email', user.email);
-	// 					res.redirect('/login');
-	// 				}
-	// 			});
-	// 		}
-	// 	});
-	// });
+		if(req.query.a && req.query.z) {
+		    PiDAO.getStaffUserById(req.query.z)
+                .then(function(result) {
+                    var staffUser = result[0];
+                    if (staffUser && bCrypt.compareSync(req.query.a, staffUser.resetToken)) {
+                        if (moment(staffUser.resetTokenExpiration).diff(moment()) > 0) {
+                            payLoad = {
+                                userId: staffUser.id,
+                                firstName: staffUser.firstName,
+                                lastName: staffUser.lastName,
+                                email: staffUser.email
+                            };
+                        } else {
+                            req.flash('registerMessage', 'We\'re sorry, the registration link provided has expired. Please contact the system administrator for a new one.');
+                        }
+                    } else {
+                        throw new Error('Failed to get staff user from database.');
+                    }
+                })
+                .catch(function(e) {
+                    console.error('Error registering staff user: ', e);
+                    req.flash('errorMessage', 'We\'re sorry, an error has occurred. Please contact the system administrator.');
+                })
+                .then(function() {
+                    res.render('public/register', _.merge(payLoad, req.flash()));
+                });
+		} else {
+			console.error('the token query string parameter was not provided for registration.');
+            req.flash('errorMessage', 'We\'re sorry, an error has occurred. Please contact the system administrator.');
+            res.render('public/register');
+		}
+	});
+
+	router.post('/register', function(req, res) {
+        var staffUser;
+
+	    PiDAO.getStaffUserById(req.body.userId)
+            .then(function(result) {
+                staffUser = result[0];
+                if (staffUser) {
+                    staffUser.password = utils.createHash(req.body.password1);
+                    staffUser.resetToken = undefined;
+                    staffUser.resetTokenExpiration = undefined;
+
+                    return PiDAO.updateStaffUser(staffUser);
+                } else {
+                    throw new Error('Failed to get staff user from database.');
+                }
+            })
+            .then(function() {
+                req.flash('email', staffUser.email);
+                res.redirect('/login');
+            })
+            .catch(function(e) {
+                console.error('Failed to update staff user for registration.', e);
+                req.flash('errorMessage', 'We\'re sorry, an error has occurred. Please contact the system administrator.');
+                res.render('public/register');
+            });
+	});
 
 	router.get('/packets/battery', function(req, res) {
 		var fileStats = fs.statSync(packetsPath+batteryPacket);

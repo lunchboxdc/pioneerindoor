@@ -332,33 +332,42 @@ module.exports = (function() {
 
 	router.post('/users/new', function(req, res) {
 		var email = req.body.email.toLowerCase();
-		AdminUser.findOne({ 'email': email }, function (err, user) {
-			if(user) {
-				console.info("New User: user already exists with email, %s", email);
-				req.flash('errorMessage', 'User already exists with email, ' + email);
-				res.redirect('/admin/users');
-			} else {
-				console.info("New User: no user found for email, %s ... adding user with token.", email);
-				var token = require('crypto').randomBytes(32).toString('hex');
-				var adminUser = new AdminUser();
-				adminUser.firstName = req.body.firstName;
-				adminUser.lastName = req.body.lastName;
-				adminUser.email = email;
-				adminUser.token = utils.createHash(token);
-				adminUser.tokenExpires = moment().add(1, 'days');
-				adminUser.save(function(err, user) {
-					if (err) {
-						console.error('error adding user: ' + user);
-						req.flash('errorMessage', 'error adding user!');
-					} else {
-						req.flash('successMessage', 'Successfully added user. A registration email has been sent.');
-						console.log('return user date: '+user);
-					}
-					piMailer.sendAdminRegistration(user.firstName, user.email, token, user._id);
-					res.redirect('/admin/users');
-				});
-			}
-		});
+		var staffUser;
+
+		PiDAO.getStaffUserByEmail(email)
+			.then(function(result) {
+				if (result[0]) {
+                    req.flash('errorMessage', 'User already exists with email, ' + email);
+				} else {
+                    var token = require('crypto').randomBytes(32).toString('hex');
+                    staffUser = {
+                        firstName: req.body.firstName,
+						lastName: req.body.lastName,
+						email: email,
+						resetToken: utils.createHash(token),
+                        resetTokenExpiration: moment().add(1, 'days').format("YYYY-MM-DD HH:mm:ss")
+					};
+
+                    return PiDAO.insertStaffUser(staffUser)
+                        .then(function(result) {
+                        	if (result.insertId) {
+                                piMailer.sendAdminRegistration(staffUser.firstName, staffUser.email, token, result.insertId);
+							} else {
+                        		throw new Error('Failed to insert staff user into database.');
+							}
+                        })
+                        .then(function() {
+                            req.flash('successMessage', 'Successfully added user. A registration email has been sent.');
+                        });
+				}
+			})
+			.catch(function(e) {
+                console.error('error adding user.', e);
+                req.flash('errorMessage', 'error adding user!');
+			})
+			.then(function() {
+                res.redirect('/admin/users');
+			});
 	});
 
 	router.post('/users/delete', function(req, res) {
@@ -381,17 +390,17 @@ module.exports = (function() {
 		}
 	});
 
-	router.post('/email/sendAuditioneeReminder', function(req, res) {
-		Auditionee.find({season: req.body.season, deleted: false})
-		.exec(function(err, auditionees) {
-			if (err) {
-				console.error(err);
-				res.send(500, err);
-			}
-			piMailer.sendAuditionReminder(auditionees);
-			res.send({});
-		});
-	});
+	// router.post('/email/sendAuditioneeReminder', function(req, res) {
+	// 	Auditionee.find({season: req.body.season, deleted: false})
+	// 	.exec(function(err, auditionees) {
+	// 		if (err) {
+	// 			console.error(err);
+	// 			res.send(500, err);
+	// 		}
+	// 		piMailer.sendAuditionReminder(auditionees);
+	// 		res.send({});
+	// 	});
+	// });
 
 	router.get('/email/:template', function(req, res) {
 		res.sendFile(process.cwd() + '/email/templates/'+req.params.template+'.html');

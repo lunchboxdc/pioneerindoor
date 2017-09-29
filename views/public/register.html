@@ -9,8 +9,8 @@
 
     <h2>Register</h2>
 
-    {{#if registerMessage}}
-        <div>{{registerMessage}}</div>
+    {{#if errorMessage}}
+        <div>{{errorMessage}}</div>
     {{else}}
         <form action="/register" method="post" data-parsley-validate>
             <input type="hidden" name="userId" value="{{userId}}"/>

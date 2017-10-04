@@ -294,10 +294,6 @@ module.exports = function(passport) {
 
                     return PiDAO.insertAuditionInfo(auditionInfo);
                 })
-                .then(function() {
-                    piMailer.sendAuditionConfirmation(req.body.firstName, req.body.email, studentId);
-                    res.redirect('/audition/confirm');
-                })
                 .catch(function(e) {
                     console.error('error inserting auditionee.', e);
 
@@ -307,6 +303,15 @@ module.exports = function(passport) {
 
                     req.flash('auditionMessage', 'We\'re sorry, something went wrong. Please try again. If the error continues, please email <a href="mailto:admin@pioneerindoordrums.org">admin@pioneerindoordrums.org</a>');
                     res.redirect('/audition');
+                })
+                .then(function() {
+                    return piMailer.sendAuditionConfirmation(req.body.firstName, req.body.email);
+                })
+                .catch(function(e) {
+                    console.error('Error sending email to auditionee -> studentId: ' + studentId, e);
+                })
+                .then(function() {
+                    res.redirect('/audition/confirm');
                 });
         } else {
             returnAuditionSoonPage(req, res);

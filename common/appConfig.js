@@ -34,5 +34,4 @@ if (config.logLevel) {
 }
 
 
-console.info('App properties:\n', config);
 module.exports = config;

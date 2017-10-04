@@ -40,25 +40,21 @@ var transport = nodemailer.createTransport(ses({
 
 module.exports = {
 
-    sendAuditionConfirmation: function(firstName, email, studentId) {
-        try {
-            if (templates.auditionConfirmation) {
-                var emailHtml = templates.auditionConfirmation({firstName: firstName, auditionDate: appConfig.auditionDate});
-                var options = {
-                    from: 'Pioneer Indoor <director@pioneerindoordrums.org>',
-                    sender: 'director@pioneerindoordrums.org',
-                    replyTo: 'pioneerindoordrums@gmail.com',
-                    to: email,
-                    subject: 'You\'re registered for Pioneer Indoor auditions!',
-                    html: emailHtml
-                };
+    sendAuditionConfirmation: function(firstName, email) {
+        if (templates.auditionConfirmation) {
+            var emailHtml = templates.auditionConfirmation({firstName: firstName, auditionDate: appConfig.auditionDate});
+            var options = {
+                from: 'Pioneer Indoor <director@pioneerindoordrums.org>',
+                sender: 'director@pioneerindoordrums.org',
+                replyTo: 'pioneerindoordrums@gmail.com',
+                to: email,
+                subject: 'You\'re registered for Pioneer Indoor auditions!',
+                html: emailHtml
+            };
 
-                return this.sendMail(options);
-            } else {
-                console.error('piMailer: auditionConfirmationTemplate is undefined. studentId: ' + studentId);
-            }
-        } catch (e) {
-            console.error('piMailer: error sending email to studentId: ' + studentId, e);
+            return this.sendMail(options);
+        } else {
+            throw new Error('auditionConfirmation is undefined');
         }
     },
 

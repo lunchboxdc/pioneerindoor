@@ -2,6 +2,7 @@ var request = require('request-promise');
 var Promise = require('bluebird');
 var fs = require('fs');
 var moment = require('moment');
+var appConfig = require('./appConfig');
 var PiDAO = require('../persistence/PiDAO');
 
 const facebookApiUrl = 'https://graph.facebook.com/v2.10/PioneerIndoor';
@@ -16,7 +17,7 @@ module.exports = {
                 qs: {limit: 10, fields: 'created_time,from,name,story,message,description,caption,picture,link,type,status_type,attachments,object_id'},
                 method: 'get',
                 headers: {
-                    "Authorization": process.env.FB_TOKEN
+                    "Authorization": appConfig.fbToken
                 }
             })
             .then(function(result) {
@@ -118,7 +119,7 @@ module.exports = {
 
                         var postId;
                         for (var j = 0; j < mysqlPosts.length; j++) {
-                            if (mysqlPosts[j].facebookId == fbPosts[i].id) {
+                            if (mysqlPosts[j].facebookId === fbPosts[i].id) {
                                 postId = mysqlPosts[j].id;
                                 break;
                             }
@@ -149,16 +150,11 @@ module.exports = {
     },
 
     getProfilePicture: function() {
-        if(!process.env.FB_TOKEN) {
-            console.error("FB_TOKEN environment variable missing!");
-        } else {
-            console.debug('FacebookService: getting profile picture.');
-            var uri = facebookApiUrl + '/picture';
-            request.head(uri, function() {
-                request(uri).pipe(fs.createWriteStream(__dirname+'/../assets/image/fbPicture.jpg')).on('close', function() {
-                    console.debug('FacebookService: updated profile picture');
-                });
+        var uri = facebookApiUrl + '/picture';
+        request.head(uri, function() {
+            request(uri).pipe(fs.createWriteStream(__dirname+'/../assets/image/fbPicture.jpg')).on('close', function() {
+                console.debug('FacebookService: updated profile picture');
             });
-        }
+        });
     }
 };

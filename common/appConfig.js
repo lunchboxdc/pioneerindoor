@@ -1,26 +1,38 @@
 var logger = require('./logger');
 var moment = require('moment');
 
-var configObject = {};
-if (process.env.NODE_ENV === 'prod') {
+const auditionDate = '2017-11-04 08:00';
+
+var config = {
+    auditionDate: moment(auditionDate),
+    nodeEnv: process.env.NODE_ENV,
+    port: process.env.PORT,
+    piSessionSecret: process.env.PI_SESSION_SECRET,
+    fbToken: process.env.FB_TOKEN,
+    piAccessKeyId: process.env.PI_ACCESS_KEY_ID,
+    piSecretAccessKey: process.env.PI_SECRET_ACCESS_KEY,
+    piDbHost: process.env.PI_DB_HOST,
+    piDbUser: process.env.PI_DB_USER,
+    piDbPass: process.env.PI_DB_PASS,
+    piDbSslCa: process.env.PI_DB_SSL_CA
+};
+
+
+if (config.nodeEnv === 'prod') {
 	console.info('App running in prod mode');
-	if(process.env.PORT) {
-		configObject["port"] = process.env.PORT;
-	}
-    configObject["host"] = "https://www.pioneerindoordrums.org";
-    configObject["logLevel"] = "info";
+    config['host'] = 'https://www.pioneerindoordrums.org';
+    config['logLevel'] = 'info';
 } else {
-    configObject["port"] = "3000";
-    configObject["host"] = "http://localhost:"+configObject.port;
-    configObject["logLevel"] = "debug";
+    config['port'] = '3000';
+    config['host'] = 'http://localhost:' + config.port;
+    config['logLevel'] = 'debug';
 }
 
-console.info('App properties:\n', configObject);
 
-if (configObject.logLevel) {
-    logger.transports.console.level = configObject.logLevel;
+if (config.logLevel) {
+    logger.transports.console.level = config.logLevel;
 }
 
-configObject['auditionDate'] = moment("2017-11-04 08:00");
 
-module.exports = configObject;
+console.info('App properties:\n', config);
+module.exports = config;

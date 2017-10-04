@@ -1,20 +1,21 @@
+var appConfig = require('../common/appConfig');
 var mysql = require('promise-mysql');
 var fs = require('fs');
 
 var pool;
 
 var mysqlOptions = {
-    host: process.env.PI_DB_HOST,
-    user: process.env.PI_DB_USER,
-    password: process.env.PI_DB_PASS,
+    host: appConfig.piDbHost,
+    user: appConfig.piDbUser,
+    password: appConfig.piDbPass,
     database: 'pi',
     connectionLimit: 100,
     dateStrings: ['DATE']
 };
 
-if (process.env.PI_DB_SSL_CA) {
+if (appConfig.piDbSslCa) {
     mysqlOptions['ssl'] = {};
-	mysqlOptions.ssl['ca'] = fs.readFileSync(process.env.PI_DB_SSL_CA);
+	mysqlOptions.ssl['ca'] = fs.readFileSync(appConfig.piDbSslCa);
 }
 
 module.exports = {

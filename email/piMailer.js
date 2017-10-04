@@ -4,7 +4,7 @@ var handlebars  = require('handlebars');
 var fs = require('fs');
 var appConfig = require('../common/appConfig');
 var helpers = require('../common/HandlebarsHelpers');
-var PiDAO = require('../persistence/PiDAO');
+var devWhitelist = require('../devEmail').whitelist;
 
 for (var helper in helpers) {
     if (helpers.hasOwnProperty(helper)) {
@@ -12,55 +12,29 @@ for (var helper in helpers) {
     }
 }
 
-var adminRegistrationTemplate;
-fs.readFile(__dirname + '/templates/adminRegistration.html', 'utf8', function (err, html) {
-    if(err) {
-        console.error('piMailer: failed to load adminRegistrationTemplate template: '+err);
-    } else {
-        adminRegistrationTemplate = handlebars.compile(html);
-    }
-});
+var templates = {};
 
-var adminForgotPasswordTemplate;
-fs.readFile(__dirname + '/templates/adminForgotPassword.html', 'utf8', function (err, html) {
-    if(err) {
-        console.error('piMailer: failed to load adminForgotPasswordTemplate template: '+err);
-    } else {
-        adminForgotPasswordTemplate = handlebars.compile(html);
+function loadTemplate(template) {
+    try {
+        var templateHtml = fs.readFileSync(__dirname + '/templates/' + template + '.html', 'utf8');
+        templates[template] = handlebars.compile(templateHtml);
+    } catch (e) {
+        console.error('Failed to compile template: ' + template, e);
     }
-});
+}
 
-var auditionConfirmationTemplate;
-fs.readFile(__dirname + '/templates/auditionConfirmation.html', 'utf8', function (err, html) {
-    if(err) {
-        console.error('piMailer: failed to load auditionConfirmationTemplate template: '+err);
-    } else {
-        auditionConfirmationTemplate = handlebars.compile(html);
-    }
-});
 
-var auditionReminderTemplate;
-fs.readFile(__dirname + '/templates/auditionReminder.html', 'utf8', function (err, html) {
-    if(err) {
-        console.error('piMailer: failed to load auditionReminderTemplate template: '+err);
-    } else {
-        auditionReminderTemplate = handlebars.compile(html);
-    }
-});
+loadTemplate('adminRegistration');
+loadTemplate('adminForgotPassword');
+loadTemplate('auditionConfirmation');
+loadTemplate('auditionReminder');
+loadTemplate('auditionUpdate');
 
-var auditionUpdateTemplate;
-fs.readFile(__dirname + '/templates/auditionUpdate.html', 'utf8', function (err, html) {
-    if(err) {
-        console.error('piMailer: failed to load auditionUpdateTemplate template: '+err);
-    } else {
-        auditionUpdateTemplate = handlebars.compile(html);
-    }
-});
 
 var transport = nodemailer.createTransport(ses({
     region: 'us-west-2',
-    accessKeyId: process.env.PI_ACCESS_KEY_ID,
-    secretAccessKey: process.env.PI_SECRET_ACCESS_KEY,
+    accessKeyId: appConfig.piAccessKeyId,
+    secretAccessKey: appConfig.piSecretAccessKey,
     rateLimit: 5
 }));
 
@@ -68,8 +42,8 @@ module.exports = {
 
     sendAuditionConfirmation: function(firstName, email, studentId) {
         try {
-            if (auditionConfirmationTemplate) {
-                var emailHtml = auditionConfirmationTemplate({firstName: firstName, auditionDate: appConfig.auditionDate});
+            if (templates.auditionConfirmation) {
+                var emailHtml = templates.auditionConfirmation({firstName: firstName, auditionDate: appConfig.auditionDate});
                 var options = {
                     from: 'Pioneer Indoor <director@pioneerindoordrums.org>',
                     sender: 'director@pioneerindoordrums.org',
@@ -79,27 +53,21 @@ module.exports = {
                     html: emailHtml
                 };
 
-                this.sendMail(options, function (error) {
-                    if (error) {
-                        console.error(error);
-                    } else {
-                        console.info('Audition Confirmation email sent for studentId: %s', studentId);
-                    }
-                });
+                return this.sendMail(options);
             } else {
-                console.error("piMailer: auditionConfirmationTemplate is undefined.");
+                console.error('piMailer: auditionConfirmationTemplate is undefined. studentId: ' + studentId);
             }
         } catch (e) {
-            console.error("piMailer: error sending email", e);
+            console.error('piMailer: error sending email to studentId: ' + studentId, e);
         }
     },
 
     sendAuditionReminder: function(auditionees) {
-        if(auditionReminderTemplate) {
+        if (templates.auditionReminder) {
             var auditionYear = appConfig.auditionDate.year() + 1;
 
             auditionees.forEach(function(auditionee) {
-                var emailHtml = auditionReminderTemplate({firstName: auditionee.firstName, auditionDate: appConfig.auditionDate});
+                var emailHtml = templates.auditionReminder({firstName: auditionee.firstName, auditionDate: appConfig.auditionDate});
                 var options = {
                     to: auditionee.email,
                     from: 'Pioneer Indoor <director@pioneerindoordrums.org>',
@@ -109,13 +77,8 @@ module.exports = {
                     html: emailHtml
                 };
 
-                this.sendMail(options, function(error) {
-                    if(error) {
-                        console.error(error);
-                    } else {
-                        console.info('Audition reminder email sent to: %s', auditionee.email);
-                    }
-                });
+                // todo refactor to Promise.all();
+                return this.sendMail(options);
             },this);
         } else {
             console.error("piMailer: auditionReminderTemplate is undefined.");
@@ -123,11 +86,11 @@ module.exports = {
     },
 
     sendAuditionUpdate: function(auditionees) {
-        if(auditionUpdateTemplate) {
+        if (templates.auditionUpdate) {
             var auditionYear = appConfig.auditionDate.year() + 1;
 
             auditionees.forEach(function(auditionee) {
-                var emailHtml = auditionUpdateTemplate({firstName: auditionee.firstName, auditionDate: appConfig.auditionDate});
+                var emailHtml = templates.auditionUpdate({firstName: auditionee.firstName, auditionDate: appConfig.auditionDate});
                 var options = {
                     to: auditionee.email,
                     from: 'Pioneer Indoor <director@pioneerindoordrums.org>',
@@ -137,13 +100,8 @@ module.exports = {
                     html: emailHtml
                 };
 
-                this.sendMail(options, function(error) {
-                    if(error) {
-                        console.error(error);
-                    } else {
-                        console.info('Audition update email sent to: %s', auditionee.email);
-                    }
-                });
+                // todo refactor to Promise.all();
+                return this.sendMail(options);
             },this);
         } else {
             console.error("piMailer: auditionUpdateTemplate is undefined.");
@@ -151,8 +109,8 @@ module.exports = {
     },
 
     sendAdminRegistration: function(firstName, email, token, userId) {
-        if (adminRegistrationTemplate) {
-            var emailHtml = adminRegistrationTemplate({host: appConfig.host, firstName: firstName, token: token, userId: userId});
+        if (templates.adminRegistration) {
+            var emailHtml = templates.adminRegistration({host: appConfig.host, firstName: firstName, token: token, userId: userId});
             var options = {
                 from: 'admin@pioneerindoordrums.org',
                 to: email,
@@ -160,21 +118,15 @@ module.exports = {
                 html: emailHtml
             };
 
-            this.sendMail(options, function(error) {
-                if (error) {
-                    console.error(error);
-                } else {
-                    console.info('Registration email sent for userid: %s', userId);
-                }
-            });
+            return this.sendMail(options);
         } else {
-            console.error("piMailer: adminRegistrationTemplate is undefined.");
+            return Promise.reject('adminRegistrationTemplate is undefined.');
         }
     },
 
     sendForgotPasswordEmail: function(firstName, email, token, userId) {
-        if (adminForgotPasswordTemplate) {
-            var emailHtml = adminForgotPasswordTemplate({host: appConfig.host, firstName: firstName, token: token, userId: userId});
+        if (templates.adminForgotPassword) {
+            var emailHtml = templates.adminForgotPassword({host: appConfig.host, firstName: firstName, token: token, userId: userId});
             var options = {
                 from: 'admin@pioneerindoordrums.org',
                 to: email,
@@ -182,34 +134,22 @@ module.exports = {
                 html: emailHtml
             };
 
-            this.sendMail(options, function(error) {
-                if (error) {
-                    console.error(error);
-                } else {
-                    console.info('Forgot password email sent for userId: %s', userId);
-                }
-            });
+            return this.sendMail(options);
         } else {
             console.error("piMailer: adminForgotPasswordTemplate is undefined.");
         }
     },
 
-    sendMail: function(options, callback) {
-        // if (process.env.NODE_ENV !== 'prod') {
-        //     PiDAO.getStaffUserByEmail(options.to)
-        //         .then(function(staffUser) {
-        //             if (staffUser[0] && staffUser[0].email === options.to) {
-        //                 console.log('found user in admin user table, sending email to: ' + options.to);
-        //                 transport.sendMail(options, callback);
-        //             } else {
-        //                 console.log('user not found in admin user table, not sending email to: ' + options.to);
-        //             }
-        //         })
-        //         .catch(function(e) {
-        //             console.log('Error sending email in dev environment.\n' + e.stack);
-        //         });
-        // } else {
-            transport.sendMail(options, callback);
-        // }
+    sendMail: function(options) {
+        if (appConfig.nodeEnv !== 'prod') {
+            if (devWhitelist.includes(options.to)) {
+                console.info('whitelist has email, sending to: ' + options.to);
+                return transport.sendMail(options);
+            }
+            console.info('Email not in whitelist, doing nothing');
+            return Promise.resolve();
+        } else {
+            return transport.sendMail(options);
+        }
     }
 };

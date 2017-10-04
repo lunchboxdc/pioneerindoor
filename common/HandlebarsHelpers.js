@@ -1,4 +1,4 @@
-var ConnectionManager = require('../persistence/ConnectionManager');
+var appConfig = require('./appConfig');
 var AssetsVersion = require('../persistence/AssetsVersion');
 var moment = require('moment');
 
@@ -74,7 +74,7 @@ module.exports = {
         return AssetsVersion.getAssetsVersion();
     },
     isProduction: function(options) {
-        if (process.env.NODE_ENV === 'prod') {
+        if (appConfig.nodeEnv === 'prod') {
             return options.fn(this);
         } else {
             return options.inverse(this);

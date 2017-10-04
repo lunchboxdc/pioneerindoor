@@ -17,8 +17,7 @@ function exitApp() {
     process.exit();
 }
 
-if (!process.env.PI_SESSION_SECRET) {
-    console.info('PI_SESSION_SECRET -> ' + process.env.PI_SESSION_SECRET);
+if (!appConfig.piSessionSecret) {
     console.error('Missing PI_SESSION_SECRET environment variable');
     exitApp();
 }
@@ -30,10 +29,10 @@ ConnectionManager.open();
 var expressSessionConfig = {
     resave: false,
     saveUninitialized: false,
-    secret: process.env.PI_SESSION_SECRET
+    secret: appConfig.piSessionSecret
 };
 
-if (process.env.NODE_ENV === 'prod') {
+if (appConfig.nodeEnv === 'prod') {
     var redis = require("redis");
     var redisStore = require('connect-redis')(expressSession);
     var client = redis.createClient();
@@ -67,7 +66,7 @@ var hbs = exphbs.create({
 app.engine('html', hbs.engine);
 
 //middleware and other components specific to either prod or non-prod
-if (process.env.NODE_ENV !== 'prod') {
+if (appConfig.nodeEnv !== 'prod') {
     //run facebook stuff once locally at startup
     //require('./common/script/runFacebookService');
     //not behind nginx locally so lets serve out assets through node

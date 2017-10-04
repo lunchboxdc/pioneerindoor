@@ -351,7 +351,7 @@ module.exports = (function() {
                     return PiDAO.insertStaffUser(staffUser)
                         .then(function(result) {
                         	if (result.insertId) {
-                                piMailer.sendAdminRegistration(staffUser.firstName, staffUser.email, token, result.insertId);
+                                return piMailer.sendAdminRegistration(staffUser.firstName, staffUser.email, token, result.insertId);
 							} else {
                         		throw new Error('Failed to insert staff user into database.');
 							}

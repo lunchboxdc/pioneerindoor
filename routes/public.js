@@ -185,6 +185,9 @@ module.exports = function(passport) {
                 studentAddress['address2'] = req.body.address2;
             }
 
+            // TODO if an error happens before the promise chain, user gets a white page with no message
+            // also, test out setting studentAddress = undefined. Error logging isn't good. Also, user gets error page, but an email still goes out.
+
             PiDAO.insertAddress(studentAddress)
                 .then(function(result) {
                     studentAddressId = result.insertId;

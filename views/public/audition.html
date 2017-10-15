@@ -279,53 +279,25 @@
           </select>
         </div>
       </section>
+
+
       <section class="two-column">
-        <!-- instrument 1 -->
         <div class="input-row">
           <label for="auditionInstrument1">My first choice is to audition for <span class="required-indicator">*</span></label>
           <select id="auditionInstrument1" name="auditionInstrument1" required >
-            <option value="">Select One</option>
-            {{{selectOption auditionInstrument1 'Front ensemble (percussion)'}}}
-            {{{selectOption auditionInstrument1 'Front ensemble (electronics)'}}}
-            {{{selectOption auditionInstrument1 'Snare'}}}
-            {{{selectOption auditionInstrument1 'Tenor'}}}
-            {{{selectOption auditionInstrument1 'Bass'}}}
-            {{{selectOption auditionInstrument1 'Cymbals'}}}
-            {{{selectOption auditionInstrument1 'Character'}}}
-            {{{selectOption auditionInstrument1 'Electric Guitar'}}}
-            {{{selectOption auditionInstrument1 'Drumset'}}}
+            {{> instrumentOptions selectedInstrument=auditionInstrument1}}
           </select>
         </div>
-        <!-- instrument 2 -->
         <div id="auditionInstrumentRow2" class="input-row">
           <label for="auditionInstrument2">My second choice is to audition for</label>
           <select id="auditionInstrument2" name="auditionInstrument2">
-            <option value="">Select One</option>
-            {{{selectOption auditionInstrument2 'Front ensemble (percussion)'}}}
-            {{{selectOption auditionInstrument2 'Front ensemble (electronics)'}}}
-            {{{selectOption auditionInstrument2 'Snare'}}}
-            {{{selectOption auditionInstrument2 'Tenor'}}}
-            {{{selectOption auditionInstrument2 'Bass'}}}
-            {{{selectOption auditionInstrument2 'Cymbals'}}}
-            {{{selectOption auditionInstrument2 'Character'}}}
-            {{{selectOption auditionInstrument1 'Electric Guitar'}}}
-            {{{selectOption auditionInstrument1 'Drumset'}}}
+            {{> instrumentOptions selectedInstrument=auditionInstrument2}}
           </select>
         </div>
-        <!-- instrument 3 -->
         <div id="auditionInstrumentRow3" class="input-row">
           <label for="auditionInstrument3">My third choice is to audition for</label>
           <select id="auditionInstrument3" name="auditionInstrument3">
-            <option value="">Select One</option>
-            {{{selectOption auditionInstrument3 'Front ensemble (percussion)'}}}
-            {{{selectOption auditionInstrument3 'Front ensemble (electronics)'}}}
-            {{{selectOption auditionInstrument3 'Snare'}}}
-            {{{selectOption auditionInstrument3 'Tenor'}}}
-            {{{selectOption auditionInstrument3 'Bass'}}}
-            {{{selectOption auditionInstrument3 'Cymbals'}}}
-            {{{selectOption auditionInstrument3 'Character'}}}
-            {{{selectOption auditionInstrument1 'Electric Guitar'}}}
-            {{{selectOption auditionInstrument1 'Drumset'}}}
+            {{> instrumentOptions selectedInstrument=auditionInstrument3}}
           </select>
         </div>
       </section>

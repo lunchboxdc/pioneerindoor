@@ -5,9 +5,17 @@ var fs = require('fs');
 var appConfig = require('../common/appConfig');
 var helpers = require('../common/HandlebarsHelpers');
 
+
+
+
+// todo refactor this
 try {
     var devWhitelist = require('../devEmail').whitelist;
 } catch (e) {}
+
+
+
+
 
 for (var helper in helpers) {
     if (helpers.hasOwnProperty(helper)) {

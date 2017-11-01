@@ -72,6 +72,7 @@ module.exports = {
     sendAuditionReminder: function(auditionees) {
         if (templates.auditionReminder) {
             var auditionYear = appConfig.auditionDate.year() + 1;
+            var tasks = [];
 
             auditionees.forEach(function(auditionee) {
                 var emailHtml = templates.auditionReminder({firstName: auditionee.firstName, auditionDate: appConfig.auditionDate});
@@ -85,8 +86,10 @@ module.exports = {
                 };
 
                 // todo refactor to Promise.all();
-                return this.sendMail(options);
-            },this);
+                tasks.push(this.sendMail(options));
+            }, this);
+
+            return Promise.all(tasks);
         } else {
             console.error("piMailer: auditionReminderTemplate is undefined.");
         }

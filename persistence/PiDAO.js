@@ -90,6 +90,24 @@ module.exports = {
         });
     },
 
+    getAuditioneesForEmail: function(season) {
+        return Promise.using(ConnectionManager.getConnection(), function(connection) {
+            return connection.query(
+                'select ' +
+                's.firstName,' +
+                's.email ' +
+                'from student s ' +
+                'join address a on a.id = s.addressId ' +
+                'join address ga on ga.id = s.guardianAddressId ' +
+                'left join address ga2 on ga2.id = s.guardian2AddressId ' +
+                'join auditioninfo ai on ai.studentId = s.id ' +
+                'where ai.season = ? ' +
+                'and s.deleted <> 1',
+                season
+            );
+        });
+    },
+
     getStudentById: function(studentId) {
         return Promise.using(ConnectionManager.getConnection(), function(connection) {
             return connection.query('select * from student where id = ?', studentId);

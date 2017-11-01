@@ -4,8 +4,6 @@ var bCrypt = require('bcrypt-nodejs');
 var _ = require('lodash');
 var fs = require('fs');
 var piMailer = require('../email/piMailer');
-var AdminUser = require('../persistence/models/adminUser');
-var Auditionee = require('../persistence/models/auditionee');
 var utils = require('../common/utils');
 var xml2js = require('xml2js');
 var appConfig = require('../common/appConfig');
@@ -433,62 +431,75 @@ module.exports = function(passport) {
             });
 	});
 
-	// router.get('/resetPassword', function(req, res) {
-	// 	if(req.query.a && req.query.z) {
-	// 		AdminUser.findById(req.query.z, function (err, user) {
-	// 			if(err) {
-	// 				console.error("Error looking up resetPassword userId and token.",err);
-	// 				res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-	// 			}
-	// 			if(user && user.token && bCrypt.compareSync(req.query.a, user.token)) {
-	// 				if(moment(user.tokenExpires).diff(moment())>0) {
-	// 					console.debug('Valid forgot password token.');
-	// 					var payLoad = {
-	// 						userId: user._id
-	// 					};
-	// 					res.render('public/resetPassword', payLoad);
-	// 				} else {
-	// 					console.debug('forgot password token expired');
-	// 					res.render('public/resetPassword', {errorMessage: 'We\'re sorry, the forgot password link provided has expired. Please go back to the \'forgot password\' page and generate another email.'});
-	// 				}
-	// 			} else {
-	// 				console.debug('Forgot password: No user found by token, %s', req.query.a);
-	// 				res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-	// 			}
-	// 		});
-	// 	} else {
-	// 		console.debug('the token query string parameter was not provided.');
-	// 		res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-	// 	}
-	// });
+	router.get('/resetPassword', function(req, res) {
+		if (req.query.a && req.query.z) {
+		    PiDAO.getStaffUserById(req.query.z)
+                .then(function(result) {
+                    var staffUser;
+                    if (result[0]) {
+                        staffUser = result[0];
 
-	// router.post('/resetPassword', function(req, res) {
-	// 	AdminUser.findById(req.body.userId, function(err, user) {
-	// 		if (err || !user) {
-	// 			console.error("Error resetting password for userId: " + req.body.userId);
-	// 			res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-	// 		} else {
-	// 			user.password = utils.createHash(req.body.password1);
-	// 			user.tokenExpires = undefined;
-	// 			user.token = undefined;
-	// 			user.save(function (err, user) {
-	// 				if (err) {
-	// 					console.error("Error removing token and expiration from user: " + user.email);
-	// 					res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
-	// 				} else {
-	// 					console.info("Successfully reset password for: " + user.email);
-	// 					req.flash('email', user.email);
-	// 					res.redirect('/login');
-	// 				}
-	// 			});
-	// 		}
-	// 	});
-	// });
+                        if (staffUser && staffUser.resetToken && bCrypt.compareSync(req.query.a, staffUser.resetToken)) {
+                            if (moment(staffUser.resetTokenExpiration).diff(moment()) > 0) {
+                                console.debug('Valid forgot password token.');
+                                var payLoad = {
+                                    userId: staffUser.id
+                                };
+                                res.render('public/resetPassword', payLoad);
+                                return;
+                            } else {
+                                console.debug('forgot password token expired');
+                                res.render('public/resetPassword', {errorMessage: 'We\'re sorry, the forgot password link provided has expired. Please go back to the \'forgot password\' page and generate another email.'});
+                                return;
+                            }
+                        }
+                    }
+
+                    console.debug('Forgot password: No user found by token, %s', req.query.a);
+                    res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+
+                })
+                .catch(function(e) {
+                    console.error("Error looking up resetPassword userId and token.", e);
+                    res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+                });
+		} else {
+			console.debug('the token query string parameter was not provided.');
+			res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+		}
+	});
+
+	router.post('/resetPassword', function(req, res) {
+        var staffUser;
+        PiDAO.getStaffUserById(req.body.userId)
+            .then(function(result) {
+                if (result[0]) {
+                    staffUser = result[0];
+
+                    staffUser.password = utils.createHash(req.body.password1);
+                    staffUser.resetTokenExpiration = undefined;
+                    staffUser.resetToken = undefined;
+
+                    return PiDAO.updateStaffUser(staffUser);
+                } else {
+                    throw new Error("user not found");
+                }
+            })
+            .then(function() {
+                console.info("Successfully reset password for: " + staffUser.email);
+                req.flash('email', staffUser.email);
+                res.redirect('/login');
+            })
+            .catch(function(e) {
+                console.error("Error resetting password for userId: " + req.body.userId, e);
+                res.render('public/resetPassword', {errorMessage: 'We\'re sorry, an error has occurred. Please contact the system administrator.'});
+            });
+	});
 
 	router.get('/register', function(req, res) {
 	    var payLoad = {};
 
-		if(req.query.a && req.query.z) {
+		if (req.query.a && req.query.z) {
 		    PiDAO.getStaffUserById(req.query.z)
                 .then(function(result) {
                     var staffUser = result[0];

@@ -17,11 +17,6 @@ function exitApp() {
     process.exit();
 }
 
-if (!appConfig.piSessionSecret) {
-    console.error('Missing PI_SESSION_SECRET environment variable');
-    exitApp();
-}
-
 
 ConnectionManager.open();
 

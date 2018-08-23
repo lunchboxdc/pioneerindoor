@@ -1,13 +1,17 @@
 {
-  "apps": [{
-    "name": "PioneerIndoor-App",
-    "script": "./app.js",
-    "exec-mode": "cluster",
-    "instances": 4
-  },{
-    "name": "PioneerIndoor-Scheduler",
-    "script": "./common/scheduler.js",
-    "exec-mode": "cluster",
-    "instances": 1
-  }]
+	"apps": [
+		{
+			"name": "PioneerIndoor-App",
+			"script": "./app.js",
+			"exec-mode": "cluster",
+			"instances": 4,
+			"auto-restart": false
+		},
+		/* {
+			"name": "PioneerIndoor-Scheduler",
+			"script": "./common/scheduler.js",
+			"exec-mode": "cluster",
+			"instances": 1
+		} */
+	]
 }

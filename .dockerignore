@@ -1,0 +1,14 @@
+README.md
+.git
+.gitignore
+.DS_Store
+*.log
+*.cnf
+*.pem
+*.iml
+docker-compose.yml
+node_modules
+build
+
+devEmail.js
+test

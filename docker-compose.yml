@@ -1,0 +1,11 @@
+version: "3"
+services:
+    pi:
+        build: .
+        command: /bin/bash entry.sh
+        ports:
+            - "3000:3000"
+        environment:
+            - DB_USER=$PI_DB_USER
+            - DB_PASS=$PI_DB_PASS
+            - FB_TOKEN=$PI_FB_TOKEN

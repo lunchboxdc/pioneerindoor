@@ -14,6 +14,7 @@ module.exports = {
                     throw new Error('assetsVersion not found in assets table.');
                 }
             });
+        // return Promise.resolve();
     },
 
     getAssetsVersion: function() {

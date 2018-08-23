@@ -1,7 +1,12 @@
 *.DS_Store
-node_modules/
-npm-debug.log
-.idea/
+node_modules
+*.log
+.idea
 *.iml
-test/
+test
 devEmail.js
+*.cnf
+
+*.pem
+build
+coverage

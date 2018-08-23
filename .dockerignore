@@ -1,0 +1,11 @@
+README.md
+
+node_modules
+*.log
+
+.dockerignore
+*.pem
+*.iml
+
+devEmail.js
+test

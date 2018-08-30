@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if ping -c 1 docker.for.mac.localhost &> /dev/null ; then
 	export DB_HOST=docker.for.mac.localhost

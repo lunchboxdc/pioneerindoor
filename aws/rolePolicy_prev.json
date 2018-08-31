@@ -4,6 +4,7 @@
 		{
 			"Effect": "Allow",
 			"Action": [
+				"ecs:CreateCluster",
 				"ecs:DeregisterContainerInstance",
 				"ecs:DiscoverPollEndpoint",
 				"ecs:Poll",

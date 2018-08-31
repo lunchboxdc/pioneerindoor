@@ -3,14 +3,16 @@
 		{
 			"name": "PioneerIndoor-App",
 			"script": "./app.js",
-			"exec-mode": "cluster",
+			"exec_mode": "cluster",
 			"instances": 4,
-			"auto-restart": false
-		},
-		/* {
+			"max_restarts": 5,
+			"min_uptime": "1h",
+			"restart_delay": "5s"
+		}
+		/* ,{
 			"name": "PioneerIndoor-Scheduler",
 			"script": "./common/scheduler.js",
-			"exec-mode": "cluster",
+			"exec_mode": "cluster",
 			"instances": 1
 		} */
 	]

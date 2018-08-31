@@ -1,12 +1,13 @@
 README.md
+.DS_Store
 .git
 .gitignore
-.DS_Store
 *.log
 *.cnf
 *.pem
 *.iml
 docker-compose.yml
+aws
 node_modules
 build
 

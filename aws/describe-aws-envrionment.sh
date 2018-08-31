@@ -1,8 +1,11 @@
 #!/bin/bash
 
+AWS_DEFAULT_REGION=us-east-2
+AWS_SECRETS_BUCKET_REGION=us-east-2
+
 
 printf "iam roles...\n"
-aws iam list-roles
+aws iam list-roles --query 'Roles[].[Path,RoleName,Description]'
 printf "\n\n"
 
 printf "iam role policies...\n"
@@ -20,7 +23,7 @@ aws ec2 describe-key-pairs
 printf "\n\n"
 
 printf "ec2 security groups...\n"
-aws ec2 describe-security-groups
+aws ec2 describe-security-groups --query 'SecurityGroups[].[Description,GroupName]'
 printf "\n\n"
 
 printf "ec2 instances...\n"

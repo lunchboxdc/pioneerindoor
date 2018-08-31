@@ -1,0 +1,46 @@
+{
+	 "Version": "2012-10-17",
+	 "Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"ecs:CreateCluster",
+				"ecs:DeregisterContainerInstance",
+				"ecs:DiscoverPollEndpoint",
+				"ecs:Poll",
+				"ecs:RegisterContainerInstance",
+				"ecs:Submit*"
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"ssm:DescribeParameters"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "Stmt1482841904000",
+			"Effect": "Allow",
+			"Action": [
+				"ssm:GetParameters"
+			],
+			"Resource": [
+				"arn:aws:ssm:$AWS_DEFAULT_REGION:$AWS_ACCOUNT_ID:parameter/pi.*"
+			]
+		},
+		{
+			"Sid": "Stmt1482841948000",
+			"Effect": "Allow",
+			"Action": [
+				"kms:Decrypt"
+			],
+			"Resource": [
+				"arn:aws:kms:$AWS_DEFAULT_REGION:$AWS_ACCOUNT_ID:key/$DB_USER_KMS_KEY"
+			]
+		}
+	]
+}

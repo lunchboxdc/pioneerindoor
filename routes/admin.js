@@ -2,8 +2,6 @@ var express = require('express');
 var moment = require('moment');
 var _ = require('lodash');
 var piMailer = require('../email/piMailer');
-var AdminUser = require('../persistence/models/adminUser');
-var Auditionee = require('../persistence/models/auditionee');
 var utils = require('../common/utils');
 var csv = require('express-csv');
 var stringify = require('node-stringify');
@@ -147,23 +145,9 @@ module.exports = (function() {
 
 	router.post('/email/sendAuditioneeUpdate', function(req, res) {
 		var maxSubmitDate = moment("2016-10-04T02:00:00.000Z", moment.ISO_8601, true);
-		Auditionee.find({
-				season: '2017',
-				submitDate: {
-					$lte: maxSubmitDate
-				}
-			})
-			.sort({submitDate: 'asc'})
-			.exec(function(err, auditionees) {
-				if (err) {
-					res.send(err);
-				} else {
-					piMailer.sendAuditionUpdate(auditionees);
-					res.json({
-						message: 'Successfully queued update emails'
-					});
-				}
-			});
+		res.json({
+			message: 'Operation currently not supported'
+		});
 	});
 
 	router.get('/auditionees/export', function(req, res) {
@@ -367,23 +351,8 @@ module.exports = (function() {
 	});
 
 	router.post('/users/delete', function(req, res) {
-		if(req.body.userId === req.user._id.toString()) {
-			console.log("you can't delete the user you're logged in with!");
-			req.flash('errorMessage', 'you can\'t delete the user you\'re logged in with!');
-			res.redirect('/admin/users');
-		} else {
-			AdminUser.remove({
-				_id: req.body.userId
-			}, function(err, user) {
-				if (err) {
-					console.error('error deleting user: ' + user);
-					req.flash('errorMessage', 'error deleting user!');
-				} else {
-					req.flash('successMessage', 'Successfully deleted user');
-				}
-				res.redirect('/admin/users');
-			});
-		}
+		req.flash('errorMessage', 'Operation currently not supported');
+		res.redirect('/admin/users');
 	});
 
 	router.post('/email/sendAuditioneeReminder', function(req, res) {

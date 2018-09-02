@@ -6,7 +6,7 @@ node_modules
 test
 devEmail.js
 *.cnf
-
+*.env
 *.pem
 build
 coverage

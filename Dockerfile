@@ -6,6 +6,6 @@ WORKDIR /home/node/pioneer_indoor
 COPY . .
 
 RUN npm i
-RUN npm i pm2@3.0.0 -g
+RUN npm i pm2@3.0.4 -g
 
 CMD [ "./entry.sh" ]

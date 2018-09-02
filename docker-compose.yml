@@ -1,11 +1,11 @@
-version: "3"
+version: '3.2'
 services:
     pi:
         build: .
-        container_name: "pi"
+        container_name: pi
         ports:
-            - "3000:3000"
-        # environment:
-        #     - DB_USER=$PI_DB_USER
-        #     - DB_PASS=$PI_DB_PASS
-        #     - FB_TOKEN=$PI_FB_TOKEN
+            - 3000:3000
+        environment:
+            - DB_USER=${PI_DB_USER}
+            - DB_PASS=${PI_DB_PASS}
+            # - FB_TOKEN=$PI_FB_TOKEN

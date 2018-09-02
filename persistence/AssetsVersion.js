@@ -1,6 +1,6 @@
 var PiDAO = require('./PiDAO');
 
-var assetsVersion;
+var assetsVersion = 0;
 
 module.exports = {
     updateAssetsVersion: function() {
@@ -8,13 +8,10 @@ module.exports = {
             .then(function(result) {
                 if (result[0]) {
                     assetsVersion = result[0].assetsVersion;
-                    assetsVersion++;
-                    return PiDAO.setAssetsVersion(assetsVersion);
-                } else {
-                    throw new Error('assetsVersion not found in assets table.');
                 }
+				assetsVersion++;
+				return PiDAO.setAssetsVersion(assetsVersion);
             });
-        // return Promise.resolve();
     },
 
     getAssetsVersion: function() {

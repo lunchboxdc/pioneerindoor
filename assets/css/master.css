@@ -144,11 +144,11 @@ ul.slides li {
 }
 
 .site-body section {
-	display: inline-block;
+	/* display: inline-block; */
 }
 
 .site-body section.main-content {
-	width: 65%;
+	/* width: 65%; */
 }
 
 .site-body section.right-rail {

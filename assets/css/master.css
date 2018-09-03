@@ -144,7 +144,7 @@ ul.slides li {
 }
 
 .site-body section {
-	/* display: inline-block; */
+	display: inline-block;
 }
 
 .site-body section.main-content {

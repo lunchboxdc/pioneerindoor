@@ -1,21 +1,20 @@
-var appConfig = require('../common/appConfig');
-var mysql = require('promise-mysql');
-var fs = require('fs');
+const appConfig = require('../common/appConfig');
+const mysql = require('promise-mysql');
 
-var pool;
+let pool;
 
-var mysqlOptions = {
+let mysqlOptions = {
     host: appConfig.piDbHost,
     user: appConfig.piDbUser,
     password: appConfig.piDbPass,
     database: 'pi',
-    connectionLimit: 100,
+    connectTimeout: 5000,
+    connectionLimit: 10,
     dateStrings: ['DATE']
 };
 
-if (appConfig.piDbSslCa) {
-    mysqlOptions['ssl'] = {};
-	mysqlOptions.ssl['ca'] = fs.readFileSync(appConfig.piDbSslCa);
+if (appConfig.nodeEnv === 'prod') {
+  mysqlOptions.ssl = 'Amazon RDS';
 }
 
 module.exports = {

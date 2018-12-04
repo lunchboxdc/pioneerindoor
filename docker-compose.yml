@@ -1,11 +1,51 @@
-version: '3.2'
+version: '3.3'
 services:
-    pi:
-        build: .
-        container_name: pi
+    nginx:
+        build:
+            context: .
+            dockerfile: Dockerfile.nginx
+        container_name: nginx
         ports:
-            - 3000:3000
+            - 80:80
+        networks:
+            - pinetwork
+
+    pi:
+        build:
+            context: .
+            dockerfile: Dockerfile.site
+        container_name: pi
+        expose:
+            - 3002
         environment:
-            - DB_USER=${PI_DB_USER}
-            - DB_PASS=${PI_DB_PASS}
+            - NODE_ENV=dev
+            - NODE_PORT=3002
+            - DB_USER=$PI_DB_USER
+            - DB_PASS=$PI_DB_PASS
+            - DB_HOST=mysql
             # - FB_TOKEN=$PI_FB_TOKEN
+        command: pm2 start pm2.json --attach
+        networks:
+            pinetwork:
+                aliases:
+                    - "site"
+
+    mysql:
+        image: mysql/mysql-server:5.7.23-1.1.7
+        container_name: mysql
+        ports:
+            - 3306:3306
+        volumes:
+            - ./docker/createPiUser.sh:/docker-entrypoint-initdb.d/createPiUser.sh
+            - ./docker/pi-schema.sql:/docker-entrypoint-initdb.d/pi-schema.sql
+        environment:
+          - DB_PASS=${PI_DB_PASS}
+          - MYSQL_ROOT_PASSWORD=piDevRoot
+        networks:
+            pinetwork:
+                aliases:
+                    - "mysql"
+
+networks:
+    pinetwork:
+        driver: bridge

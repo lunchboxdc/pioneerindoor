@@ -1,8 +1,53 @@
-{{#section 'head'}}
-  <meta property="og:title" content="Pioneer Indoor | Home"/>
+<!doctype html>
+<html>
+<head lang="en">
+  <meta charset="utf-8" />
+	<meta property="og:site_name" content="Pioneer Indoor Percussion Ensemble"/>
+	<meta property="og:description" content="Pioneer Indoor is a two-time silver medalist WGI Independent Open indoor percussion ensemble."/>
+	<meta property="og:image" content="https://www.pioneerindoordrums.org/assets/image/logo-white.jpg">
+	<link rel="image_src" href="https://www.pioneerindoordrums.org/assets/image/logo-white.jpg" />
+
+	<script src="/assets/script/lib/jquery-1.11.3.min.js"></script>
+	<script src="/assets/script/lib/jquery.mask-1.13.4.min.js"></script>
+	<script src="/assets/script/lib/parsley-2.4.4.min.js"></script>
+	<script src="/assets/script/lib/handlebars-3.0.3.min.js"></script>
+	<script src="/assets/script/lib/jquery.flexslider-2.5.0.min.js"></script>
+	<script src="/assets/script/lib/jquery.bpopup-0.11.0.min.js"></script>
+	<script src="/assets/script/lib/moment-2.14.1.min.js"></script>
+
+	<link type="text/css" rel="stylesheet" href="/assets/css/normalize.css?v=1"/>
+	<link type="text/css" rel="stylesheet" href="/assets/css/common.css?v=1"/>
+	<link type="text/css" rel="stylesheet" href="/assets/css/flexslider.css?v=1"/>
+	<link type="text/css" rel="stylesheet" href="/assets/css/font-awesome.min.css?v=1">
+
+	<link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+	<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+	<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+	<link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+	<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+	<link rel="manifest" href="/manifest.json">
+	<meta name="apple-mobile-web-app-title" content="Pioneer Indoor">
+	<meta name="application-name" content="Pioneer Indoor">
+	<meta name="msapplication-TileColor" content="#00a300">
+	<meta name="msapplication-TileImage" content="/mstile-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+
+	  <meta property="og:title" content="Pioneer Indoor | Home"/>
   <title>Pioneer Indoor | Home</title>
-  <link type="text/css" rel="stylesheet" href="/assets/css/master.css?v={{assetsVersion}}"/>
-{{/section}}
+  <link type="text/css" rel="stylesheet" href="/assets/css/master.css?v=1"/>
+
+</head>
+<body>
+
 
 <script>
   $(function() {
@@ -18,8 +63,36 @@
   });
 </script>
 
-{{> nav}}
-
+<header class="site-center">
+    <a class="logo" href="/">
+      <img width="300" height="90" alt="pioneerindoordrums.org" src="/assets/image/logo-white.svg" >
+    </a>
+    <nav class="site-nav">
+    	<ul>
+            <li >
+                <a id="menuAuditionLink" href="/audition">AUDITION</a>
+            </li>
+    		<li >
+                <a id="menuScheduleLink" href="/schedule">SCHEDULE</a>
+            </li>
+            <li >
+                <a id="menuFaqLink" href="/faq">FAQ</a>
+            </li>
+    		<li >
+                <a id="menuStaffLink" href="/staff">STAFF</a>
+            </li>
+            <!--<li >
+                <a id="menuMediaLink" href="/media">MEDIA</a>
+            </li>-->
+            <li >
+                <a id="menuAboutLink" href="/about">ABOUT</a>
+            </li>
+            <li >
+                <a id="menuSupportLink" href="/support">SUPPORT</a>
+            </li>
+    	</ul>
+    </nav>
+</header>
 <div class="site-body site-center">
 
   <div id="imageSlider" class="slider flexslider">
@@ -135,20 +208,25 @@
       </div>
     </div>
 
-    {{! <div class="tile blog-post">
-      <div class="blog-content">
-        <div class="blog-meta">
-            <span>Kelly Dittrich | 19 Aug 2015</span>
-        </div>
-        <h2>Welcome to Our New Website</h2>
-        <p>It took four finals appearances and two silver medals, but Pioneer Indoor finally has a new website. Portions of our site currently remain under construction, and new features will be coming throughout the next few months. As construction is completed, you'll be able to come to our new site for information about the ensemble, news on our upcoming season, schedules and audition details.</p>
-        </div>
-      </div> }}
   </section>
 
   <section class="right-rail">
-    {{> facebookFeed}}
   </section>
 </div>
 
-{{> footer}}
+<footer class="site-center">
+    <div class="center">
+        <div class="logo-container">
+            <a class="logo" href="/">
+                <img width="150" height="45" src="/assets/image/logo-footer.svg">
+            </a>
+        </div>
+        <div class="social-links">
+            <a href="https://www.facebook.com/PioneerIndoor" target="_blank"><i class="fa fa-facebook"></i></a>
+            <a href="https://twitter.com/pioneer_indoor" target="_blank"><i class="fa fa-twitter"></i></a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

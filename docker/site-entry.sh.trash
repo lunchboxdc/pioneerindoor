@@ -1,0 +1,21 @@
+export INTERNAL_HOST_ALIAS="host.docker.internal"
+
+if [ `ping -q -c1 $INTERNAL_HOST_ALIAS &>/dev/null` -gt 0 ]; then
+  export INTERNAL_HOST_ALIAS=$(ip route | awk 'NR==1 {print $3}')
+fi
+
+if [ -z $DB_HOST ] ; then
+	export DB_HOST=$INTERNAL_HOST_ALIAS
+fi
+
+
+# echo "waiting for mysql server..."
+# until
+# mysql -h $DB_HOST -u $DB_USER -p$DB_PASS --ssl-ca=rds-combined-ca-bundle.pem --ssl-mode=VERIFY_IDENTITY -e "select 1"
+ # &>/dev/null ; do
+  # sleep 1
+# done
+# echo "mysql server is running"
+
+
+pm2 start pm2.json --attach

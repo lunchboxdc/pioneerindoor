@@ -53,7 +53,7 @@ var hbs = exphbs.create({
     	'./views/partials',
     	'./views/admin/partials',
     	'./views/public/partials',
-        './email/templates'
+      './email/templates'
     ],
     helpers: require('./common/HandlebarsHelpers')
 });
@@ -61,12 +61,12 @@ var hbs = exphbs.create({
 app.engine('html', hbs.engine);
 
 //middleware and other components specific to either prod or non-prod
-if (appConfig.nodeEnv !== 'prod') {
+// if (appConfig.nodeEnv !== 'prod') {
     //run facebook stuff once locally at startup
     //require('./common/script/runFacebookService');
     //not behind nginx locally so lets serve out assets through node
-    app.use('/assets', express.static('assets'));
-}
+//     app.use('/assets', express.static('assets'));
+// }
 
 
 //temporary middleware to parse raw body on post requests
@@ -101,7 +101,7 @@ app.use('/admin', function(req, res, next) {
 // var apiRoutes = require('./routes/api');
 // app.use('/api', apiRoutes);
 
-app.use(favicon(__dirname + '/assets/image/favicon/favicon.ico'));
+// app.use(favicon(__dirname + '/assets/image/favicon/favicon.ico'));
 
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
@@ -109,7 +109,7 @@ app.use(function(err, req, res, next) {
     console.error(err);
 });
 
-var port = (appConfig.port || 3000);
+var port = (appConfig.nodePort || 3002);
 var ip = '0.0.0.0';
 
 process.on('SIGINT', function() {

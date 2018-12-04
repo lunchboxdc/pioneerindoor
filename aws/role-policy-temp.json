@@ -26,7 +26,7 @@
 				"ssm:GetParametersByPath"
 			],
 			"Resource": [
-				"arn:aws:ssm:$AWS_DEFAULT_REGION:$AWS_ACCOUNT_ID:parameter/pi/db/*"
+				"arn:aws:ssm:us-east-2:334736187797:parameter/pi/db/*"
 			]
 		},
 		{
@@ -36,7 +36,7 @@
 				"kms:Decrypt"
 			],
 			"Resource": [
-				"arn:aws:kms:$AWS_DEFAULT_REGION:$AWS_ACCOUNT_ID:key/$DB_USER_KMS_KEY"
+				"arn:aws:kms:us-east-2:334736187797:key/18155ca5-615a-4cf6-8516-9bbf6e1b47a2"
 			]
 		}
 	]

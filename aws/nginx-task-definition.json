@@ -1,0 +1,37 @@
+{
+	"containerDefinitions": [
+		{
+			"image": "334736187797.dkr.ecr.us-east-2.amazonaws.com/pi-nginx:latest",
+			"name": "pi-nginx",
+			"cpu": 0,
+			"memory": 50,
+			"portMappings": [
+				{
+					"hostPort": 80,
+					"containerPort": 80,
+					"protocol": "tcp"
+				}
+			],
+			"environment": [
+				{
+					"name": "AWS_DEFAULT_REGION",
+					"value": "us-east-2"
+				},
+				{
+					"name": "NODE_PORT",
+					"value": "$NODE_PORT"
+				}
+			],
+			"volumesFrom": [],
+			"mountPoints": [],
+			"essential": true,
+			"command": [
+				"sh",
+				"-ec",
+				"/root/ecs-nginx-entry.sh"
+			]
+		}
+	],
+	"volumes": [],
+	"family": "pi-family"
+}

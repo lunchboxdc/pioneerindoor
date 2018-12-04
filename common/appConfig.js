@@ -1,5 +1,4 @@
-var logger = require('./logger');
-var moment = require('moment');
+const moment = require('moment');
 
 const auditionDate = '2017-11-04 08:00';
 
@@ -8,7 +7,7 @@ const piSessionSecret = process.env.PI_SESSION_SECRET ? process.env.PI_SESSION_S
 var config = {
 	auditionDate: moment(auditionDate),
 	nodeEnv: process.env.NODE_ENV,
-	port: process.env.PORT,
+	nodePort: process.env.NODE_PORT,
 	piSessionSecret: piSessionSecret,
 	fbToken: process.env.FB_TOKEN,
 	piAccessKeyId: process.env.PI_ACCESS_KEY_ID,
@@ -16,23 +15,18 @@ var config = {
 	piDbHost: process.env.DB_HOST,
 	piDbUser: process.env.DB_USER,
 	piDbPass: process.env.DB_PASS,
-	piDbSslCa: process.env.DB_SSL_CA
+	dbSslCaCert: process.env.DB_SSL_CA_CERT
 };
 
 
 if (config.nodeEnv === 'prod') {
 	console.info('App running in prod mode');
-	config['host'] = 'https://www.pioneerindoordrums.org';
+	config['host'] = 'https://www.pipercussion.org';
 	config['logLevel'] = 'info';
 } else {
-	config['port'] = '3000';
-	config['host'] = 'http://localhost:' + config.port;
+	config['port'] = '3002';
+	config['host'] = 'http://localhost:' + config.nodePort;
 	config['logLevel'] = 'debug';
-}
-
-
-if (config.logLevel) {
-	logger.transports.console.level = config.logLevel;
 }
 
 module.exports = config;

@@ -1,0 +1,41 @@
+{
+	"containerDefinitions": [
+		{
+			"image": "334736187797.dkr.ecr.us-east-2.amazonaws.com/pi-site:latest",
+			"name": "pi-site",
+			"cpu": 0,
+			"memory": 200,
+			"portMappings": [
+				{
+					"hostPort": $NODE_PORT,
+					"containerPort": $NODE_PORT,
+					"protocol": "tcp"
+				}
+			],
+			"environment": [
+				{
+					"name": "AWS_DEFAULT_REGION",
+					"value": "us-east-2"
+				},
+				{
+					"name": "NODE_PORT",
+					"value": "$NODE_PORT"
+				},
+				{
+					"name": "NODE_ENV",
+					"value": "prod"
+				}
+			],
+			"volumesFrom": [],
+			"mountPoints": [],
+			"essential": true,
+			"command": [
+				"sh",
+				"-ec",
+				"/home/node/pioneer_indoor/docker/ecs-site-entry.sh"
+			]
+		}
+	],
+	"volumes": [],
+	"family": "pi-family"
+}

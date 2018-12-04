@@ -1,8 +1,17 @@
 var appConfig = require('./appConfig');
 var AssetsVersion = require('../persistence/AssetsVersion');
 var moment = require('moment');
+var appConfig = require('./appConfig');
 
 module.exports = {
+
+    getNodePort: function() {
+        if (appConfig.nodePort == 3002) {
+            return appConfig.nodePort;
+        }
+        return `      ${appConfig.nodePort}`;
+    },
+
     equals: function(a, b, options) {
         if (a === b) {
             return options.fn(this);

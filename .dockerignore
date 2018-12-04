@@ -4,12 +4,10 @@ README.md
 .gitignore
 *.log
 *.cnf
-*.pem
 *.iml
 docker-compose.yml
 aws
-node_modules
 build
-
+Dockerfile.*
 devEmail.js
 test

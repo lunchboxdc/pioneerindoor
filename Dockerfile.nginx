@@ -1,0 +1,11 @@
+FROM nginx:1.15.4-alpine
+
+RUN apk add grep
+
+COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY docker/change-nginx-upstream.sh /etc/nginx/change-nginx-upstream.sh
+COPY docker/ecs-nginx-entry.sh /root/ecs-nginx-entry.sh
+
+RUN rm -rf /usr/share/nginx/html
+COPY assets /usr/share/nginx/assets
+COPY docker/nginx-coming-soon.html /usr/share/nginx/coming-soon.html

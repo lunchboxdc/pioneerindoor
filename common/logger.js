@@ -1,15 +1,22 @@
-var util = require('util');
-var moment = require('moment/min/moment.min.js');
-var winston = require('winston');
+const appConfig = require('./appConfig');
+const util = require('util');
+const moment = require('moment/min/moment.min.js');
+const winston = require('winston');
 
-var logger = new (winston.Logger)({
-    transports: [
-        new (winston.transports.Console)({
-            timestamp: function() { return moment().format("MMM DD, YYYY h:mm:ss A") },
-            level: 'info'
-        })
-    ]
-});
+const logger = winston.createLogger({
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.printf(i => `${i.timestamp} - ${i.message}`)
+  ),
+  transports: [
+    new winston.transports.Console({
+        level: 'debug',
+        handleExceptions: true,
+        json: false,
+        colorize: true
+    })
+  ]
+})
 
 function formatArgs(args) {
     return [util.format.apply(util.format, Array.prototype.slice.call(args))];
